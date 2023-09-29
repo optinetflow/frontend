@@ -6,15 +6,15 @@ export default function Web() {
   return (
     <>
       <Head>
-        <meta property="og:url" content="https://next-enterprise.vercel.app/" />
+        <meta property="og:url" content="https://arvanvpn.online/" />
         <meta
           property="og:image"
-          content="https://raw.githubusercontent.com/Blazity/next-enterprise/main/project-logo.png"
+          content="https://cdn5.vectorstock.com/i/1000x1000/15/34/fast-icon-vector-26611534.jpg"
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <title>Next.js Enterprise Boilerplate</title>
+        <title>Optinet Panel</title>
       </Head>
       <GetStat />
     </>
