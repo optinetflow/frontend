@@ -1,0 +1,23 @@
+overwrite: true
+schema: ${NEXT_PUBLIC_GRAPHQL_URI}
+documents: './graphql/**/*.graphql'
+generates:
+  ./src/graphql/__generated__/schema.graphql.ts:
+    plugins:
+      - typescript
+  ./src/graphql/:
+    preset: near-operation-file
+    presetConfig:
+      extension: '.graphql.interface.ts'
+      baseTypesPath: './__generated__/schema.graphql.ts'
+    plugins:
+      - typescript-operations
+      # - typed-document-node
+      - typescript-react-apollo
+    config:
+      skipTypename: false
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      withResultType: true
+      reactApolloVersion: 3

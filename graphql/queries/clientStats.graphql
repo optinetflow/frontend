@@ -1,0 +1,11 @@
+query getClientStats($filters: GetClientStatsFiltersInput) {
+    clientStats(filters: $filters){
+        id
+        email
+        down
+        up
+        total
+        expiryTime
+        enable
+    }
+}
