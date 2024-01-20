@@ -5,22 +5,22 @@ import { env } from "./env.mjs"
 /**
  * @type {import('next').NextConfig}
  */
+
+const isDevelop = process.env.NODE_ENV === 'development';
 const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
-  output: process.env.NODE_ENV === 'development' ? undefined : 'export',
+  output: isDevelop ? undefined : 'export',
   reactStrictMode: true,
   experimental: { instrumentationHook: true },
-  async rewrites() {
-    if (process.env.NODE_ENV === 'development') {
+  ...(isDevelop && {
+    async rewrites() {
       return [
         {
           source: '/graphql',
           destination: 'http://localhost:3333/graphql',
         },
       ];
-    } else {
-      return []; // No rewrites in other environments
     }
-  },
+  }),
 })
 
 export default config
