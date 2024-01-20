@@ -1,0 +1,12 @@
+query UserPackages {
+    userPackages {
+        id
+        name
+        link
+        remainingTraffic
+        totalTraffic
+        expiryTime
+        createdAt
+        updatedAt
+    }
+}

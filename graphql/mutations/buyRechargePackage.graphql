@@ -1,0 +1,7 @@
+mutation buyRechargePackage($input: BuyRechargePackageInput!) {
+    buyRechargePackage(input: $input) {
+        id
+        balance
+        totalProfit
+    }
+}

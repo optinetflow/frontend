@@ -1,0 +1,33 @@
+query Me {
+    me {
+        id
+        firstname
+        lastname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        isParentDisabled
+        balance
+        totalProfit
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        parent {
+            id
+            telegram {
+                username
+            }
+            bankCard {
+                number
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+mutation updateChild($input: UpdateChildInput!) {
+    updateChild(input: $input){
+        id
+        firstname
+        lastname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+    }
+}

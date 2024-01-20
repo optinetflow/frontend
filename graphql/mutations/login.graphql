@@ -1,0 +1,31 @@
+mutation login($input: LoginInput!) {
+    login(data: $input) {
+        user {
+            id
+            firstname
+            lastname
+            phone
+            role
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            totalProfit
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
+            parent {
+                id
+                telegram {
+                    username
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+query GetPackages {
+    packages {
+        id
+        price
+        traffic
+        expirationDays
+        userCount
+    }
+}

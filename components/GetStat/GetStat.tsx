@@ -85,7 +85,7 @@ export function GetStat() {
 
   const currentStat = clientStats?.data?.clientStats?.[0]
   const totalTraffic = currentStat && roundTo(bytesToGB(currentStat?.total), 1)
-  const remainingTraffic = currentStat && getConsumedTraffic(currentStat.up, currentStat.down)
+  const consumedTraffic = currentStat && getConsumedTraffic(currentStat.up, currentStat.down)
   const remainingDays = currentStat?.expiryTime === 0 ? false : currentStat?.expiryTime && getRemainingDays(currentStat?.expiryTime)
 
   const uuid = extractUUID(input)
@@ -127,9 +127,9 @@ export function GetStat() {
 
         {currentStat && (
           <div className="flex flex-row items-center justify-center mt-2">
-            <ProgressBar progress={(remainingTraffic! / totalTraffic!) * 100} />
+            <ProgressBar progress={(consumedTraffic! / totalTraffic!) * 100} />
             <div className="ltr mr-4">
-              {remainingTraffic} / {totalTraffic} GB
+              {consumedTraffic} / {totalTraffic} GB
             </div>
           </div>
         )}

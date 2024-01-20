@@ -1,19 +1,25 @@
 import { ApolloProvider } from '@apollo/client';
-import { AppProps } from "next/app"
-import localFont from "next/font/local"
+import type { NextPage } from 'next'
+import type { AppProps } from 'next/app'
 import { useApollo } from '../lib/apollo';
-import "../styles/tailwind.css"
+import "../styles/tailwind.scss"
 
 
-const iranSans = localFont({ src: '../assets/fonts/IRANSansWeb.woff2' });
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const apolloClient = useApollo(pageProps);
-  return (
-    <main className={iranSans.className}>
-      <ApolloProvider client={apolloClient}><Component {...pageProps} /></ApolloProvider>
-    </main>
-  )
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode
 }
 
-export default MyApp
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const apolloClient = useApollo(pageProps);
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout ?? ((page) => page)
+
+  if (apolloClient) {
+    return getLayout(<ApolloProvider client={apolloClient}><Component {...pageProps} /></ApolloProvider>)
+  }
+}

@@ -1,0 +1,7 @@
+query rechargePackages {
+    rechargePackages {
+        id
+        amount
+        discountPercent
+    }
+}
