@@ -99,6 +99,7 @@ const HomePage: NextPageWithLayout = () => {
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
   const isRegisteredInTelegram = me?.data?.me.telegram?.phone;
   const hasBankCard = me.data?.me.bankCard?.[0]?.number;
+  const registerToBotText = isAdmin ? 'ثبت نام در ربات تلگرام' : 'آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟';
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
@@ -207,7 +208,7 @@ const HomePage: NextPageWithLayout = () => {
             >
               <Button variant="outline" className="flex w-full">
                 <BellIcon className="ml-2 h-5 w-5" />
-                <span>آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟</span>
+                <span>{registerToBotText}</span>
               </Button>
             </a>
           )}
