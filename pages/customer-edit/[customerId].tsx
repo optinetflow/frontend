@@ -1,12 +1,14 @@
 import { useRouter } from "next/router"
 import React from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Layout from "../../components/Layout/Layout"
 import { useUpdateChildMutation } from "../../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../../graphql/queries/children.graphql.interface"
+import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { faNumToEn } from "../../helpers"
 import { UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
@@ -18,11 +20,13 @@ const CustomerEditPage: NextPageWithLayout = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<UpdateChildInput>()
   const customers = useChildrenQuery({ fetchPolicy: "cache-only" })
+  const me = useMeQuery({ fetchPolicy: "cache-only" })
   const customer = customers.data?.children.find((child) => child.id === id)
-  console.log("customer ===>", customer)
+  const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100
 
   const onSubmit = handleSubmit((data) => {
     updateChild({
@@ -59,6 +63,30 @@ const CustomerEditPage: NextPageWithLayout = () => {
         <Label htmlFor="lastname">نام خانوادگی</Label>
         <Input defaultValue={customer?.lastname} {...register("lastname")} id="lastname" required type="text" />
       </div>
+      {isSuperAdmin && (
+        <div className="space-y-2">
+          <Label htmlFor="role">دسترسی</Label>
+          <Controller
+            name="role"
+            control={control}
+            rules={{ required: true }}
+            defaultValue={customer?.role}
+            render={({ field: { onChange } }) => (
+              <Select defaultValue={customer?.role} onValueChange={onChange}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="USER">کاربر عادی</SelectItem>
+                    <SelectItem value="ADMIN">ادمین</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="phone">شماره موبایل</Label>
         <Input

@@ -18,7 +18,7 @@ import {
   remainingTimeToWords,
   roundTo,
 } from "../helpers"
-import { ArrowPathIcon, BanknotesIcon, BellIcon, PlusIcon, PowerIcon, TelegramIcon, UsersIcon } from "../icons"
+import { ArrowPathIcon, BanknotesIcon, BellIcon, Cog6ToothIcon, PlusIcon, PowerIcon, TelegramIcon, UsersIcon } from "../icons"
 
 type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
@@ -98,11 +98,12 @@ const HomePage: NextPageWithLayout = () => {
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
   const isRegisteredInTelegram = me?.data?.me.telegram?.phone;
+  const hasBankCard = me.data?.me.bankCard?.[0]?.number;
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
     accountIsBlocked(e)
-    isAdminRegisteredTelegram(e)
+    checkAdminRequirements(e)
   }
   const pleaseCharge = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (balance <= 0 && isAdmin) {
@@ -118,10 +119,15 @@ const HomePage: NextPageWithLayout = () => {
     }
   }
 
-  const isAdminRegisteredTelegram = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const checkAdminRequirements = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (!isRegisteredInTelegram && isAdmin) {
       e.preventDefault()
-      toast({ variant: "destructive", description: "ابتدا در ربات تلگرام ثبت نام کنید." })
+      toast({ variant: "destructive", description: "لطفا در ربات تلگرام ثبت نام کنید." })
+    }
+
+    if (!hasBankCard && isAdmin) {
+      e.preventDefault()
+      toast({ variant: "destructive", description: "از قسمت تنظیمات حساب بانکی خود را وارد کنید." })
     }
   }
 
@@ -174,10 +180,18 @@ const HomePage: NextPageWithLayout = () => {
             </Link>
           )}
           {isAdmin && (
-            <Link className="flex" href="/rechargePackages" onClick={isAdminRegisteredTelegram}>
+            <Link className="flex" href="/rechargePackages" onClick={checkAdminRequirements}>
               <Button variant="outline" className="flex w-full">
                 <BanknotesIcon className="ml-2 h-5 w-5" />
                 <span>افزایش شارژ حساب</span>
+              </Button>
+            </Link>
+          )}
+          {isAdmin && (
+            <Link className="flex" href="/setting">
+              <Button variant="outline" className="flex w-full">
+                <Cog6ToothIcon className="ml-2 h-5 w-5" />
+                <span>تنظیمات</span>
               </Button>
             </Link>
           )}

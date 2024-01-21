@@ -41,6 +41,12 @@ export type Auth = {
   user: User;
 };
 
+export type BankCard = {
+  __typename?: 'BankCard';
+  name: Scalars['String']['output'];
+  number: Scalars['String']['output'];
+};
+
 export type BuyPackageInput = {
   name: Scalars['String']['input'];
   packageId: Scalars['String']['input'];
@@ -175,6 +181,7 @@ export type Mutation = {
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
   signup: Auth;
+  signupA: Auth;
   updateArvanSslStates: Scalars['Boolean']['output'];
   updateChild: User;
   updateIp: Array<Dns>;
@@ -241,6 +248,11 @@ export type MutationSignupArgs = {
 };
 
 
+export type MutationSignupAArgs = {
+  data: SignupInput;
+};
+
+
 export type MutationUpdateChildArgs = {
   input: UpdateChildInput;
 };
@@ -257,7 +269,7 @@ export type MutationUpdatePortArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  data: UpdateUserInput;
+  input: UpdateUserInput;
 };
 
 
@@ -280,14 +292,9 @@ export type Package = {
 
 export type Parent = {
   __typename?: 'Parent';
-  bankCard?: Maybe<Array<ParentBankCard>>;
+  bankCard?: Maybe<Array<BankCard>>;
   id: Scalars['String']['output'];
   telegram?: Maybe<ParentTelegram>;
-};
-
-export type ParentBankCard = {
-  __typename?: 'ParentBankCard';
-  number?: Maybe<Scalars['String']['output']>;
 };
 
 export type ParentTelegram = {
@@ -402,6 +409,7 @@ export type UpdateChildInput = {
   lastname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Role>;
 };
 
 export type UpdateDnsIpInput = {
@@ -415,6 +423,8 @@ export type UpdateDnsPortInput = {
 };
 
 export type UpdateUserInput = {
+  cardBandName?: InputMaybe<Scalars['String']['input']>;
+  cardBandNumber?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
@@ -436,6 +446,7 @@ export enum UpstreamHttps {
 export type User = {
   __typename?: 'User';
   balance: Scalars['Float']['output'];
+  bankCard?: Maybe<Array<BankCard>>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   firstname: Scalars['String']['output'];
@@ -443,6 +454,7 @@ export type User = {
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
   lastname: Scalars['String']['output'];
+  maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];

@@ -11,6 +11,11 @@ query Me {
         isParentDisabled
         balance
         totalProfit
+        maxRechargeDiscountPercent
+        bankCard {
+            name
+            number
+        }
         telegram {
             id
             phone

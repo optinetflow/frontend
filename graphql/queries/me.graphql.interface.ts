@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type MeQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, isParentDisabled?: boolean | null, balance: number, totalProfit: number, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname: string, lastname: string, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null, parent?: { __typename?: 'Parent', id: string, telegram?: { __typename?: 'ParentTelegram', username?: string | null } | null, bankCard?: Array<{ __typename?: 'ParentBankCard', number?: string | null }> | null } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, isParentDisabled?: boolean | null, balance: number, totalProfit: number, maxRechargeDiscountPercent?: number | null, bankCard?: Array<{ __typename?: 'BankCard', name: string, number: string }> | null, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname: string, lastname: string, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null, parent?: { __typename?: 'Parent', id: string, telegram?: { __typename?: 'ParentTelegram', username?: string | null } | null, bankCard?: Array<{ __typename?: 'BankCard', number: string }> | null } | null } };
 
 
 export const MeDocument = gql`
@@ -23,6 +23,11 @@ export const MeDocument = gql`
     isParentDisabled
     balance
     totalProfit
+    maxRechargeDiscountPercent
+    bankCard {
+      name
+      number
+    }
     telegram {
       id
       phone
