@@ -7,9 +7,11 @@ import { Copyable } from "../../components/Copyable/Copyable"
 import Layout from "../../components/Layout/Layout"
 import { UploadImage } from "../../components/UploadImage/UploadImage"
 import { useBuyRechargePackageMutation } from "../../graphql/mutations/buyRechargePackage.graphql.interface"
+import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useRechargePackagesQuery } from "../../graphql/queries/rechargePackages.graphql.interface"
 import { convertPersianCurrency } from "../../helpers"
 import type { NextPageWithLayout } from "../_app"
+
 
 interface FormValues {
   receipt: string
@@ -17,6 +19,7 @@ interface FormValues {
 
 const RechargeAccountPage: NextPageWithLayout = () => {
   const router = useRouter()
+  const me = useMeQuery({ fetchPolicy: "cache-only" });
   const rechargePackageId = router.query?.rechargePackageId as string
   const [buyRechargePackageMutate, buyRechargePackage] = useBuyRechargePackageMutation()
   const {
@@ -54,7 +57,7 @@ const RechargeAccountPage: NextPageWithLayout = () => {
             <span className="font-black">{convertPersianCurrency(currentRechargePackage.amount)}</span> کارت به کارت
             کنید
           </Label>
-          <Copyable isCenter content="6037 6976 7728 4256" />
+          <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ''} />
           <Controller
             name="receipt"
             control={control}
