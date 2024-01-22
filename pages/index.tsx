@@ -18,7 +18,16 @@ import {
   remainingTimeToWords,
   roundTo,
 } from "../helpers"
-import { ArrowPathIcon, BanknotesIcon, BellIcon, Cog6ToothIcon, PlusIcon, PowerIcon, TelegramIcon, UsersIcon } from "../icons"
+import {
+  ArrowPathIcon,
+  BanknotesIcon,
+  BellIcon,
+  Cog6ToothIcon,
+  PlusIcon,
+  PowerIcon,
+  TelegramIcon,
+  UsersIcon,
+} from "../icons"
 
 type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
@@ -54,7 +63,7 @@ function Stat({ pack, onRenewClick }: StatProps) {
   const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords
   const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است"
 
-  const showRenewBtn = (remainingDays >= 2) || (pack.totalTraffic - pack.remainingTraffic)  >= (pack.totalTraffic * 0.85)
+  const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85
 
   return (
     <div className="space-y-4 rounded-md bg-slate-50 p-4">
@@ -68,14 +77,14 @@ function Stat({ pack, onRenewClick }: StatProps) {
       </div>
 
       {showRenewBtn ? (
-        <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
-      ) : (
         <Link className="flex" href={`/packages?userPackageId=${pack.id}`} onClick={onRenewClick}>
           <Button variant="outline" className="flex w-full text-slate-600">
             <ArrowPathIcon className="ml-2 h-5 w-5" />
             <span>تمدید بسته</span>
           </Button>
         </Link>
+      ) : (
+        <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
       )}
     </div>
   )
@@ -99,9 +108,9 @@ const HomePage: NextPageWithLayout = () => {
   const isAdmin = me?.data?.me.role !== "USER"
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
-  const isRegisteredInTelegram = me?.data?.me.telegram?.phone;
-  const hasBankCard = me.data?.me.bankCard?.[0]?.number;
-  const registerToBotText = isAdmin ? 'ثبت نام در ربات تلگرام' : 'آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟';
+  const isRegisteredInTelegram = me?.data?.me.telegram?.phone
+  const hasBankCard = me.data?.me.bankCard?.[0]?.number
+  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟"
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
