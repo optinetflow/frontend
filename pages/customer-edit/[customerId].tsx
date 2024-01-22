@@ -56,11 +56,11 @@ const CustomerEditPage: NextPageWithLayout = () => {
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
       <div className="space-y-2">
-        <Label htmlFor="firstname">نام</Label>
+        <Label htmlFor="firstname">نام (فارسی)</Label>
         <Input defaultValue={customer?.firstname} {...register("firstname")} id="firstname" required type="text" />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="lastname">نام خانوادگی</Label>
+        <Label htmlFor="lastname">نام خانوادگی (فارسی)</Label>
         <Input defaultValue={customer?.lastname} {...register("lastname")} id="lastname" required type="text" />
       </div>
       {isSuperAdmin && (
@@ -108,7 +108,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
           {...register("password", { minLength: { value: 4, message: "رمز باید حداقل ۴ حرف باشد." } })}
           className="ltr"
           id="password"
-          type="password"
+          type="text"
         />
       </div>
 
