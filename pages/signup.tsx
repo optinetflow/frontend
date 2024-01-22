@@ -42,11 +42,11 @@ const SignupPage: NextPageWithLayout = () => {
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
       <div className="space-y-2">
-        <Label htmlFor="firstname">نام</Label>
+        <Label htmlFor="firstname">نام (فارسی)</Label>
         <Input {...register("firstname")} id="firstname" required type="text" />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="lastname">نام خانوادگی</Label>
+        <Label htmlFor="lastname">نام خانوادگی (فارسی)</Label>
         <Input {...register("lastname")} id="lastname" required type="text" />
       </div>
       {/* <div className="space-y-2">
@@ -74,7 +74,7 @@ const SignupPage: NextPageWithLayout = () => {
           className="ltr"
           id="password"
           required
-          type="password"
+          type="text"
         />
       </div>
 
