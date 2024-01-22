@@ -54,6 +54,8 @@ function Stat({ pack, onRenewClick }: StatProps) {
   const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords
   const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است"
 
+  const showRenewBtn = (remainingDays >= 2) || (pack.totalTraffic - pack.remainingTraffic)  >= (pack.totalTraffic * 0.85)
+
   return (
     <div className="space-y-4 rounded-md bg-slate-50 p-4">
       <div className="truncate pb-6 text-lg font-black text-slate-800">{pack.name}</div>
@@ -65,7 +67,7 @@ function Stat({ pack, onRenewClick }: StatProps) {
         <ProgressBar progress={((remainingTraffic > 0 ? remainingTraffic : 0) / totalTraffic) * 100} />
       </div>
 
-      {remainingDays >= 2 ? (
+      {showRenewBtn ? (
         <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
       ) : (
         <Link className="flex" href={`/packages?userPackageId=${pack.id}`} onClick={onRenewClick}>
