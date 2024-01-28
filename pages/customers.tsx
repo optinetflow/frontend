@@ -4,11 +4,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Switch } from "@/components/ui/switch"
+import { useToast } from "@/components/ui/use-toast"
 
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../graphql/queries/children.graphql.interface"
+import { copyText } from '../helpers';
 import { avatarColor, convertPersianCurrency, roundTo } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
 import * as Types from '../src/graphql/__generated__/schema.graphql';
@@ -87,6 +89,15 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 }
 
 const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit }) => {
+  const { toast } = useToast()
+
+  const handlePhoneClick = () => {
+    copyText(`0${phone}`);
+    toast({
+      description: "شماره موبایل کپی شد.",
+      duration: 500,
+    })
+  }
   return (
     <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="flex flex-1 overflow-hidden items-center">
@@ -102,9 +113,9 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
           </div>
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
-          <div className="text-xs text-slate-600">
+          <button type="button" onClick={handlePhoneClick} className="text-xs text-slate-600 text-right">
             {phone}
-          </div>
+          </button>
         </div>
       </div>
       <CustomerOptions id={id} isDisabled={isDisabled} />
