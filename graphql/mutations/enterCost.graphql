@@ -1,0 +1,6 @@
+mutation enterCost($input: EnterCostInput!) {
+    enterCost(input: $input) {
+        id
+        totalProfit
+    }
+}

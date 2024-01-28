@@ -2,6 +2,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 import { Button } from "@/components/ui/button"
+import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import { Copyable } from "../components/Copyable/Copyable"
@@ -94,7 +95,8 @@ const HomePage: NextPageWithLayout = () => {
   const router = useRouter()
   const { toast } = useToast()
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })
-  const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" });
+  const isSendRegisterToBotAlarm = React.useRef(false);
 
   const [logout] = useLogoutMutation()
 
@@ -105,18 +107,21 @@ const HomePage: NextPageWithLayout = () => {
     })
   }
 
+  const botRef = `https://t.me/${process.env.NEXT_PUBLIC_BOT_NAME}?start=${jsonToB64Url({uid: me.data?.me.id || ""})}`;
   const isAdmin = me?.data?.me.role !== "USER"
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
   const isRegisteredInTelegram = me?.data?.me.telegram?.phone
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
-  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟"
+  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟";
+  const hasOnlinePackage = data?.userPackages?.[0] ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic : false;
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
     accountIsBlocked(e)
     checkAdminRequirements(e)
   }
+
   const pleaseCharge = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (balance <= 0 && isAdmin) {
       e.preventDefault()
@@ -141,6 +146,17 @@ const HomePage: NextPageWithLayout = () => {
       e.preventDefault()
       toast({ variant: "destructive", description: "از قسمت تنظیمات حساب بانکی خود را وارد کنید." })
     }
+  }
+
+  if (!isRegisteredInTelegram && hasOnlinePackage && !isSendRegisterToBotAlarm.current) {
+    toast({
+      duration: 15000,
+      title: "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟",
+      description: "با ثبت‌نام در ربات تلگرام ما قبل از اتمام بسته پیام فرستاده شده و قابلیت تمدید بسته را دارید.",
+      action: (<a href={botRef} ><ToastAction  altText="Register to bot">ثبت‌نام</ToastAction></a>),
+    })
+
+    isSendRegisterToBotAlarm.current = true;
   }
 
   if (data) {
@@ -211,12 +227,7 @@ const HomePage: NextPageWithLayout = () => {
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
           {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
-            <a
-              className="block"
-              href={`https://t.me/${process.env.NEXT_PUBLIC_BOT_NAME}?start=${jsonToB64Url({
-                uid: me.data?.me.id || "",
-              })}`}
-            >
+            <a className="block" href={botRef} >
               <Button variant="outline" className="flex w-full">
                 <BellIcon className="ml-2 h-5 w-5" />
                 <span>{registerToBotText}</span>

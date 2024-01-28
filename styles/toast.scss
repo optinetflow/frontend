@@ -1,0 +1,9 @@
+body div[role="region"][aria-label="Notifications (F8)"] {
+    li button, li a {
+        margin: initial !important;
+    }
+    li button[toast-close=""] {
+        left: 0.5rem;
+        right: initial;
+    }
+}

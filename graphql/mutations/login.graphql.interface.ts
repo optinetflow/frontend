@@ -8,7 +8,7 @@ export type LoginMutationVariables = Types.Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Login', user: { __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname: string, lastname: string, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null, parent?: { __typename?: 'Parent', id: string, telegram?: { __typename?: 'ParentTelegram', username?: string | null } | null } | null } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Login', user: { __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null, parent?: { __typename?: 'Parent', id: string, telegram?: { __typename?: 'ParentTelegram', username?: string | null } | null } | null } } };
 
 
 export const LoginDocument = gql`

@@ -9,7 +9,7 @@ import Layout from "../../components/Layout/Layout"
 import { useUpdateChildMutation } from "../../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../../graphql/queries/children.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
-import { faNumToEn } from "../../helpers"
+import { normalizePhone } from "../../helpers"
 import { UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
@@ -92,12 +92,12 @@ const CustomerEditPage: NextPageWithLayout = () => {
         <Input
           defaultValue={customer?.phone}
           {...register("phone", {
-            setValueAs: faNumToEn,
+            setValueAs: normalizePhone,
             pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
           })}
           className="ltr"
           id="phone"
-          placeholder="912XXXXXXX"
+          placeholder="0912XXXXXXX"
           required
           type="tel"
         />

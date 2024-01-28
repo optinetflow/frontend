@@ -88,7 +88,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 
 const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit }) => {
   return (
-    <div className={`flex items-stretch justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
+    <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="flex flex-1 overflow-hidden items-center">
         <Avatar className="h-12 w-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
@@ -102,9 +102,9 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
           </div>
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
-          <a className="text-xs text-slate-600" href={"tel:0" + phone}>
-            0{phone}
-          </a>
+          <div className="text-xs text-slate-600">
+            {phone}
+          </div>
         </div>
       </div>
       <CustomerOptions id={id} isDisabled={isDisabled} />

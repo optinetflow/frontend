@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
-import { faNumToEn } from "../helpers"
+import { normalizePhone } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const SignupPage: NextPageWithLayout = () => {
@@ -57,12 +57,12 @@ const SignupPage: NextPageWithLayout = () => {
         <Label htmlFor="phone">شماره موبایل</Label>
         <Input
           {...register("phone", {
-            setValueAs: faNumToEn,
+            setValueAs: normalizePhone,
             pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
           })}
           className="ltr"
           id="phone"
-          placeholder="912XXXXXXX"
+          placeholder="0912XXXXXXX"
           required
           type="tel"
         />

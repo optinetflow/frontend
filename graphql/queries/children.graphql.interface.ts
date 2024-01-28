@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type ChildrenQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname: string, lastname: string, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
+export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
 
 
 export const ChildrenDocument = gql`

@@ -11,7 +11,7 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 
 import { useLoginMutation } from "../graphql/mutations/login.graphql.interface"
-import { faNumToEn } from "../helpers"
+import { normalizePhone } from "../helpers"
 
 interface FormValues {
   phone: string
@@ -53,12 +53,12 @@ const LoginPage: NextPageWithLayout = () => {
               <Label htmlFor="phone">شماره موبایل</Label>
               <Input
                 {...register("phone", {
-                  setValueAs: faNumToEn,
+                  setValueAs: normalizePhone,
                   pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
                 })}
                 className="ltr"
                 id="phone"
-                placeholder="912XXXXXXX"
+                placeholder="0912XXXXXXX"
                 required
                 type="text"
               />

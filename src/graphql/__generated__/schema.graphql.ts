@@ -147,6 +147,12 @@ export type DomainsFiltersInput = {
   nsState?: InputMaybe<DomainState>;
 };
 
+export type EnterCostInput = {
+  amount: Scalars['Int']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  type: PaymentType;
+};
+
 export type GetClientStatsFiltersInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -175,13 +181,13 @@ export type Mutation = {
   buyPackage: Scalars['String']['output'];
   buyRechargePackage: User;
   changePassword: User;
+  enterCost: User;
   issueCert: Domain;
   login: Login;
   logout: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
   signup: Auth;
-  signupA: Auth;
   updateArvanSslStates: Scalars['Boolean']['output'];
   updateChild: User;
   updateIp: Array<Dns>;
@@ -223,6 +229,11 @@ export type MutationChangePasswordArgs = {
 };
 
 
+export type MutationEnterCostArgs = {
+  input: EnterCostInput;
+};
+
+
 export type MutationIssueCertArgs = {
   data: IssueCertInput;
 };
@@ -244,11 +255,6 @@ export type MutationRenewPackageArgs = {
 
 
 export type MutationSignupArgs = {
-  data: SignupInput;
-};
-
-
-export type MutationSignupAArgs = {
   data: SignupInput;
 };
 
@@ -301,6 +307,14 @@ export type ParentTelegram = {
   __typename?: 'ParentTelegram';
   username?: Maybe<Scalars['String']['output']>;
 };
+
+/** Payment Type */
+export enum PaymentType {
+  ExternalServerCost = 'EXTERNAL_SERVER_COST',
+  IranServerCost = 'IRAN_SERVER_COST',
+  PackagePurchase = 'PACKAGE_PURCHASE',
+  WalletRecharge = 'WALLET_RECHARGE'
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -386,9 +400,9 @@ export type SignupInput = {
 export type TelegramUser = {
   __typename?: 'TelegramUser';
   bigAvatar?: Maybe<Scalars['String']['output']>;
-  firstname: Scalars['String']['output'];
+  firstname?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigNumber']['output'];
-  lastname: Scalars['String']['output'];
+  lastname?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
   smallAvatar?: Maybe<Scalars['String']['output']>;
   username?: Maybe<Scalars['String']['output']>;

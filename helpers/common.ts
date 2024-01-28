@@ -83,6 +83,21 @@ export const avatarColor = (str: string) => {
 export const  faNumToEn = (value: string) =>
 value.replace(/([۰-۹])/g, (token: string) => String.fromCharCode(token.charCodeAt(0) - 1728));
 
+function removePhonePrefix(phoneNumber: string): string {
+  if (phoneNumber.startsWith('0')) {
+    return phoneNumber.substring(1);
+  } else if (phoneNumber.startsWith('+98')) {
+    return phoneNumber.substring(3);
+  } else {
+    return phoneNumber;
+  }
+}
+
+
+export const normalizePhone = (phoneNumber: string): string =>  removePhonePrefix(faNumToEn(phoneNumber));
+
+
+
 export function bytesToGB(bytes: number): number {
   const gigabyte = 1024 * 1024 * 1024 // 1 gigabyte = 1024 megabytes * 1024 kilobytes * 1024 bytes
   return bytes / gigabyte
