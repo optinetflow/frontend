@@ -67,7 +67,7 @@ const BuyPackagePage: NextPageWithLayout = () => {
           <Label>
             <span className="font-black">{convertPersianCurrency(currentPackage.price)}</span> کارت به کارت کنید
           </Label>
-          <Copyable isCenter content="6037 6976 7728 4256" />
+          <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ''} />
           <Controller
             name="receipt"
             control={control}
