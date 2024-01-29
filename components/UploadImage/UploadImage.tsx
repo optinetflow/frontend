@@ -1,9 +1,11 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { ProcessServerConfigFunction } from "filepond"
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
 import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 import React, { forwardRef } from "react"
 import { FilePond, FilePondProps, registerPlugin } from "react-filepond"
+
 import { useUploadImageMutation } from "../../graphql/mutations/uploadImage.graphql.interface"
 
 import "filepond/dist/filepond.min.css"
@@ -11,7 +13,7 @@ import "filepond/dist/filepond.min.css"
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 
 // Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
 interface Props extends FilePondProps {
   id?: string;
@@ -50,6 +52,7 @@ export const UploadImage = forwardRef<FilePond, Props>(({ onChange, label, id, .
       stylePanelAspectRatio="1:1"
       name="files"
       credits={false}
+      acceptedFileTypes={["image/*"]}
       labelFileProcessing="درحال آپلود"
       labelFileProcessingComplete="آپلود شد"
       labelTapToUndo="بازگشت"

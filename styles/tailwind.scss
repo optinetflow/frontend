@@ -21,6 +21,8 @@ body {
 
 html {
   direction: rtl;
+
+  -webkit-tap-highlight-color: transparent; /* for removing the highlight */
 }
 
 .rtl {

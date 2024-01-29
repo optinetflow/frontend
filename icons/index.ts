@@ -11,3 +11,4 @@ export * from './TelegramIcon';
 export * from './BanknotesIcon';
 export * from './ArrowPathIcon';
 export * from './Cog6ToothIcon';
+export * from './ChatBubbleOvalLeftIcon';

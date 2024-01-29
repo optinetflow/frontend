@@ -114,7 +114,7 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
           <button type="button" onClick={handlePhoneClick} className="text-xs text-slate-600 text-right">
-            {phone}
+            0{phone}
           </button>
         </div>
       </div>

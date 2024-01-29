@@ -22,7 +22,7 @@ import {
 import {
   ArrowPathIcon,
   BanknotesIcon,
-  BellIcon,
+  ChatBubbleOvalLeftIcon,
   Cog6ToothIcon,
   PlusIcon,
   PowerIcon,
@@ -115,6 +115,7 @@ const HomePage: NextPageWithLayout = () => {
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟";
   const hasOnlinePackage = data?.userPackages?.[0] ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic : false;
+  const isMeFreshed = me.networkStatus === 7;
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
@@ -148,10 +149,10 @@ const HomePage: NextPageWithLayout = () => {
     }
   }
 
-  if (!isRegisteredInTelegram && hasOnlinePackage && !isSendRegisterToBotAlarm.current) {
+  if (isMeFreshed && !isRegisteredInTelegram && hasOnlinePackage && !isSendRegisterToBotAlarm.current) {
     toast({
-      duration: 15000,
-      title: "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟",
+      duration: 10000,
+      title: "می‌خواهید پیش از اتمام بسته مطلع شوید؟",
       description: "با ثبت‌نام در ربات تلگرام ما قبل از اتمام بسته پیام فرستاده شده و قابلیت تمدید بسته را دارید.",
       action: (<a href={botRef} ><ToastAction  altText="Register to bot">ثبت‌نام</ToastAction></a>),
     })
@@ -229,7 +230,7 @@ const HomePage: NextPageWithLayout = () => {
           {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef} >
               <Button variant="outline" className="flex w-full">
-                <BellIcon className="ml-2 h-5 w-5" />
+                <TelegramIcon className="ml-2 h-5 w-5" />
                 <span>{registerToBotText}</span>
               </Button>
             </a>
@@ -242,7 +243,7 @@ const HomePage: NextPageWithLayout = () => {
               href={`https://t.me/${me.data?.me.parent?.telegram?.username}`}
             >
               <Button variant="outline" className="flex w-full">
-                <TelegramIcon className="ml-2 h-5 w-5" />
+                <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
                 <span>پشتیبانی</span>
               </Button>
             </a>

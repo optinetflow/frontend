@@ -15275,6 +15275,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"filepond-plugin-file-validate-type@npm:^1.2.8":
+  version: 1.2.8
+  resolution: "filepond-plugin-file-validate-type@npm:1.2.8"
+  peerDependencies:
+    filepond: ">=1.x <5.x"
+  checksum: 5a8334323d0f9ef154f4f5788125e8b724ab3e39f23ccb35defad8d4a0f324f3097c280858f9662278576a9e9929065739c455f3bfe7bab1827bd1d9fe32d204
+  languageName: node
+  linkType: hard
+
 "filepond-plugin-image-exif-orientation@npm:^1.0.11":
   version: 1.0.11
   resolution: "filepond-plugin-image-exif-orientation@npm:1.0.11"
@@ -20297,6 +20306,7 @@ __metadata:
     eslint-plugin-tailwindcss: ^3.12.1
     fetch-mock: ^9.11.0
     filepond: ^4.30.6
+    filepond-plugin-file-validate-type: ^1.2.8
     filepond-plugin-image-exif-orientation: ^1.0.11
     filepond-plugin-image-preview: ^4.6.12
     graphql: 16.8.0
