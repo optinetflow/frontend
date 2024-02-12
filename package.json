@@ -2,8 +2,14 @@
   "name": "next-enterprise",
   "version": "0.0.0",
   "private": true,
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "scripts": {
-    "dev": "cross-env FORCE_COLOR=1 next dev",
+    "dev": "cross-env FORCE_COLOR=1 next dev -p 8372",
     "build": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "codegen": "env-cmd graphql-codegen",
@@ -60,6 +66,7 @@
     "clsx": "^2.0.0",
     "cookie": "0.5.0",
     "cookie-parser": "^1.4.6",
+    "core-js": "^3.35.1",
     "env-cmd": "10.1.0",
     "filepond": "^4.30.6",
     "filepond-plugin-file-validate-type": "^1.2.8",
