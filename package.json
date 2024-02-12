@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
+    "defaults",
+    "ie >= 9",
+    "Firefox >= 4", 
+    "Chrome >= 15", 
+    "Safari >= 5.1",
     "not op_mini all"
   ],
   "scripts": {
