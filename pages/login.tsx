@@ -75,11 +75,11 @@ const LoginPage: NextPageWithLayout = () => {
             </Button>
           </CardContent>
         </Card>
-        <Link className="w-full" href="/stat">
+        {/* <Link className="w-full" href="/stat">
           <Button variant="outline" className="flex w-full">
             مشاهده لینک
           </Button>
-        </Link>
+        </Link> */}
       </div>
     </form>
   )
