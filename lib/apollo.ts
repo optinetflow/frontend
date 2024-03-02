@@ -33,7 +33,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 const createApolloClient = async (ctx?: GetServerSidePropsContext | null) => {  
   const httpLink = createUploadLink({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
+    uri: `${document.location.origin}${process.env.NEXT_PUBLIC_GRAPHQL_URI}`,
     // credentials: 'same-origin',
   })
 

@@ -11,7 +11,7 @@
     "not op_mini all"
   ],
   "scripts": {
-    "dev": "cross-env FORCE_COLOR=1 next dev -p 8372",
+    "dev": "cross-env FORCE_COLOR=1 next dev -p 3000",
     "build": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "codegen": "env-cmd graphql-codegen",
