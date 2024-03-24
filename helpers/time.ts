@@ -13,7 +13,7 @@ export function remainingTimeToWords(remainingTime: number): string {
   if (days > 10) {
     return `${days + 1} روز`
   }
-	if (days < 10 && days >= 1) {
+	if (days < 10 && hours >= 1) {
     return `${days} روز${hours > 0 ? ` و ${hours} ساعت` : ''}`;
   }
 	if (days === 0 && hours >= 1) {
