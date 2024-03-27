@@ -95,7 +95,7 @@ export function GetStat() {
       getClientStats({
         variables: {
           filters: {
-            id: extractUUID(input),
+            id: uuid,
           },
         },
       })
