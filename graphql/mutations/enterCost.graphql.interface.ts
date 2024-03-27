@@ -8,14 +8,13 @@ export type EnterCostMutationVariables = Types.Exact<{
 }>;
 
 
-export type EnterCostMutation = { __typename?: 'Mutation', enterCost: { __typename?: 'User', id: string, balance: number, totalProfit: number } };
+export type EnterCostMutation = { __typename?: 'Mutation', enterCost: { __typename?: 'User', id: string, totalProfit: number } };
 
 
 export const EnterCostDocument = gql`
     mutation enterCost($input: EnterCostInput!) {
   enterCost(input: $input) {
     id
-    balance
     totalProfit
   }
 }

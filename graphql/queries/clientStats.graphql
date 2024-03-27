@@ -1,4 +1,4 @@
-query getClientStats($filters: GetClientStatsFiltersInput) {
+query getClientStats($filters: GetClientStatsFiltersInput!) {
     clientStats(filters: $filters){
         id
         email

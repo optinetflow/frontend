@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetClientStatsQueryVariables = Types.Exact<{
-  filters?: Types.InputMaybe<Types.GetClientStatsFiltersInput>;
+  filters: Types.GetClientStatsFiltersInput;
 }>;
 
 
@@ -12,7 +12,7 @@ export type GetClientStatsQuery = { __typename?: 'Query', clientStats: Array<{ _
 
 
 export const GetClientStatsDocument = gql`
-    query getClientStats($filters: GetClientStatsFiltersInput) {
+    query getClientStats($filters: GetClientStatsFiltersInput!) {
   clientStats(filters: $filters) {
     id
     email
@@ -41,7 +41,7 @@ export const GetClientStatsDocument = gql`
  *   },
  * });
  */
-export function useGetClientStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>) {
+export function useGetClientStatsQuery(baseOptions: Apollo.QueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
       }

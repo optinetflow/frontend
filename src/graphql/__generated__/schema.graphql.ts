@@ -63,6 +63,32 @@ export type ChangePasswordInput = {
   oldPassword: Scalars['String']['input'];
 };
 
+export type Child = {
+  __typename?: 'Child';
+  activePackages: Scalars['Int']['output'];
+  balance: Scalars['Float']['output'];
+  bankCard?: Maybe<Array<BankCard>>;
+  /** Identifies the date and time when the object was created. */
+  createdAt: Scalars['DateTime']['output'];
+  firstname: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isDisabled?: Maybe<Scalars['Boolean']['output']>;
+  isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
+  lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
+  lastname: Scalars['String']['output'];
+  maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
+  parent?: Maybe<Parent>;
+  parentId?: Maybe<Scalars['String']['output']>;
+  phone: Scalars['String']['output'];
+  profitBalance: Scalars['Float']['output'];
+  referId?: Maybe<Scalars['String']['output']>;
+  role: Role;
+  telegram?: Maybe<TelegramUser>;
+  totalProfit: Scalars['Float']['output'];
+  /** Identifies the date and time when the object was last updated. */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type ClientStat = {
   __typename?: 'ClientStat';
   /** Identifies the date and time when the object was created. */
@@ -154,8 +180,7 @@ export type EnterCostInput = {
 };
 
 export type GetClientStatsFiltersInput = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
 };
 
 export type IssueCertInput = {
@@ -318,7 +343,7 @@ export enum PaymentType {
 
 export type Query = {
   __typename?: 'Query';
-  children: Array<User>;
+  children: Array<Child>;
   clientStats: Array<ClientStat>;
   domains: Array<Domain>;
   hello: Scalars['String']['output'];
@@ -331,7 +356,7 @@ export type Query = {
 
 
 export type QueryClientStatsArgs = {
-  filters?: InputMaybe<GetClientStatsFiltersInput>;
+  filters: GetClientStatsFiltersInput;
 };
 
 
@@ -384,6 +409,7 @@ export type Server = {
 /** ServerCountry */
 export enum ServerCountry {
   De = 'DE',
+  Ir = 'IR',
   Nl = 'NL',
   Tr = 'TR'
 }
@@ -487,6 +513,7 @@ export type UserPackage = {
   createdAt: Scalars['DateTime']['output'];
   expiryTime: Scalars['BigNumber']['output'];
   id: Scalars['ID']['output'];
+  lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
   link: Scalars['String']['output'];
   name: Scalars['String']['output'];
   remainingTraffic: Scalars['BigNumber']['output'];

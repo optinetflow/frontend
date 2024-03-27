@@ -11,7 +11,7 @@ import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../graphql/queries/children.graphql.interface"
 import { copyText } from '../helpers';
-import { avatarColor, convertPersianCurrency, roundTo } from "../helpers"
+import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
 import * as Types from '../src/graphql/__generated__/schema.graphql';
 
@@ -26,6 +26,8 @@ interface CustomerProps {
   role: Types.Role;
   balance: number;
   totalProfit: number;
+  activePackages: number;
+  lastConnectedAt?: Date;
 }
 
 interface CustomerOptionsProps {
@@ -41,9 +43,6 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
         input: { childId, isDisabled: !isEnabled },
       },
     })
-      .then((res) => {
-        console.log("res ===>", res.data?.updateChild)
-      })
       .catch((e) => {
         console.log("e ==>", e)
       })
@@ -88,7 +87,16 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
   )
 }
 
-const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit }) => {
+function isRecentlyConnected(date: Date) {
+  const diffMs = Math.abs(new Date().getTime() - date.getTime());
+
+  // Check if the difference is less than 1.5 minutes (1.5 * 60 * 1000 milliseconds)
+  const isWithinWindow = diffMs < (1.5 * 60 * 1000);
+  
+  return isWithinWindow;
+}
+
+const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt }) => {
   const { toast } = useToast()
 
   const handlePhoneClick = () => {
@@ -98,23 +106,26 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
       duration: 500,
     })
   }
+  const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt);
   return (
     <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
-      <div className="flex flex-1 overflow-hidden items-center">
-        <Avatar className="h-12 w-12 text-xs">
+      <div className="relative flex flex-1 overflow-hidden items-center">
+        <Avatar className="relative h-12 w-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
           <AvatarFallback className={avatarColor(`${firstname} ${lastname}`)}>
             {firstname[0]}‌{lastname[0]}
           </AvatarFallback>
         </Avatar>
+        {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? 'top-4 right-8' : 'top-0 right-8'}  text-xs w-6 h-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
         <div className="mr-4 flex h-full w-full flex-col justify-between overflow-hidden text-sm space-y-2">
-          <div className="truncate font-black text-slate-800">
+          <div className=" truncate font-black text-slate-800">
             {firstname} {lastname}
           </div>
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
-          <button type="button" onClick={handlePhoneClick} className="text-xs text-slate-600 text-right">
+          <button type="button" onClick={handlePhoneClick} className="relative text-xs text-slate-600 text-right">
             0{phone}
+            {lastConnectedAt && !isOnline && <div className="absolute font-black top-0 left-0 text-xs rounded-full text-slate-400">{timeSince(lastConnectedAt)}</div>}
           </button>
         </div>
       </div>
@@ -136,6 +147,10 @@ const CustomersPage: NextPageWithLayout = () => {
               <span>ثبت نام</span>
             </Button>
           </Link>
+          <div className="flex bg-slate-50 text-slate-600 rounded-md text-sm">
+            <span className="w-full p-4">بسته: {data.children.reduce((all, child) => all + child.activePackages, 0)}</span>
+            <span className="w-full p-4">آنلاین: {data.children.reduce((all, child) => child.lastConnectedAt && isRecentlyConnected(new Date(child.lastConnectedAt)) ? all + 1 : all , 0)}</span>
+          </div>
           {data.children.map((child) => (
             <Customer
               key={child.id}
@@ -148,6 +163,8 @@ const CustomersPage: NextPageWithLayout = () => {
               role={child.role}
               balance={child.balance}
               totalProfit={child.totalProfit}
+              activePackages={child.activePackages}
+              lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined }
             />
           ))}
         </div>
