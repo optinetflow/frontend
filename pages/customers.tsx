@@ -125,7 +125,7 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
           <button type="button" onClick={handlePhoneClick} className="relative text-xs text-slate-600 text-right">
             0{phone}
-            {lastConnectedAt && !isOnline && <div className="absolute font-black top-0 left-0 text-xs rounded-full text-slate-400">{timeSince(lastConnectedAt)}</div>}
+            {lastConnectedAt && !isOnline && <div className="absolute top-0 left-0 text-xs font-thin rounded-full text-slate-400">{timeSince(lastConnectedAt)}</div>}
           </button>
         </div>
       </div>
