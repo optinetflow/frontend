@@ -1,3 +1,4 @@
+import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
 import React from "react"
 import { useForm } from "react-hook-form"
@@ -12,6 +13,9 @@ import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const SignupPage: NextPageWithLayout = () => {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const phone = searchParams.get("phone")
+  const promoCode = searchParams.get("promoCode")
 
   const [signup, signupData] = useSignupMutation()
   const {
@@ -23,10 +27,18 @@ const SignupPage: NextPageWithLayout = () => {
   const onSubmit = handleSubmit((data) => {
     signup({
       variables: {
-        input: data,
+        input: {
+          ...data,
+          ...(phone && { phone }),
+          promoCode,
+        },
       },
     })
       .then(() => {
+        if (promoCode) {
+          router.replace("/")
+          return
+        }
         router.replace("/customers")
       })
       .catch((e) => {
@@ -53,22 +65,25 @@ const SignupPage: NextPageWithLayout = () => {
         <Label htmlFor="referId">شماره موبایل معرف (اختیاری)</Label>
         <Input {...register("referId")}  id="referId" type="text" />
       </div> */}
+      {!promoCode && (
+        <div className="space-y-2">
+          <Label htmlFor="phone">شماره موبایل</Label>
+          <Input
+            {...register("phone", {
+              setValueAs: normalizePhone,
+              pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
+            })}
+            className="ltr"
+            id="phone"
+            placeholder="0912XXXXXXX"
+            required
+            type="tel"
+          />
+        </div>
+      )}
+
       <div className="space-y-2">
-        <Label htmlFor="phone">شماره موبایل</Label>
-        <Input
-          {...register("phone", {
-            setValueAs: normalizePhone,
-            pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
-          })}
-          className="ltr"
-          id="phone"
-          placeholder="0912XXXXXXX"
-          required
-          type="tel"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">رمز عبور</Label>
+        <Label htmlFor="password">رمز عبور جدید</Label>
         <Input
           {...register("password", { minLength: { value: 4, message: "رمز باید حداقل ۴ حرف باشد." } })}
           className="ltr"

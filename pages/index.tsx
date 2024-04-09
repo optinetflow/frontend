@@ -95,8 +95,8 @@ const HomePage: NextPageWithLayout = () => {
   const router = useRouter()
   const { toast } = useToast()
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })
-  const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" });
-  const isSendRegisterToBotAlarm = React.useRef(false);
+  const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  const isSendRegisterToBotAlarm = React.useRef(false)
 
   const [logout] = useLogoutMutation()
 
@@ -107,15 +107,18 @@ const HomePage: NextPageWithLayout = () => {
     })
   }
 
-  const botRef = `https://t.me/${process.env.NEXT_PUBLIC_BOT_NAME}?start=${jsonToB64Url({uid: me.data?.me.id || ""})}`;
+  const botRef = `https://t.me/${process.env.NEXT_PUBLIC_BOT_NAME}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`
   const isAdmin = me?.data?.me.role !== "USER"
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
   const isRegisteredInTelegram = me?.data?.me.telegram?.phone
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
-  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟";
-  const hasOnlinePackage = data?.userPackages?.[0] ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic : false;
-  const isMeFreshed = me.networkStatus === 7;
+  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟"
+  const hasOnlinePackage = data?.userPackages?.[0]
+    ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic
+    : false
+  const isMeFreshed = me.networkStatus === 7
+  const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
@@ -154,10 +157,14 @@ const HomePage: NextPageWithLayout = () => {
       duration: 10000,
       title: "می‌خواهید پیش از اتمام بسته مطلع شوید؟",
       description: "با ثبت‌نام در ربات تلگرام ما قبل از اتمام بسته پیام فرستاده شده و قابلیت تمدید بسته را دارید.",
-      action: (<a href={botRef} ><ToastAction  altText="Register to bot">ثبت‌نام</ToastAction></a>),
+      action: (
+        <a href={botRef}>
+          <ToastAction altText="Register to bot">ثبت‌نام</ToastAction>
+        </a>
+      ),
     })
 
-    isSendRegisterToBotAlarm.current = true;
+    isSendRegisterToBotAlarm.current = true
   }
 
   if (data) {
@@ -200,6 +207,14 @@ const HomePage: NextPageWithLayout = () => {
               <span>خرید بسته جدید</span>
             </Button>
           </Link>
+          {gif && (
+            <a className="block" href={botRef}>
+              <Button variant="outline" className="flex w-full">
+                {/* <TelegramIcon className="ml-2 h-5 w-5" /> */}
+                <span>{gif} گیگ هدیه با ثبت‌نام در ربات تلگرام</span>
+              </Button>
+            </a>
+          )}
           {isAdmin && (
             <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
               <Button variant="outline" className="flex w-full">
@@ -228,7 +243,7 @@ const HomePage: NextPageWithLayout = () => {
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
           {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
-            <a className="block" href={botRef} >
+            <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
                 <TelegramIcon className="ml-2 h-5 w-5" />
                 <span>{registerToBotText}</span>

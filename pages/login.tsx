@@ -27,6 +27,7 @@ const LoginPage: NextPageWithLayout = () => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<FormValues>()
 
   const onSubmit = handleSubmit((data) => {
@@ -38,6 +39,12 @@ const LoginPage: NextPageWithLayout = () => {
   })
 
   if (loginData?.data?.login) {
+    if (loginData?.data?.login?.isPromoCodeValid) {
+      const formData = getValues();
+      router.push(`/signup?phone=${formData.phone}&promoCode=${formData.password}`);
+      return;
+    }
+ 
     const redirected = searchParams.get("redirected")
     router.push(redirected ? decodeURIComponent(redirected) : "/")
   }

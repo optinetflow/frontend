@@ -66,12 +66,14 @@ export type ChangePasswordInput = {
 export type Child = {
   __typename?: 'Child';
   activePackages: Scalars['Int']['output'];
+  appliedDiscountPercent?: Maybe<Scalars['Float']['output']>;
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   firstname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
   lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -81,12 +83,14 @@ export type Child = {
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
   profitBalance: Scalars['Float']['output'];
+  profitPercent: Scalars['Float']['output'];
   referId?: Maybe<Scalars['String']['output']>;
   role: Role;
   telegram?: Maybe<TelegramUser>;
   totalProfit: Scalars['Float']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+  userGift?: Maybe<Array<UserGift>>;
 };
 
 export type ClientStat = {
@@ -189,6 +193,12 @@ export type IssueCertInput = {
 
 export type Login = {
   __typename?: 'Login';
+  isPromoCodeValid?: Maybe<Scalars['Boolean']['output']>;
+  loggedIn?: Maybe<LoginData>;
+};
+
+export type LoginData = {
+  __typename?: 'LoginData';
   tokens: Token;
   user: User;
 };
@@ -419,8 +429,7 @@ export type SignupInput = {
   lastname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
-  referId?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Role>;
+  promoCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TelegramUser = {
@@ -485,12 +494,14 @@ export enum UpstreamHttps {
 
 export type User = {
   __typename?: 'User';
+  appliedDiscountPercent?: Maybe<Scalars['Float']['output']>;
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   firstname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
   lastname: Scalars['String']['output'];
@@ -499,12 +510,20 @@ export type User = {
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
   profitBalance: Scalars['Float']['output'];
+  profitPercent: Scalars['Float']['output'];
   referId?: Maybe<Scalars['String']['output']>;
   role: Role;
   telegram?: Maybe<TelegramUser>;
   totalProfit: Scalars['Float']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+  userGift?: Maybe<Array<UserGift>>;
+};
+
+export type UserGift = {
+  __typename?: 'UserGift';
+  giftPackage?: Maybe<Package>;
+  isGiftUsed: Scalars['Boolean']['output'];
 };
 
 export type UserPackage = {

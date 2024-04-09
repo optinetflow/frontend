@@ -55,6 +55,8 @@ const createApolloClient = async (ctx?: GetServerSidePropsContext | null) => {
     if (graphQLErrors) {
       for (const error of graphQLErrors) {
         if (error.extensions?.code === 'UNAUTHENTICATED') {
+
+          console.log('error.extensions', error.extensions);
           // Redirect to login page
           window.location.replace(`/login?redirected=${encodeURIComponent(window.location.pathname)}`);
         }

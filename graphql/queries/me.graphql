@@ -34,5 +34,10 @@ query Me {
                 number
             }
         }
+        userGift {
+            giftPackage {
+                traffic
+            }
+        }
     }
 }
