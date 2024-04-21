@@ -6,16 +6,12 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
-import { Stat } from '../components/Stat';
+import { Stat } from "../components/Stat"
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
 import { useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import {
-  convertPersianCurrency,
-  jsonToB64Url,
-  roundTo,
-} from "../helpers"
+import { convertPersianCurrency, jsonToB64Url, roundTo } from "../helpers"
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -26,7 +22,6 @@ import {
   TelegramIcon,
   UsersIcon,
 } from "../icons"
-
 
 const HomePage: NextPageWithLayout = () => {
   const router = useRouter()
@@ -51,6 +46,7 @@ const HomePage: NextPageWithLayout = () => {
   const isRegisteredInTelegram = me?.data?.me.telegram?.phone
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
+  const hasPackage = Boolean(data?.userPackages?.length)
   const hasOnlinePackage = data?.userPackages?.[0]
     ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic
     : false
@@ -179,12 +175,7 @@ const HomePage: NextPageWithLayout = () => {
           {data.userPackages?.map((userPackage) => (
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
-          <Link className="flex" href="/help">
-            <Button variant="outline" className="flex w-full">
-              <InformationCircleIcon className="ml-2 h-5 w-5" />
-              <span>آموزش اتصال</span>
-            </Button>
-          </Link>
+          
           {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
@@ -193,19 +184,30 @@ const HomePage: NextPageWithLayout = () => {
               </Button>
             </a>
           )}
-          {me.data?.me.parent?.telegram?.username && (
-            <a
-              target="_blank"
-              rel="noreferrer"
-              className="flex"
-              href={`https://t.me/${me.data?.me.parent?.telegram?.username}`}
-            >
-              <Button variant="outline" className="flex w-full">
-                <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
-                <span>پشتیبانی</span>
-              </Button>
-            </a>
-          )}
+          <div className="flex space-x-4 flex-row-reverse">
+            {me.data?.me.parent?.telegram?.username && (
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className="flex w-full"
+                href={`https://t.me/${me.data?.me.parent?.telegram?.username}`}
+              >
+                <Button variant="outline" className="flex w-full">
+                  <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
+                  <span>پشتیبانی</span>
+                </Button>
+              </a>
+            )}
+            {hasPackage && (
+              <Link className="flex w-full" href="/help">
+                <Button variant="outline" className="flex w-full">
+                  <InformationCircleIcon className="ml-2 h-5 w-5" />
+                  <span>آموزش اتصال</span>
+                </Button>
+              </Link>
+            )}
+          </div>
+          
         </div>
       </div>
     )

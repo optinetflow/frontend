@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type UserPackagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserPackagesQuery = { __typename?: 'Query', userPackages: Array<{ __typename?: 'UserPackage', id: string, name: string, link: string, remainingTraffic: any, totalTraffic: any, expiryTime: any, createdAt: any, updatedAt: any }> };
+export type UserPackagesQuery = { __typename?: 'Query', userPackages: Array<{ __typename?: 'UserPackage', id: string, name: string, link: string, remainingTraffic: any, totalTraffic: any, expiryTime: any, createdAt: any, updatedAt: any, lastConnectedAt?: any | null }> };
 
 
 export const UserPackagesDocument = gql`
@@ -20,6 +20,7 @@ export const UserPackagesDocument = gql`
     expiryTime
     createdAt
     updatedAt
+    lastConnectedAt
   }
 }
     `;

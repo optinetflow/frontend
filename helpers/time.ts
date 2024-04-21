@@ -65,3 +65,13 @@ export const timeSince = (date: Date): string | undefined => {
   }
   return `${seconds < 0 || seconds === 0 ? 'چند' : Math.floor(seconds)} ثانیه  قبل`;
 };
+
+
+export function isRecentlyConnected(date: Date) {
+  const diffMs = Math.abs(new Date().getTime() - date.getTime());
+
+  // Check if the difference is less than 1.5 minutes (1.5 * 60 * 1000 milliseconds)
+  const isWithinWindow = diffMs < (1.5 * 60 * 1000);
+  
+  return isWithinWindow;
+}

@@ -11,7 +11,7 @@ import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../graphql/queries/children.graphql.interface"
 import { copyText } from '../helpers';
-import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
+import { avatarColor, convertPersianCurrency, isRecentlyConnected, roundTo, timeSince } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
 import * as Types from '../src/graphql/__generated__/schema.graphql';
 
@@ -87,14 +87,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
   )
 }
 
-function isRecentlyConnected(date: Date) {
-  const diffMs = Math.abs(new Date().getTime() - date.getTime());
 
-  // Check if the difference is less than 1.5 minutes (1.5 * 60 * 1000 milliseconds)
-  const isWithinWindow = diffMs < (1.5 * 60 * 1000);
-  
-  return isWithinWindow;
-}
 
 const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt }) => {
   const { toast } = useToast()
