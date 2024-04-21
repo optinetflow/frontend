@@ -18,10 +18,10 @@ const AndroidPage: NextPageWithLayout = () => {
       <div className="w-full space-y-4">
         <p>۱. برنامه V2rayNG را دانلود و نصب کنید:</p>
         <a
-          target="_blank"
           rel="noreferrer"
           className="flex"
           href="https://github.com/2dust/v2rayNG/releases/download/1.8.19/v2rayNG_1.8.19.apk"
+          download
         >
           <Button variant="outline" className="flex w-full">
             <ArrowDownTrayIcon className="ml-2 h-5 w-5" />
