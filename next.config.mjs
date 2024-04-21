@@ -12,6 +12,7 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   reactStrictMode: true,
   experimental: { instrumentationHook: true },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
