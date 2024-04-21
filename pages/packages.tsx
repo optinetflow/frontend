@@ -1,24 +1,36 @@
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 import React from "react"
 
-import type { NextPageWithLayout } from './_app'
-import Layout from '../components/Layout/Layout'
+import { Button } from "@/components/ui/button"
+
+
+import type { NextPageWithLayout } from "./_app"
+import Layout from "../components/Layout/Layout"
 
 import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface"
 import { convertPersianCurrency } from "../helpers"
+import { ArrowUTurnLeftIcon } from "../icons"
 
 const PackagesPage: NextPageWithLayout = () => {
-  const packages = useGetPackagesQuery({ fetchPolicy: "cache-and-network" });
+  const packages = useGetPackagesQuery({ fetchPolicy: "cache-and-network" })
   const searchParams = useSearchParams()
-  const userPackageId = searchParams.get('userPackageId');
+  const userPackageId = searchParams.get("userPackageId")
+  const router = useRouter()
 
   return (
-    <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)"}}>
-        <div className="w-full space-y-4">
+    <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
+      <div className="w-full space-y-4">
+        <Button variant="secondary" className="flex w-full" onClick={router.back}>
+          <ArrowUTurnLeftIcon className="ml-2 h-5 w-5" />
+          <span>بازگشت</span>
+        </Button>
         {packages.data?.packages.map((pack) => (
           <Link
-            href={userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`}
+            href={
+              userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`
+            }
             key={pack.id}
             className="mb-4 flex h-32 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"
           >
@@ -34,15 +46,10 @@ const PackagesPage: NextPageWithLayout = () => {
       </div>
     </div>
   )
-};
+}
 
-export default PackagesPage;
-
+export default PackagesPage
 
 PackagesPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <Layout>
-      {page}
-    </Layout>
-  )
+  return <Layout>{page}</Layout>
 }

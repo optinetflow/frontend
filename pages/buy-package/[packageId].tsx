@@ -13,8 +13,10 @@ import { useBuyPackageMutation } from "../../graphql/mutations/buyPackage.graphq
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface"
 import { convertPersianCurrency } from "../../helpers"
+import { ArrowUTurnLeftIcon } from "../../icons"
 import { BuyPackageInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
+
 
 const BuyPackagePage: NextPageWithLayout = () => {
   const router = useRouter()
@@ -77,6 +79,10 @@ const BuyPackagePage: NextPageWithLayout = () => {
           <div className=" text-sm text-red-600">{errors?.[firstError]?.message}&nbsp;</div>
           <Button disabled={buyPackage?.loading} className="w-full" type="submit">
             {buyPackage?.loading ? "لطفا کمی صبر کنید..." : buttonLabel}
+          </Button>
+          <Button variant="ghost" className="flex w-full" onClick={router.back}>
+            <ArrowUTurnLeftIcon className="ml-2 h-5 w-5" />
+            <span>بازگشت</span>
           </Button>
         </div>
       </form>

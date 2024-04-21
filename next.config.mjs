@@ -11,6 +11,16 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
   output: isDevelop ? undefined : 'export',
   reactStrictMode: true,
   experimental: { instrumentationHook: true },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'vaslkon.com',
+        port: '',
+        pathname: '/file/optinetflow/asset/**',
+      },
+    ],
+  },
   ...(isDevelop && {
     async rewrites() {
       return [

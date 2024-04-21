@@ -5,91 +5,28 @@ import { Button } from "@/components/ui/button"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
-import { Copyable } from "../components/Copyable/Copyable"
 import Layout from "../components/Layout/Layout"
+import { Stat } from '../components/Stat';
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
 import { useMeQuery } from "../graphql/queries/me.graphql.interface"
 
-import { UserPackagesQuery, useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
+import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
 import {
-  bytesToGB,
   convertPersianCurrency,
-  getRemainingDays,
   jsonToB64Url,
-  remainingTimeToWords,
   roundTo,
 } from "../helpers"
 import {
-  ArrowPathIcon,
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
   Cog6ToothIcon,
+  InformationCircleIcon,
   PlusIcon,
   PowerIcon,
   TelegramIcon,
   UsersIcon,
 } from "../icons"
 
-type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
-  ? ElementType
-  : never
-interface ProgressBarProp {
-  progress: number
-}
-
-const ProgressBar: React.FC<ProgressBarProp> = ({ progress }) => {
-  const rounded = Math.round(progress)
-  return (
-    <div className="ltr flex-1 rounded-full bg-slate-200">
-      <div
-        className="rounded-full bg-slate-900 py-1 text-center font-sans text-xs font-medium leading-none text-neutral-200"
-        style={{ width: `${rounded}%` }}
-      ></div>
-    </div>
-  )
-}
-
-interface StatProps {
-  pack: ArrayElement<UserPackagesQuery["userPackages"]>
-  onRenewClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
-}
-function Stat({ pack, onRenewClick }: StatProps) {
-  const remainingTime = pack.expiryTime - new Date().getTime()
-  const totalTraffic = roundTo(bytesToGB(pack.totalTraffic), 2)
-  const remainingTraffic = roundTo(bytesToGB(pack.remainingTraffic), 2)
-  const remainingDays = getRemainingDays(pack.expiryTime)
-
-  const remainingTimeWords =
-    remainingTime > 0 ? `${remainingTimeToWords(remainingTime)} مانده تا اتمام بسته` : "بسته‌ی شما منقضی شده است"
-  const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords
-  const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است"
-
-  const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85
-
-  return (
-    <div className="space-y-4 rounded-md bg-slate-50 p-4">
-      <div className="truncate pb-6 text-lg font-black text-slate-800">{pack.name}</div>
-      <div className="text-xs font-thin text-slate-500">{packageNote}</div>
-      <div className="flex items-center justify-between">
-        <div className="ltr ml-4 pt-1 text-sm font-black text-slate-500">
-          {remainingTraffic > 0 ? remainingTraffic : 0} GB
-        </div>
-        <ProgressBar progress={((remainingTraffic > 0 ? remainingTraffic : 0) / totalTraffic) * 100} />
-      </div>
-
-      {showRenewBtn ? (
-        <Link className="flex" href={`/packages?userPackageId=${pack.id}`} onClick={onRenewClick}>
-          <Button variant="outline" className="flex w-full text-slate-600">
-            <ArrowPathIcon className="ml-2 h-5 w-5" />
-            <span>تمدید بسته</span>
-          </Button>
-        </Link>
-      ) : (
-        <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
-      )}
-    </div>
-  )
-}
 
 const HomePage: NextPageWithLayout = () => {
   const router = useRouter()
@@ -113,7 +50,7 @@ const HomePage: NextPageWithLayout = () => {
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
   const isRegisteredInTelegram = me?.data?.me.telegram?.phone
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
-  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "آیا می‌خواهید پیش از اتمام بسته مطلع شوید؟"
+  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
   const hasOnlinePackage = data?.userPackages?.[0]
     ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic
     : false
@@ -152,20 +89,20 @@ const HomePage: NextPageWithLayout = () => {
     }
   }
 
-  if (isMeFreshed && !isRegisteredInTelegram && hasOnlinePackage && !isSendRegisterToBotAlarm.current) {
-    toast({
-      duration: 10000,
-      title: "می‌خواهید پیش از اتمام بسته مطلع شوید؟",
-      description: "با ثبت‌نام در ربات تلگرام ما قبل از اتمام بسته پیام فرستاده شده و قابلیت تمدید بسته را دارید.",
-      action: (
-        <a href={botRef}>
-          <ToastAction altText="Register to bot">ثبت‌نام</ToastAction>
-        </a>
-      ),
-    })
+  // if (isMeFreshed && !isRegisteredInTelegram && hasOnlinePackage && !isSendRegisterToBotAlarm.current) {
+  //   toast({
+  //     duration: 10000,
+  //     title: "می‌خواهید پیش از اتمام بسته مطلع شوید؟",
+  //     description: "با ثبت‌نام در ربات تلگرام ما قبل از اتمام بسته پیام فرستاده شده و قابلیت تمدید بسته را دارید.",
+  //     action: (
+  //       <a href={botRef}>
+  //         <ToastAction altText="Register to bot">ثبت‌نام</ToastAction>
+  //       </a>
+  //     ),
+  //   })
 
-    isSendRegisterToBotAlarm.current = true
-  }
+  //   isSendRegisterToBotAlarm.current = true
+  // }
 
   if (data) {
     return (
@@ -242,6 +179,12 @@ const HomePage: NextPageWithLayout = () => {
           {data.userPackages?.map((userPackage) => (
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
+          <Link className="flex" href="/help">
+            <Button variant="outline" className="flex w-full">
+              <InformationCircleIcon className="ml-2 h-5 w-5" />
+              <span>آموزش اتصال</span>
+            </Button>
+          </Link>
           {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
