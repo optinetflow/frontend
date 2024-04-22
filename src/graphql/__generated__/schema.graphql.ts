@@ -71,6 +71,7 @@ export type Child = {
   bankCard?: Maybe<Array<BankCard>>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   firstname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
@@ -453,6 +454,7 @@ export type Token = {
 
 export type UpdateChildInput = {
   childId: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   firstname?: InputMaybe<Scalars['String']['input']>;
   isDisabled?: InputMaybe<Scalars['Boolean']['input']>;
   lastname?: InputMaybe<Scalars['String']['input']>;

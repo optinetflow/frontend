@@ -3,6 +3,7 @@ import React from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Layout from "../../components/Layout/Layout"
@@ -110,6 +111,10 @@ const CustomerEditPage: NextPageWithLayout = () => {
           id="password"
           type="text"
         />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="description">توضیحات (اختیاری)</Label>
+        <Textarea className="resize-none" rows={3} defaultValue={customer?.description || undefined} {...register("description")} id="description" />
       </div>
 
       <div className=" text-sm text-red-600">

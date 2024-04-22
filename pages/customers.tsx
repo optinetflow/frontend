@@ -28,6 +28,7 @@ interface CustomerProps {
   totalProfit: number;
   activePackages: number;
   lastConnectedAt?: Date;
+  description?: string | null;
 }
 
 interface CustomerOptionsProps {
@@ -89,7 +90,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 
 
 
-const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt }) => {
+const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt, description }) => {
   const { toast } = useToast()
 
   const handlePhoneClick = () => {
@@ -109,9 +110,9 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
             {firstname[0]}‌{lastname[0]}
           </AvatarFallback>
         </Avatar>
-        {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? 'top-4 right-8' : 'top-0 right-8'}  text-xs w-6 h-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
+        {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? description ? 'top-6 right-8' : 'top-4 right-8' : 'top-0 right-8'}  text-xs w-6 h-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
         <div className="mr-4 flex h-full w-full flex-col justify-between overflow-hidden text-sm space-y-2">
-          <div className=" truncate font-black text-slate-800">
+          <div className="truncate font-black text-slate-800">
             {firstname} {lastname}
           </div>
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
@@ -120,6 +121,7 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
             0{phone}
             {lastConnectedAt && !isOnline && <div className="absolute top-0 left-0 text-xs font-thin rounded-full text-slate-400">{timeSince(lastConnectedAt)}</div>}
           </button>
+          {description && <div className="truncate text-xs font-thin text-slate-300">{description}</div>}
         </div>
       </div>
       <CustomerOptions id={id} isDisabled={isDisabled} />
@@ -158,6 +160,7 @@ const CustomersPage: NextPageWithLayout = () => {
               totalProfit={child.totalProfit}
               activePackages={child.activePackages}
               lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined }
+              description={child.description}
             />
           ))}
         </div>

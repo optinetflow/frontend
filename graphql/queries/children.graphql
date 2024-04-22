@@ -12,6 +12,7 @@ query children {
         totalProfit
         activePackages
         lastConnectedAt
+        description
         telegram {
             id
             phone
