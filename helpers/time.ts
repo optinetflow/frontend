@@ -10,17 +10,20 @@ export function remainingTimeToWords(remainingTime: number): string {
 	const hours = floorTo((remainingTime - (days * millisecondsInDay)) / millisecondsInHour, 0);
   const mins = floorTo((remainingTime - (days * millisecondsInDay) - (hours * millisecondsInHour)) / millisecondsInMinute, 0);
 
-  if (days >= 10) {
-    return `${days + 1} روز`
+  if (days === 0 && hours === 0 && hours === 0) {
+    return `${mins} دقیقه`;
   }
-	if (days < 10) {
-    return `${days} روز${hours > 0 ? ` و ${hours} ساعت` : ''}`;
-  }
-	if (days === 0 && hours >= 1) {
+
+  if (days === 0 && hours >= 1) {
     return `${hours} ساعت${mins > 0 ? ` و ${mins} دقیقه` : ''}`;
   }
-	if (hours === 0 && hours === 0) {
-    return `${mins} دقیقه`;
+
+  if (days < 10) {
+    return `${days} روز${hours > 0 ? ` و ${hours} ساعت` : ''}`;
+  }
+
+  if (days >= 10) {
+    return `${days + 1} روز`
   }
 
   return "0 ثانیه"

@@ -80,6 +80,7 @@ export type Child = {
   lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
   lastname: Scalars['String']['output'];
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
+  onlinePackages: Scalars['Int']['output'];
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];

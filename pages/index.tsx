@@ -23,6 +23,8 @@ import {
   UsersIcon,
 } from "../icons"
 
+const isDevelop = process.env.NODE_ENV === 'development';
+
 const HomePage: NextPageWithLayout = () => {
   const router = useRouter()
   const { toast } = useToast()
@@ -74,7 +76,7 @@ const HomePage: NextPageWithLayout = () => {
   }
 
   const checkAdminRequirements = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (!isRegisteredInTelegram && isAdmin) {
+    if (!isRegisteredInTelegram && isAdmin && !isDevelop) {
       e.preventDefault()
       toast({ variant: "destructive", description: "لطفا در ربات تلگرام ثبت نام کنید." })
     }

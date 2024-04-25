@@ -11,6 +11,7 @@ query children {
         balance
         totalProfit
         activePackages
+        onlinePackages
         lastConnectedAt
         description
         telegram {

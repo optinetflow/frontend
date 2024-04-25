@@ -11,7 +11,7 @@ import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../graphql/queries/children.graphql.interface"
 import { copyText } from '../helpers';
-import { avatarColor, convertPersianCurrency, isRecentlyConnected, roundTo, timeSince } from "../helpers"
+import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
 import * as Types from '../src/graphql/__generated__/schema.graphql';
 
@@ -27,6 +27,7 @@ interface CustomerProps {
   balance: number;
   totalProfit: number;
   activePackages: number;
+  onlinePackages: number;
   lastConnectedAt?: Date;
   description?: string | null;
 }
@@ -90,7 +91,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 
 
 
-const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt, description }) => {
+const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt, description, onlinePackages }) => {
   const { toast } = useToast()
 
   const handlePhoneClick = () => {
@@ -100,7 +101,7 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
       duration: 500,
     })
   }
-  const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt);
+  const isOnline = lastConnectedAt && onlinePackages > 0;
   return (
     <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="relative flex flex-1 overflow-hidden items-center">
@@ -144,7 +145,7 @@ const CustomersPage: NextPageWithLayout = () => {
           </Link>
           <div className="flex bg-slate-50 text-slate-600 rounded-md text-sm">
             <span className="w-full p-4">بسته: {data.children.reduce((all, child) => all + child.activePackages, 0)}</span>
-            <span className="w-full p-4">آنلاین: {data.children.reduce((all, child) => child.lastConnectedAt && isRecentlyConnected(new Date(child.lastConnectedAt)) ? all + 1 : all , 0)}</span>
+            <span className="w-full p-4">آنلاین: {data.children.reduce((all, child) => all + child.onlinePackages, 0)}</span>
           </div>
           {data.children.map((child) => (
             <Customer
@@ -159,6 +160,7 @@ const CustomersPage: NextPageWithLayout = () => {
               balance={child.balance}
               totalProfit={child.totalProfit}
               activePackages={child.activePackages}
+              onlinePackages={child.onlinePackages}
               lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined }
               description={child.description}
             />
