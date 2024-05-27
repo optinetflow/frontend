@@ -71,7 +71,7 @@ const LoginPage: NextPageWithLayout = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">رمز عبور</Label>
+              <Label htmlFor="password">رمز عبور (یا کد ثبت‌نام)</Label>
               <Input {...register("password")} className="ltr" id="password" required type="password" />
             </div>
             <div className=" text-sm text-red-600">
