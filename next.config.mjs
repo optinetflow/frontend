@@ -27,7 +27,7 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
       return [
         {
           source: '/graphql',
-          destination: 'http://localhost:3333/graphql',
+          destination: 'https://vaslkon.com/api/graphql',
         },
       ];
     }

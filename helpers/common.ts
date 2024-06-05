@@ -113,6 +113,12 @@ export function floorTo(number: number, decimalPlaces: number) {
   return Math.floor(number * factor) / factor
 }
 
+export function ceilTo(number: number, decimalPlaces: number) {
+  const factor = Math.pow(10, decimalPlaces);
+
+  return Math.ceil(number * factor) / factor;
+}
+
 export function copyText(text: string) {
   if (navigator.clipboard) {
     // Clipboard API method

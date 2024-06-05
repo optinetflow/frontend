@@ -78,7 +78,7 @@ const HomePage: NextPageWithLayout = () => {
   const checkAdminRequirements = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (!isRegisteredInTelegram && isAdmin && !isDevelop) {
       e.preventDefault()
-      toast({ variant: "destructive", description: "لطفا در ربات تلگرام ثبت نام کنید." })
+      toast({ variant: "destructive", description: "لطفا در ربات تلگرام عضو شوید." })
     }
 
     if (!hasBankCard && isAdmin) {
@@ -146,7 +146,7 @@ const HomePage: NextPageWithLayout = () => {
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
                 {/* <TelegramIcon className="ml-2 h-5 w-5" /> */}
-                <span>{gif} گیگ هدیه با ثبت‌نام در ربات تلگرام</span>
+                <span>{gif} گیگ تست با عضو شدن در ربات تلگرام</span>
               </Button>
             </a>
           )}

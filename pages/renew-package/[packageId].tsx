@@ -13,7 +13,7 @@ import { UploadImage } from "../../components/UploadImage/UploadImage"
 import { useRenewPackageMutation } from "../../graphql/mutations/renewPackage.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface"
-import { convertPersianCurrency } from "../../helpers"
+import { ceilTo, convertPersianCurrency } from "../../helpers"
 import { RenewPackageInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
@@ -31,7 +31,13 @@ const BuyPackagePage: NextPageWithLayout = () => {
   } = useForm<RenewPackageInput>()
   const packages = useGetPackagesQuery({ fetchPolicy: "cache-only" })
   const me = useMeQuery({ fetchPolicy: "cache-only" })
-  const currentPackage = packages.data?.packages.find((pack) => pack.id === packageId)
+  const filteredPackages = me.data?.me.parent?.id === '801d871d-879a-4ad0-9e8c-a5577ffd682d' ? packages.data?.packages.filter(pack => {
+    if ([20, 50, 40].includes(pack.traffic)) return false;
+    return true;
+  }).map((pack) => {
+    return ({...pack,  price: ceilTo(pack.price * 0.7, 0)})
+  }): packages.data?.packages;
+  const currentPackage = filteredPackages?.find((pack) => pack.id === packageId)
 
   const onSubmit = handleSubmit((data) => {
     renewPackageMutate({
