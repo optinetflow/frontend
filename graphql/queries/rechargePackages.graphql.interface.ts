@@ -42,6 +42,11 @@ export function useRechargePackagesLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(RechargePackagesDocument, options);
         }
+export function useRechargePackagesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RechargePackagesQuery, RechargePackagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(RechargePackagesDocument, options);
+        }
 export type RechargePackagesQueryHookResult = ReturnType<typeof useRechargePackagesQuery>;
 export type RechargePackagesLazyQueryHookResult = ReturnType<typeof useRechargePackagesLazyQuery>;
+export type RechargePackagesSuspenseQueryHookResult = ReturnType<typeof useRechargePackagesSuspenseQuery>;
 export type RechargePackagesQueryResult = Apollo.QueryResult<RechargePackagesQuery, RechargePackagesQueryVariables>;

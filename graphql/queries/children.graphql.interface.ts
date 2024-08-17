@@ -6,15 +6,14 @@ const defaultOptions = {} as const;
 export type ChildrenQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'Child', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, activePackages: number, onlinePackages: number, lastConnectedAt?: any | null, description?: string | null, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
+export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'Child', id: string, firstname: string, lastname?: string | null, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, activePackages: number, onlinePackages: number, lastConnectedAt?: any | null, description?: string | null, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
 
 
 export const ChildrenDocument = gql`
     query children {
   children {
     id
-    firstname
-    lastname
+    fullname
     phone
     role
     createdAt
@@ -62,6 +61,11 @@ export function useChildrenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<C
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
         }
+export function useChildrenSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ChildrenQuery, ChildrenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
+        }
 export type ChildrenQueryHookResult = ReturnType<typeof useChildrenQuery>;
 export type ChildrenLazyQueryHookResult = ReturnType<typeof useChildrenLazyQuery>;
+export type ChildrenSuspenseQueryHookResult = ReturnType<typeof useChildrenSuspenseQuery>;
 export type ChildrenQueryResult = Apollo.QueryResult<ChildrenQuery, ChildrenQueryVariables>;

@@ -51,8 +51,8 @@ const PromoCodePage: NextPageWithLayout = () => {
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
       <div className="space-y-2">
-        <Label htmlFor="firstname">نام و نام خانوادگی (فارسی)</Label>
-        <Input {...register("firstname")} id="firstname" required type="text" />
+        <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
+        <Input {...register("fullname")} id="fullname" required type="text" />
       </div>
   
       <div className="space-y-2">

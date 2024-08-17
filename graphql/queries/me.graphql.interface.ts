@@ -6,15 +6,14 @@ const defaultOptions = {} as const;
 export type MeQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, isParentDisabled?: boolean | null, balance: number, totalProfit: number, maxRechargeDiscountPercent?: number | null, bankCard?: Array<{ __typename?: 'BankCard', name: string, number: string }> | null, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null, parent?: { __typename?: 'Parent', id: string, telegram?: { __typename?: 'ParentTelegram', username?: string | null } | null, bankCard?: Array<{ __typename?: 'BankCard', number: string }> | null } | null, userGift?: Array<{ __typename?: 'UserGift', giftPackage?: { __typename?: 'Package', traffic: number } | null }> | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, fullname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, isParentDisabled?: boolean | null, balance: number, totalProfit: number, maxRechargeDiscountPercent?: number | null, bankCard?: Array<{ __typename?: 'BankCard', name: string, number: string }> | null, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null, parent?: { __typename?: 'Parent', id: string, telegram?: { __typename?: 'ParentTelegram', username?: string | null } | null, bankCard?: Array<{ __typename?: 'BankCard', number: string }> | null } | null, userGift?: Array<{ __typename?: 'UserGift', giftPackage?: { __typename?: 'Package', traffic: number } | null }> | null } };
 
 
 export const MeDocument = gql`
     query Me {
   me {
     id
-    firstname
-    lastname
+    fullname
     phone
     role
     createdAt
@@ -78,6 +77,11 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
         }
+export function useMeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;

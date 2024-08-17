@@ -109,7 +109,7 @@ const HomePage: NextPageWithLayout = () => {
           <div className="space-y-2 rounded-lg bg-slate-50 p-4">
             <div className="flex items-center justify-between ">
               <div className="truncate text-sm text-slate-700">
-                {me.data?.me.firstname} {me.data?.me.lastname}
+                {me.data?.me?.fullname}
               </div>
               <Button
                 onClick={handleLogout}

@@ -73,12 +73,13 @@ export type Child = {
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   firstname: Scalars['String']['output'];
+  fullname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
   lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
-  lastname: Scalars['String']['output'];
+  lastname?: Maybe<Scalars['String']['output']>;
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   onlinePackages: Scalars['Int']['output'];
   parent?: Maybe<Parent>;
@@ -427,8 +428,7 @@ export enum ServerCountry {
 }
 
 export type SignupInput = {
-  firstname: Scalars['String']['input'];
-  lastname: Scalars['String']['input'];
+  fullname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
   promoCode?: InputMaybe<Scalars['String']['input']>;
@@ -456,9 +456,8 @@ export type Token = {
 export type UpdateChildInput = {
   childId: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
-  firstname?: InputMaybe<Scalars['String']['input']>;
+  fullname?: InputMaybe<Scalars['String']['input']>;
   isDisabled?: InputMaybe<Scalars['Boolean']['input']>;
-  lastname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<Role>;
@@ -477,8 +476,7 @@ export type UpdateDnsPortInput = {
 export type UpdateUserInput = {
   cardBandName?: InputMaybe<Scalars['String']['input']>;
   cardBandNumber?: InputMaybe<Scalars['String']['input']>;
-  firstname?: InputMaybe<Scalars['String']['input']>;
-  lastname?: InputMaybe<Scalars['String']['input']>;
+  fullname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
 };
@@ -503,11 +501,12 @@ export type User = {
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   firstname: Scalars['String']['output'];
+  fullname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
-  lastname: Scalars['String']['output'];
+  lastname?: Maybe<Scalars['String']['output']>;
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;

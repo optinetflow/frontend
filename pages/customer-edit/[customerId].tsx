@@ -57,13 +57,10 @@ const CustomerEditPage: NextPageWithLayout = () => {
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
       <div className="space-y-2">
-        <Label htmlFor="firstname">نام (فارسی)</Label>
-        <Input defaultValue={customer?.firstname} {...register("firstname")} id="firstname" required type="text" />
+        <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
+        <Input defaultValue={customer?.fullname} {...register("fullname")} id="fullname" required type="text" />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="lastname">نام خانوادگی (فارسی)</Label>
-        <Input defaultValue={customer?.lastname} {...register("lastname")} id="lastname" required type="text" />
-      </div>
+     
       {isSuperAdmin && (
         <div className="space-y-2">
           <Label htmlFor="role">دسترسی</Label>
