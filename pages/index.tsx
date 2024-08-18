@@ -198,12 +198,12 @@ const HomePageComponent: React.FC = () => {
 
 const HomePage: NextPageWithLayout = () => {
   console.log('Renderrrrrrred INdex.tsx');
-  const router = useRouter();
+  // const router = useRouter();
 
-  // Only render the HomePageContent if the current route is "/"
-  if (router.pathname !== '/') {
-    return null;
-  }
+  // // Only render the HomePageContent if the current route is "/"
+  // if (router.pathname !== '/') {
+  //   return null;
+  // }
 
   return <HomePageComponent />;
 }
