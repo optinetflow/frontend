@@ -27,7 +27,7 @@ const config = withPlugins([[withBundleAnalyzer({ enabled: env.ANALYZE })]], {
       return [
         {
           source: '/graphql',
-          destination: process.env.CODEGEN_GRAPHQL_URI,
+          destination: 'https://vaslkon.com/api/graphql',
         },
       ];
     }
