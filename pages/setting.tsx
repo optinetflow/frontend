@@ -16,7 +16,6 @@ import { EnterCostInput, UpdateUserInput } from "../src/graphql/__generated__/sc
 
 const EnterConst: React.FC = () => {
   const router = useRouter()
-  const me = useMeQuery({ fetchPolicy: "cache-only" })
   const [enterCost, enterCostData] = useEnterCostMutation()
   const {
     register,

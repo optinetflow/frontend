@@ -72,14 +72,12 @@ export type Child = {
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  firstname: Scalars['String']['output'];
   fullname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
   lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
-  lastname?: Maybe<Scalars['String']['output']>;
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   onlinePackages: Scalars['Int']['output'];
   parent?: Maybe<Parent>;
@@ -500,13 +498,11 @@ export type User = {
   bankCard?: Maybe<Array<BankCard>>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
-  firstname: Scalars['String']['output'];
   fullname: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
-  lastname?: Maybe<Scalars['String']['output']>;
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
