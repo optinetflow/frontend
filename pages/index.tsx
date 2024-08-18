@@ -24,8 +24,8 @@ import {
 
 const isDevelop = process.env.NODE_ENV === 'development';
 
-const HomePage: NextPageWithLayout = () => {
-  console.log('Renderrrrrrred INdex.tsx');
+const HomePageComponent: React.FC = () => {
+  console.log('Renderrrrrrred Homepage Component.tsx');
   const router = useRouter()
   const { toast } = useToast()
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })
@@ -194,6 +194,18 @@ const HomePage: NextPageWithLayout = () => {
       </div>
     )
   }
+}
+
+const HomePage: NextPageWithLayout = () => {
+  console.log('Renderrrrrrred INdex.tsx');
+  const router = useRouter();
+
+  // Only render the HomePageContent if the current route is "/"
+  if (router.pathname !== '/') {
+    return null;
+  }
+
+  return <HomePageComponent />;
 }
 
 export default HomePage

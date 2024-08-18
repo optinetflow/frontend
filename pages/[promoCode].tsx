@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { NextPageWithLayout } from "../_app"
-import Layout from "../../components/Layout/Layout"
-import { useSignupMutation } from "../../graphql/mutations/signup.graphql.interface"
-import { useCheckAuthQuery } from "../../graphql/queries/checkAuth.graphql.interface"
-import { normalizePhone } from "../../helpers"
-import { SignupInput } from "../../src/graphql/__generated__/schema.graphql"
+import type { NextPageWithLayout } from "./_app"
+import Layout from "../components/Layout/Layout"
+import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
+import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface"
+import { normalizePhone } from "../helpers"
+import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const PromoCodePage: NextPageWithLayout = () => {
 
