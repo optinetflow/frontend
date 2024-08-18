@@ -16,7 +16,7 @@ const SignupPage: NextPageWithLayout = () => {
   const searchParams = useSearchParams()
   const phone = searchParams.get("phone")
   const promoCode = searchParams.get("promoCode")
-
+  
   const [signup, signupData] = useSignupMutation()
   const {
     register,

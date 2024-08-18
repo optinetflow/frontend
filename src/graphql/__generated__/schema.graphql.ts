@@ -63,6 +63,11 @@ export type ChangePasswordInput = {
   oldPassword: Scalars['String']['input'];
 };
 
+export type CheckAuth = {
+  __typename?: 'CheckAuth';
+  loggedIn: Scalars['Boolean']['output'];
+};
+
 export type Child = {
   __typename?: 'Child';
   activePackages: Scalars['Int']['output'];
@@ -354,6 +359,7 @@ export enum PaymentType {
 
 export type Query = {
   __typename?: 'Query';
+  checkAuth: CheckAuth;
   children: Array<Child>;
   clientStats: Array<ClientStat>;
   domains: Array<Domain>;

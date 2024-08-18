@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 import { useForm } from "react-hook-form"
@@ -7,12 +8,19 @@ import { Label } from "@/components/ui/label"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
+import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface"
 import { normalizePhone } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const PromoCodePage: NextPageWithLayout = () => {
   const router = useRouter()
   const promoCode = router.query?.promoCode as string
+  const { data } = useCheckAuthQuery({ 
+    fetchPolicy: "no-cache"
+  });
+  if (data?.checkAuth.loggedIn) {
+    router.replace("/");
+  }
 
   const [signup, signupData] = useSignupMutation()
   const {
@@ -43,6 +51,9 @@ const PromoCodePage: NextPageWithLayout = () => {
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof SignupInput
+  if(!data || data?.checkAuth.loggedIn) {
+    return null
+  } 
   return (
     <form
       onSubmit={onSubmit}
@@ -86,6 +97,11 @@ const PromoCodePage: NextPageWithLayout = () => {
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
       </Button>
+      <div className="mt-4 text-center text-sm">
+        <p>
+          قبلاً ثبت‌نام کرده‌اید؟ <Link href="/login" className="text-blue-600 underline">ورود</Link>
+        </p>
+      </div>
     </form>
   )
 }
