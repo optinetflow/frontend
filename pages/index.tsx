@@ -25,7 +25,6 @@ import {
 const isDevelop = process.env.NODE_ENV === 'development';
 
 const HomePageComponent: React.FC = () => {
-  console.log('Renderrrrrrred Homepage Component.tsx');
   const router = useRouter()
   const { toast } = useToast()
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })
@@ -197,12 +196,7 @@ const HomePageComponent: React.FC = () => {
 }
 
 const HomePage: NextPageWithLayout = () => {
-  console.log('Renderrrrrrred INdex.tsx');
   const router = useRouter();
-
-  console.log('router (index.tsx) => ', router.pathname)
-  console.log('window.location.pathname (index.tsx) => ', window.location.pathname)
-
 
   React.useEffect(() => {
     if (router.pathname !== window.location.pathname) {
