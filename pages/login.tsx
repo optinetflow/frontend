@@ -18,6 +18,7 @@ interface FormValues {
 }
 
 const LoginPage: NextPageWithLayout = () => {
+  console.log('Renderrrrrrred Login');
   const router = useRouter()
   const searchParams = useSearchParams()
 

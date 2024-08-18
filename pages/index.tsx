@@ -25,6 +25,7 @@ import {
 const isDevelop = process.env.NODE_ENV === 'development';
 
 const HomePage: NextPageWithLayout = () => {
+  console.log('Renderrrrrrred INdex.tsx');
   const router = useRouter()
   const { toast } = useToast()
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })

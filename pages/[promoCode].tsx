@@ -13,6 +13,8 @@ import { normalizePhone } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const PromoCodePage: NextPageWithLayout = () => {
+
+  console.log('Renderrrrrrred PPPPPPPPromoCode');
   const router = useRouter()
   const promoCode = router.query?.promoCode as string
   const { data } = useCheckAuthQuery({ 
