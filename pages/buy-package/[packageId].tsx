@@ -19,6 +19,7 @@ import type { NextPageWithLayout } from "../_app"
 
 
 const BuyPackagePage: NextPageWithLayout = () => {
+  console.log('Renderrrrrrrred [packageId].tsx');
   const router = useRouter()
   const packageId = router.query?.packageId as string;
   const [buyPackageMutate, buyPackage] = useBuyPackageMutation()
