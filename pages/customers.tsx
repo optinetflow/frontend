@@ -19,8 +19,7 @@ import * as Types from '../src/graphql/__generated__/schema.graphql';
 interface CustomerProps {
   id: string
   avatar?: string
-  firstname: string
-  lastname: string
+  fullname: string
   phone: string
   isDisabled: boolean
   role: Types.Role;
@@ -91,7 +90,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 
 
 
-const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt, description, onlinePackages }) => {
+const Customer: React.FC<CustomerProps> = ({ id, fullname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt, description, onlinePackages }) => {
   const { toast } = useToast()
 
   const handlePhoneClick = () => {
@@ -107,14 +106,14 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
       <div className="relative flex flex-1 overflow-hidden items-center">
         <Avatar className="relative h-12 w-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
-          <AvatarFallback className={avatarColor(`${firstname} ${lastname}`)}>
-            {firstname[0]}‌{lastname[0]}
+          <AvatarFallback className={avatarColor(`${fullname}`)}>
+            {fullname[0]}‌
           </AvatarFallback>
         </Avatar>
         {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? description ? 'top-6 right-8' : 'top-4 right-8' : 'top-0 right-8'}  text-xs w-6 h-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
         <div className="mr-4 flex h-full w-full flex-col justify-between overflow-hidden text-sm space-y-2">
           <div className="truncate font-black text-slate-800">
-            {firstname} {lastname}
+            {fullname}
           </div>
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
           {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
@@ -132,7 +131,6 @@ const Customer: React.FC<CustomerProps> = ({ id, firstname, lastname, isDisabled
 
 const CustomersPage: NextPageWithLayout = () => {
   const { data } = useChildrenQuery({ fetchPolicy: "cache-and-network" })
-
   if (data) {
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
@@ -151,8 +149,7 @@ const CustomersPage: NextPageWithLayout = () => {
             <Customer
               key={child.id}
               id={child.id}
-              firstname={child.firstname}
-              lastname={child.lastname}
+              fullname={child.fullname}
               phone={child.phone}
               isDisabled={Boolean(child.isDisabled)}
               avatar={child?.telegram?.smallAvatar || undefined}

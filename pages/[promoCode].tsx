@@ -1,4 +1,4 @@
-import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 import { useForm } from "react-hook-form"
@@ -8,15 +8,20 @@ import { Label } from "@/components/ui/label"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
+import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface"
 import { normalizePhone } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
-const SignupPage: NextPageWithLayout = () => {
+const PromoCodePage: NextPageWithLayout = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const phone = searchParams.get("phone")
-  const promoCode = searchParams.get("promoCode")
-  
+  const promoCode = router.query?.promoCode as string
+  const { data } = useCheckAuthQuery({ 
+    fetchPolicy: "no-cache"
+  });
+  if (data?.checkAuth.loggedIn) {
+    router.replace("/");
+  }
+
   const [signup, signupData] = useSignupMutation()
   const {
     register,
@@ -29,7 +34,6 @@ const SignupPage: NextPageWithLayout = () => {
       variables: {
         input: {
           ...data,
-          ...(phone && { phone }),
           promoCode,
         },
       },
@@ -47,6 +51,9 @@ const SignupPage: NextPageWithLayout = () => {
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof SignupInput
+  if(!data || data?.checkAuth.loggedIn) {
+    return null
+  } 
   return (
     <form
       onSubmit={onSubmit}
@@ -57,9 +64,8 @@ const SignupPage: NextPageWithLayout = () => {
         <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
         <Input {...register("fullname")} id="fullname" required type="text" />
       </div>
-      
-      {!promoCode && (
-        <div className="space-y-2">
+  
+      <div className="space-y-2">
           <Label htmlFor="phone">شماره موبایل</Label>
           <Input
             {...register("phone", {
@@ -73,7 +79,6 @@ const SignupPage: NextPageWithLayout = () => {
             type="tel"
           />
         </div>
-      )}
 
       <div className="space-y-2">
         <Label htmlFor="password">رمز عبور جدید</Label>
@@ -92,12 +97,17 @@ const SignupPage: NextPageWithLayout = () => {
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
       </Button>
+      <div className="mt-4 text-center text-sm">
+        <p>
+          قبلاً ثبت‌نام کرده‌اید؟ <Link href="/login" className="text-blue-600 underline">ورود</Link>
+        </p>
+      </div>
     </form>
   )
 }
 
-export default SignupPage
+export default PromoCodePage
 
-SignupPage.getLayout = function getLayout(page: React.ReactElement) {
+PromoCodePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }

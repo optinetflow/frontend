@@ -1,8 +1,7 @@
 mutation updateChild($input: UpdateChildInput!) {
     updateChild(input: $input){
         id
-        firstname
-        lastname
+        fullname
         phone
         role
         createdAt
