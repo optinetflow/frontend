@@ -201,6 +201,7 @@ const HomePage: NextPageWithLayout = () => {
   const router = useRouter();
 
   console.log('router (index.tsx) => ', router.pathname)
+  console.log('window.location.pathname (index.tsx) => ', window.location.pathname)
 
   // // Only render the HomePageContent if the current route is "/"
   // if (router.pathname !== '/') {
