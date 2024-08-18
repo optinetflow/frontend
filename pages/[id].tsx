@@ -16,7 +16,7 @@ const PromoCodePage: NextPageWithLayout = () => {
 
   console.log('Renderrrrrrred PPPPPPPPromoCode');
   const router = useRouter()
-  const promoCode = router.query?.promoCode as string
+  const promoCode = router.query?.id as string
   const { data } = useCheckAuthQuery({ 
     fetchPolicy: "no-cache"
   });
