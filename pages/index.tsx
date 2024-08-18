@@ -198,7 +198,9 @@ const HomePageComponent: React.FC = () => {
 
 const HomePage: NextPageWithLayout = () => {
   console.log('Renderrrrrrred INdex.tsx');
-  // const router = useRouter();
+  const router = useRouter();
+
+  console.log('router (index.tsx) => ', router.pathname)
 
   // // Only render the HomePageContent if the current route is "/"
   // if (router.pathname !== '/') {
