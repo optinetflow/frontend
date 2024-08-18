@@ -206,7 +206,19 @@ const HomePage: NextPageWithLayout = () => {
 
   React.useEffect(() => {
     if (router.pathname !== window.location.pathname) {
-      router.replace(window.location.pathname);
+      const idPattern = /^\/([\w-]+)$/;
+
+      const match = window.location.pathname.match(idPattern);
+
+      if (match) {
+        const promoCode = match[1]; // Extract the alphanumeric id part
+        router.replace({
+          pathname: '/[promoCode]',
+          query: { promoCode },
+        });
+      } else {
+        router.replace(window.location.pathname); // Directly replace for other paths
+      }
     }
   }, [router]);
 
