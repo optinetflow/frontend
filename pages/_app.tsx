@@ -15,7 +15,6 @@ type AppPropsWithLayout = AppProps & {
 }
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  console.log('Renderrrrrrred _app.tsx');
   const apolloClient = useApollo(pageProps);
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page)
