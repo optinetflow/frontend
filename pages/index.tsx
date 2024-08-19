@@ -166,8 +166,10 @@ const HomePageComponent: React.FC = () => {
               </Button>
             </a>
           )}
-          <div className="flex space-x-4 flex-row-reverse">
-            {me.data?.me.parent?.telegram?.username && (
+          {/* <div className="flex space-x-4 flex-row-reverse">
+            
+          </div> */}
+          {me.data?.me.parent?.telegram?.username && (
               <a
                 target="_blank"
                 rel="noreferrer"
@@ -188,7 +190,6 @@ const HomePageComponent: React.FC = () => {
                 </Button>
               </Link>
             )}
-          </div>
           
         </div>
       </div>
