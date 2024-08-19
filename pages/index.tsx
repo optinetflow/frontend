@@ -176,7 +176,7 @@ const HomePageComponent: React.FC = () => {
               >
                 <Button variant="outline" className="flex w-full">
                   <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
-                  <span>پشتیبانی</span>
+                  <span>پشتیبانی تلگرام (دریافت تست رایگان)</span>
                 </Button>
               </a>
             )}
