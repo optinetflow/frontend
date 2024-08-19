@@ -166,10 +166,8 @@ const HomePageComponent: React.FC = () => {
               </Button>
             </a>
           )}
-          {/* <div className="flex space-x-4 flex-row-reverse">
-            
-          </div> */}
-          {me.data?.me.parent?.telegram?.username && (
+          <div className="flex space-x-4 flex-row-reverse">
+            {me.data?.me.parent?.telegram?.username && (
               <a
                 target="_blank"
                 rel="noreferrer"
@@ -178,7 +176,7 @@ const HomePageComponent: React.FC = () => {
               >
                 <Button variant="outline" className="flex w-full">
                   <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
-                  <span>پشتیبانی تلگرام (دریافت تست رایگان)</span>
+                  <span>پشتیبانی تلگرام</span>
                 </Button>
               </a>
             )}
@@ -190,6 +188,7 @@ const HomePageComponent: React.FC = () => {
                 </Button>
               </Link>
             )}
+          </div>
           
         </div>
       </div>
