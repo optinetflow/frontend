@@ -16,7 +16,7 @@ const SignupPage: NextPageWithLayout = () => {
   const searchParams = useSearchParams()
   const phone = searchParams.get("phone")
   const promoCode = searchParams.get("promoCode")
-
+  
   const [signup, signupData] = useSignupMutation()
   const {
     register,
@@ -54,17 +54,10 @@ const SignupPage: NextPageWithLayout = () => {
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
       <div className="space-y-2">
-        <Label htmlFor="firstname">نام (فارسی)</Label>
-        <Input {...register("firstname")} id="firstname" required type="text" />
+        <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
+        <Input {...register("fullname")} id="fullname" required type="text" />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="lastname">نام خانوادگی (فارسی)</Label>
-        <Input {...register("lastname")} id="lastname" required type="text" />
-      </div>
-      {/* <div className="space-y-2">
-        <Label htmlFor="referId">شماره موبایل معرف (اختیاری)</Label>
-        <Input {...register("referId")}  id="referId" type="text" />
-      </div> */}
+      
       {!promoCode && (
         <div className="space-y-2">
           <Label htmlFor="phone">شماره موبایل</Label>

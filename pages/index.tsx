@@ -2,7 +2,6 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 import { Button } from "@/components/ui/button"
-import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
@@ -25,12 +24,11 @@ import {
 
 const isDevelop = process.env.NODE_ENV === 'development';
 
-const HomePage: NextPageWithLayout = () => {
+const HomePageComponent: React.FC = () => {
   const router = useRouter()
   const { toast } = useToast()
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })
   const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
-  const isSendRegisterToBotAlarm = React.useRef(false)
 
   const [logout] = useLogoutMutation()
 
@@ -49,10 +47,6 @@ const HomePage: NextPageWithLayout = () => {
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
   const hasPackage = Boolean(data?.userPackages?.length)
-  const hasOnlinePackage = data?.userPackages?.[0]
-    ? data.userPackages[0].remainingTraffic < data.userPackages[0].totalTraffic
-    : false
-  const isMeFreshed = me.networkStatus === 7
   const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -78,7 +72,7 @@ const HomePage: NextPageWithLayout = () => {
   const checkAdminRequirements = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (!isRegisteredInTelegram && isAdmin && !isDevelop) {
       e.preventDefault()
-      toast({ variant: "destructive", description: "لطفا در ربات تلگرام ثبت نام کنید." })
+      toast({ variant: "destructive", description: "لطفا در ربات تلگرام عضو شوید." })
     }
 
     if (!hasBankCard && isAdmin) {
@@ -87,21 +81,6 @@ const HomePage: NextPageWithLayout = () => {
     }
   }
 
-  // if (isMeFreshed && !isRegisteredInTelegram && hasOnlinePackage && !isSendRegisterToBotAlarm.current) {
-  //   toast({
-  //     duration: 10000,
-  //     title: "می‌خواهید پیش از اتمام بسته مطلع شوید؟",
-  //     description: "با ثبت‌نام در ربات تلگرام ما قبل از اتمام بسته پیام فرستاده شده و قابلیت تمدید بسته را دارید.",
-  //     action: (
-  //       <a href={botRef}>
-  //         <ToastAction altText="Register to bot">ثبت‌نام</ToastAction>
-  //       </a>
-  //     ),
-  //   })
-
-  //   isSendRegisterToBotAlarm.current = true
-  // }
-
   if (data) {
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
@@ -109,7 +88,7 @@ const HomePage: NextPageWithLayout = () => {
           <div className="space-y-2 rounded-lg bg-slate-50 p-4">
             <div className="flex items-center justify-between ">
               <div className="truncate text-sm text-slate-700">
-                {me.data?.me.firstname} {me.data?.me.lastname}
+                {me.data?.me?.fullname}
               </div>
               <Button
                 onClick={handleLogout}
@@ -146,7 +125,7 @@ const HomePage: NextPageWithLayout = () => {
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
                 {/* <TelegramIcon className="ml-2 h-5 w-5" /> */}
-                <span>{gif} گیگ هدیه با ثبت‌نام در ربات تلگرام</span>
+                <span>{gif} گیگ تست با عضو شدن در ربات تلگرام</span>
               </Button>
             </a>
           )}
@@ -196,7 +175,7 @@ const HomePage: NextPageWithLayout = () => {
               >
                 <Button variant="outline" className="flex w-full">
                   <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
-                  <span>پشتیبانی</span>
+                  <span>پشتیبانی تلگرام</span>
                 </Button>
               </a>
             )}
@@ -214,6 +193,35 @@ const HomePage: NextPageWithLayout = () => {
       </div>
     )
   }
+}
+
+const HomePage: NextPageWithLayout = () => {
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (router.pathname !== window.location.pathname) {
+      const idPattern = /^\/([\w-]+)$/;
+
+      const match = window.location.pathname.match(idPattern);
+
+      if (match) {
+        const promoCode = match[1]; // Extract the alphanumeric id part
+        router.replace({
+          pathname: '/[promoCode]',
+          query: { promoCode },
+        });
+      } else {
+        router.replace(window.location.pathname); // Directly replace for other paths
+      }
+    }
+  }, [router]);
+
+  // // Only render the HomePageContent if the current route is "/"
+  if (window.location.pathname !== '/') {
+    return null;
+  }
+
+  return <HomePageComponent />;
 }
 
 export default HomePage

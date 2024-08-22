@@ -8,15 +8,14 @@ export type UpdateChildMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateChildMutation = { __typename?: 'Mutation', updateChild: { __typename?: 'User', id: string, firstname: string, lastname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null } };
+export type UpdateChildMutation = { __typename?: 'Mutation', updateChild: { __typename?: 'User', id: string, fullname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null } };
 
 
 export const UpdateChildDocument = gql`
     mutation updateChild($input: UpdateChildInput!) {
   updateChild(input: $input) {
     id
-    firstname
-    lastname
+    fullname
     phone
     role
     createdAt

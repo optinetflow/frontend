@@ -41,7 +41,7 @@ export const GetClientStatsDocument = gql`
  *   },
  * });
  */
-export function useGetClientStatsQuery(baseOptions: Apollo.QueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>) {
+export function useGetClientStatsQuery(baseOptions: Apollo.QueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables> & ({ variables: GetClientStatsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
       }
@@ -49,6 +49,11 @@ export function useGetClientStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
         }
+export function useGetClientStatsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
+        }
 export type GetClientStatsQueryHookResult = ReturnType<typeof useGetClientStatsQuery>;
 export type GetClientStatsLazyQueryHookResult = ReturnType<typeof useGetClientStatsLazyQuery>;
+export type GetClientStatsSuspenseQueryHookResult = ReturnType<typeof useGetClientStatsSuspenseQuery>;
 export type GetClientStatsQueryResult = Apollo.QueryResult<GetClientStatsQuery, GetClientStatsQueryVariables>;

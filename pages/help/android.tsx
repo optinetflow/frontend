@@ -20,7 +20,7 @@ const AndroidPage: NextPageWithLayout = () => {
         <a
           rel="noreferrer"
           className="flex"
-          href="https://github.com/2dust/v2rayNG/releases/download/1.8.19/v2rayNG_1.8.19.apk"
+          href="https://github.com/2dust/v2rayNG/releases/download/1.8.35/v2rayNG_1.8.35_universal.apk"
           download
         >
           <Button variant="outline" className="flex w-full">

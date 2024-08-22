@@ -13,6 +13,7 @@ import { useBuyPackageMutation } from "../../graphql/mutations/buyPackage.graphq
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface"
 import { toIRR } from "../../helpers"
+import { ceilTo } from "../../helpers"
 import { ArrowUTurnLeftIcon } from "../../icons"
 import { BuyPackageInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
@@ -30,7 +31,13 @@ const BuyPackagePage: NextPageWithLayout = () => {
   } = useForm<BuyPackageInput>()
   const packages = useGetPackagesQuery({ fetchPolicy: "cache-only" })
   const me = useMeQuery({ fetchPolicy: "cache-only" })
-  const currentPackage = packages.data?.packages.find((pack) => pack.id === packageId)
+  const filteredPackages = me.data?.me.parent?.id === '801d871d-879a-4ad0-9e8c-a5577ffd682d' ? packages.data?.packages.filter(pack => {
+    if ([20, 50, 40].includes(pack.traffic)) return false;
+    return true;
+  }).map((pack) => {
+    return ({...pack,  price: ceilTo(pack.price * 0.7, 0)})
+  }): packages.data?.packages;
+  const currentPackage = filteredPackages?.find((pack) => pack.id === packageId)
 
   const onSubmit = handleSubmit((data) => {
     buyPackageMutate({
@@ -45,6 +52,8 @@ const BuyPackagePage: NextPageWithLayout = () => {
       router.replace("/")
     })
   })
+
+  
 
   const firstError = Object.keys(errors)?.[0] as keyof BuyPackageInput;
   const isAdmin = me?.data?.me.role !== "USER";
@@ -81,7 +90,7 @@ const BuyPackagePage: NextPageWithLayout = () => {
             {buyPackage?.loading ? "لطفا کمی صبر کنید..." : buttonLabel}
           </Button>
           <Button variant="ghost" className="flex w-full" onClick={router.back}>
-            <ArrowUTurnLeftIcon className="ml-2 h-5 w-5" />
+            <ArrowUTurnLeftIcon className="ml-2 size-5" />
             <span>بازگشت</span>
           </Button>
         </div>

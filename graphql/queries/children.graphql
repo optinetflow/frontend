@@ -1,8 +1,7 @@
 query children {
     children {
         id
-        firstname
-        lastname
+        fullname
         phone
         role
         createdAt
