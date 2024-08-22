@@ -3,14 +3,14 @@ import React from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import Layout from "../../components/Layout/Layout"
 import { useUpdateChildMutation } from "../../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../../graphql/queries/children.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
-import { normalizePhone } from "../../helpers"
+import { faNumToEn, normalizePhone } from "../../helpers"
 import { UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
@@ -27,6 +27,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
   const customers = useChildrenQuery({ fetchPolicy: "cache-only" })
   const me = useMeQuery({ fetchPolicy: "cache-only" })
   const customer = customers.data?.children.find((child) => child.id === id)
+  const profitPercent = me?.data?.me?.profitPercent || 0;
   const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100
 
   const onSubmit = handleSubmit((data) => {
@@ -38,6 +39,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
             {}
           ),
           childId: id,
+          initialDiscountPercent: Number(data.initialDiscountPercent),
         },
       },
     })
@@ -113,8 +115,27 @@ const CustomerEditPage: NextPageWithLayout = () => {
         />
       </div>
       <div className="space-y-2">
+        <Label htmlFor="initialDiscountPercent">درصد تخفیف:</Label>
+        <Input
+          defaultValue={customer?.initialDiscountPercent || undefined}
+          {...register("initialDiscountPercent", {
+            setValueAs: (val) => faNumToEn(val),
+            ...(!isSuperAdmin && { max: { value: profitPercent, message: 'میزان تخفیف نمی‌تونه از سود هر فروش بیشتر باشه.'} })
+          })}
+          className="ltr"
+          id="initialDiscountPercent"
+          placeholder="مثلا: 15"
+        />
+      </div>
+      <div className="space-y-2">
         <Label htmlFor="description">توضیحات (اختیاری)</Label>
-        <Textarea className="resize-none" rows={3} defaultValue={customer?.description || undefined} {...register("description")} id="description" />
+        <Textarea
+          className="resize-none"
+          rows={3}
+          defaultValue={customer?.description || undefined}
+          {...register("description")}
+          id="description"
+        />
       </div>
 
       <div className=" text-sm text-red-600">

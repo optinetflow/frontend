@@ -12,6 +12,8 @@ query Me {
         balance
         totalProfit
         maxRechargeDiscountPercent
+        profitPercent
+        initialDiscountPercent
         bankCard {
             name
             number

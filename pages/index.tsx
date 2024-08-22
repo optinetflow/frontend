@@ -11,7 +11,7 @@ import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface
 import { useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import { convertPersianCurrency, jsonToB64Url, roundTo } from "../helpers"
+import { toIRR, jsonToB64Url, roundTo } from "../helpers"
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -127,10 +127,10 @@ const HomePage: NextPageWithLayout = () => {
                     (me.data?.me.balance || 0) < 0 ? "font-black text-red-500" : "text-slate-500"
                   } `}
                 >
-                  شارژ حساب: {convertPersianCurrency(roundTo(me.data?.me.balance || 0, 0))}
+                  شارژ حساب: {toIRR(roundTo(me.data?.me.balance || 0, 0))}
                 </div>
                 <div className="text-xs text-slate-500">
-                  سود کل: {convertPersianCurrency(roundTo(me.data?.me.totalProfit || 0, 0))}
+                  سود کل: {toIRR(roundTo(me.data?.me.totalProfit || 0, 0))}
                 </div>
               </>
             )}

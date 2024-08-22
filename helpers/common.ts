@@ -1,4 +1,4 @@
-// export function convertPersianCurrency(number: number): string {
+// export function toIRR(number: number): string {
 //     if (number >= 1 && number < 10000) return `${number} تومان`;
 //     if (number >= 10000 && number < 1000000)
 //       return `${number % 1000 !== 0 ? Math.floor(number % 1000) : Math.floor(number / 1000)} هزار تومان`;
@@ -14,10 +14,28 @@
 //     return '';
 //   }
 
-export function convertPersianCurrency(number: number): string {
+export function toIRR(number: number, returnMode: 'number' | 'postfix' | 'both' = 'both'): string {
   const numberAbs = Math.abs(number);
-  if (numberAbs >= 1 && numberAbs < 1000) return `${number > 0 ? number : `${-number}-`} هزار تومان`
-  if (numberAbs >= 1000 && numberAbs < 1000000) return `${number > 0 ? number / 1000 : `${-number / 1000}-`} میلیون تومان`
+  let numberPart;
+  let postfix;
+  let processed = false
+
+  if (numberAbs >= 1 && numberAbs < 1000){
+    if (['number', 'both'].includes(returnMode)) numberPart = number > 0 ? number.toString() : `${-number}-`;
+    if (['postfix', 'both'].includes(returnMode)) postfix = 'هزار تومان';
+    processed = true;
+  } 
+  if (numberAbs >= 1000 && numberAbs < 1000000) {
+    if (['number', 'both'].includes(returnMode)) numberPart = number > 0 ? (number / 1000).toString() : `${-number / 1000}-`;
+    if (['postfix', 'both'].includes(returnMode)) postfix = 'میلیون تومان';
+    processed = true;
+  } 
+
+  if (processed) {
+    return [numberPart, postfix].filter(Boolean).join(' ');
+  }
+
+
   return number.toString();
 }
 
@@ -111,6 +129,11 @@ export function roundTo(number: number, decimalPlaces: number) {
 export function floorTo(number: number, decimalPlaces: number) {
   const factor = Math.pow(10, decimalPlaces)
   return Math.floor(number * factor) / factor
+}
+
+export function ceilTo(number: number, decimalPlaces: number) {
+  const factor = Math.pow(10, decimalPlaces)
+  return Math.ceil(number * factor) / factor
 }
 
 export function copyText(text: string) {

@@ -2,6 +2,7 @@ query GetPackages {
     packages {
         id
         price
+        discountedPrice
         traffic
         expirationDays
         userCount

@@ -11,7 +11,7 @@ import { useEnterCostMutation } from "../graphql/mutations/enterCost.graphql.int
 import { useUpdateUserMutation } from "../graphql/mutations/updateUser.graphql.interface"
 
 import { useMeQuery } from "../graphql/queries/me.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { faNumToEn, normalizePhone } from "../helpers"
 import { EnterCostInput, UpdateUserInput } from "../src/graphql/__generated__/schema.graphql"
 
 const EnterConst: React.FC = () => {
@@ -89,6 +89,7 @@ const SettingPage: NextPageWithLayout = () => {
   const router = useRouter()
   const me = useMeQuery({ fetchPolicy: "cache-only" })
   const bankCard = me?.data?.me.bankCard?.[0]
+  const profitPercent = me?.data?.me.profitPercent
   const [updateUser, updateUserData] = useUpdateUserMutation()
   const {
     register,
@@ -99,7 +100,10 @@ const SettingPage: NextPageWithLayout = () => {
   const onSubmit = handleSubmit((data) => {
     updateUser({
       variables: {
-        input: data,
+        input: {
+          ...data,
+          profitPercent: Number(data.profitPercent),
+        },
       },
     })
       .then(() => {
@@ -139,6 +143,21 @@ const SettingPage: NextPageWithLayout = () => {
             id="cardBandNumber"
             placeholder="شماره ۱۶ رقمی کارت"
             required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="profitPercent">درصد سود از هر فروش:</Label>
+          <Input
+            defaultValue={profitPercent}
+            {...register("profitPercent", {
+              setValueAs: (val) => faNumToEn(val),
+              pattern: { value: /^(?:0|[1-9]\d?|1\d\d|200)$/, message: "درصد سود باید بین 0 تا 200 باشد.",  },
+              // max: { value: 20, message: 'باید کمتر از ۲۰ باشه.'}
+            })}
+            className="ltr"
+            id="profitPercent"
+            placeholder="مثلا: 35"
           />
         </div>
 

@@ -4,7 +4,7 @@ import type { NextPageWithLayout } from './_app'
 import Layout from '../components/Layout/Layout'
 
 import { useRechargePackagesQuery } from "../graphql/queries/rechargePackages.graphql.interface"
-import { convertPersianCurrency } from "../helpers"
+import { toIRR } from "../helpers"
 
 const RechargePackagesPage: NextPageWithLayout = () => {
   const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-and-network" });
@@ -19,7 +19,7 @@ const RechargePackagesPage: NextPageWithLayout = () => {
             className="mb-4 flex h-28 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"
           >
             <div className="flex h-full flex-col items-start justify-between">
-              <span className="text-xl text-slate-800">{convertPersianCurrency(pack.amount)}</span>
+              <span className="text-xl text-slate-800">{toIRR(pack.amount)}</span>
               <span className=" text-sm text-slate-600">{pack.discountPercent}% سود هر خرید</span>
             </div>
 
