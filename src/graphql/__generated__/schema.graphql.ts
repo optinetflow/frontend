@@ -210,6 +210,7 @@ export type LoginData = {
 };
 
 export type LoginInput = {
+  domainName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
 };
@@ -432,6 +433,7 @@ export enum ServerCountry {
 }
 
 export type SignupInput = {
+  domainName: Scalars['String']['input'];
   fullname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];

@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizePhone, removeWWW } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const SignupPage: NextPageWithLayout = () => {
@@ -31,6 +31,7 @@ const SignupPage: NextPageWithLayout = () => {
           ...data,
           ...(phone && { phone }),
           promoCode,
+          domainName: removeWWW(window.location.host)
         },
       },
     })
