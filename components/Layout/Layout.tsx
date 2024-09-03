@@ -38,7 +38,6 @@ export default function Layout({ children }: LayoutProps) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Accept': 'application/json',
             },
             body: JSON.stringify({
               query,
@@ -46,10 +45,12 @@ export default function Layout({ children }: LayoutProps) {
             }),
           });
         const data = await response.json() as GetBrandInfoQueryResult;
-        setMeta({
-          title:  data.data?.getBrandInfo.title || 'Vaslkon.com | وصل کن دات کام',
-          description:  data.data?.getBrandInfo.description || 'سایت وصل کن دات کام (vaslkon.com) با کیفیت‌ترین سرورها.',
-        });
+        if(data.data?.getBrandInfo.title && data.data?.getBrandInfo.description) {
+          setMeta({
+            title:  data.data?.getBrandInfo.title,
+            description:  data.data?.getBrandInfo.description
+          });
+        }
     } catch (error) {
         console.error('Error fetching meta data:', error);
       }
