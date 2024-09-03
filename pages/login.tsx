@@ -10,7 +10,7 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 
 import { useLoginMutation } from "../graphql/mutations/login.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizePhone, removeWWW } from "../helpers"
 
 interface FormValues {
   phone: string
@@ -32,7 +32,10 @@ const LoginPage: NextPageWithLayout = () => {
   const onSubmit = handleSubmit((data) => {
     login({
       variables: {
-        input: data,
+        input: {
+          ...data, 
+          domainName: removeWWW(window.location.host)
+        },
       },
     })
   })

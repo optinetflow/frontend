@@ -135,3 +135,10 @@ export function copyText(text: string) {
     document.body.removeChild(copyTextarea);
   }
 }
+
+export function removeWWW(domain: string): string {
+  if (domain.startsWith("www.")) {
+    return domain.substring(4);
+  }
+  return domain;
+}

@@ -9,7 +9,7 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
 import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizePhone, removeWWW } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const PromoCodePage: NextPageWithLayout = () => {
@@ -35,6 +35,7 @@ const PromoCodePage: NextPageWithLayout = () => {
         input: {
           ...data,
           promoCode,
+          domainName: removeWWW(window.location.host)
         },
       },
     })

@@ -47,6 +47,21 @@ export type BankCard = {
   number: Scalars['String']['output'];
 };
 
+export type Brand = {
+  __typename?: 'Brand';
+  botToken: Scalars['String']['output'];
+  botUsername: Scalars['String']['output'];
+  /** Identifies the date and time when the object was created. */
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  domainName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  reportGroupId?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  /** Identifies the date and time when the object was last updated. */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type BuyPackageInput = {
   name: Scalars['String']['input'];
   packageId: Scalars['String']['input'];
@@ -74,6 +89,8 @@ export type Child = {
   appliedDiscountPercent?: Maybe<Scalars['Float']['output']>;
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
+  brand?: Maybe<Brand>;
+  brandId?: Maybe<Scalars['String']['output']>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -210,6 +227,7 @@ export type LoginData = {
 };
 
 export type LoginInput = {
+  domainName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
 };
@@ -432,6 +450,7 @@ export enum ServerCountry {
 }
 
 export type SignupInput = {
+  domainName: Scalars['String']['input'];
   fullname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
@@ -441,11 +460,16 @@ export type SignupInput = {
 export type TelegramUser = {
   __typename?: 'TelegramUser';
   bigAvatar?: Maybe<Scalars['String']['output']>;
+  chatId?: Maybe<Scalars['BigNumber']['output']>;
+  /** Identifies the date and time when the object was created. */
+  createdAt: Scalars['DateTime']['output'];
   firstname?: Maybe<Scalars['String']['output']>;
-  id: Scalars['BigNumber']['output'];
+  id: Scalars['ID']['output'];
   lastname?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
   smallAvatar?: Maybe<Scalars['String']['output']>;
+  /** Identifies the date and time when the object was last updated. */
+  updatedAt: Scalars['DateTime']['output'];
   username?: Maybe<Scalars['String']['output']>;
 };
 
@@ -502,6 +526,8 @@ export type User = {
   appliedDiscountPercent?: Maybe<Scalars['Float']['output']>;
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
+  brand?: Maybe<Brand>;
+  brandId?: Maybe<Scalars['String']['output']>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   fullname: Scalars['String']['output'];
