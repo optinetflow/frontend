@@ -14,22 +14,9 @@ export type Scalars = {
   Float: { input: number; output: number; }
   BigNumber: { input: any; output: any; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
   JWT: { input: any; output: any; }
   Upload: { input: any; output: any; }
-};
-
-export type Arvan = {
-  __typename?: 'Arvan';
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  nsKeys: Array<Scalars['String']['output']>;
-  password: Scalars['String']['output'];
-  token?: Maybe<Scalars['String']['output']>;
-  tokenExpiredAt?: Maybe<Scalars['DateTime']['output']>;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Auth = {
@@ -49,14 +36,13 @@ export type BankCard = {
 
 export type Brand = {
   __typename?: 'Brand';
-  botToken: Scalars['String']['output'];
   botUsername: Scalars['String']['output'];
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   domainName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  reportGroupId?: Maybe<Scalars['String']['output']>;
+  logo?: Maybe<Scalars['JSON']['output']>;
   title: Scalars['String']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
@@ -131,87 +117,18 @@ export type ClientStat = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-export type CreateArvanAccountInput = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-export type CreateDomainInput = {
-  arvanAccount: Scalars['String']['input'];
-  domain: Scalars['String']['input'];
-  expiredAt?: InputMaybe<Scalars['String']['input']>;
-  serverDomain: Scalars['String']['input'];
-};
-
-export type CreateServerInput = {
-  domain: Scalars['String']['input'];
-  inboundId: Scalars['Int']['input'];
-  ip: Scalars['String']['input'];
-  type: ServerCountry;
-};
-
-export type Dns = {
-  __typename?: 'Dns';
-  cloud: Scalars['Boolean']['output'];
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  ttl: Scalars['Int']['output'];
-  type: Scalars['String']['output'];
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
-  upstream_https: UpstreamHttps;
-  value: Array<DnsValue>;
-};
-
-export type DnsValue = {
-  __typename?: 'DnsValue';
-  country: Scalars['String']['output'];
-  ip: Scalars['String']['output'];
-  port?: Maybe<Scalars['String']['output']>;
-  weight: Scalars['Int']['output'];
-};
-
-export type Domain = {
-  __typename?: 'Domain';
-  arvanSslState: DomainState;
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  domain: Scalars['String']['output'];
-  expiredAt: Scalars['DateTime']['output'];
-  id: Scalars['ID']['output'];
-  letsEncryptSsl: DomainState;
-  nsState: DomainState;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
-};
-
-/** Domain state */
-export enum DomainState {
-  Applied = 'APPLIED',
-  Pending = 'PENDING'
-}
-
-export type DomainsFiltersInput = {
-  arvanSslState?: InputMaybe<DomainState>;
-  domain?: InputMaybe<Scalars['String']['input']>;
-  letsEncryptSsl?: InputMaybe<DomainState>;
-  nsState?: InputMaybe<DomainState>;
-};
-
 export type EnterCostInput = {
   amount: Scalars['Int']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   type: PaymentType;
 };
 
-export type GetClientStatsFiltersInput = {
-  id: Scalars['String']['input'];
+export type GetBrandInfoInput = {
+  domainName: Scalars['String']['input'];
 };
 
-export type IssueCertInput = {
-  domain: Scalars['String']['input'];
+export type GetClientStatsFiltersInput = {
+  id: Scalars['String']['input'];
 };
 
 export type Login = {
@@ -234,42 +151,18 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addArvanAccount: Arvan;
-  addDomain: Domain;
-  addServer: Server;
   buyPackage: Scalars['String']['output'];
   buyRechargePackage: User;
   changePassword: User;
   enterCost: User;
-  issueCert: Domain;
   login: Login;
   logout: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
   signup: Auth;
-  updateArvanSslStates: Scalars['Boolean']['output'];
   updateChild: User;
-  updateIp: Array<Dns>;
-  updateLetsEncryptSslStates: Scalars['Boolean']['output'];
-  updateNsStates: Scalars['Boolean']['output'];
-  updatePort: Dns;
   updateUser: User;
   uploadImage: Scalars['String']['output'];
-};
-
-
-export type MutationAddArvanAccountArgs = {
-  data: CreateArvanAccountInput;
-};
-
-
-export type MutationAddDomainArgs = {
-  data: CreateDomainInput;
-};
-
-
-export type MutationAddServerArgs = {
-  data: CreateServerInput;
 };
 
 
@@ -290,11 +183,6 @@ export type MutationChangePasswordArgs = {
 
 export type MutationEnterCostArgs = {
   input: EnterCostInput;
-};
-
-
-export type MutationIssueCertArgs = {
-  data: IssueCertInput;
 };
 
 
@@ -320,16 +208,6 @@ export type MutationSignupArgs = {
 
 export type MutationUpdateChildArgs = {
   input: UpdateChildInput;
-};
-
-
-export type MutationUpdateIpArgs = {
-  data: UpdateDnsIpInput;
-};
-
-
-export type MutationUpdatePortArgs = {
-  data: UpdateDnsPortInput;
 };
 
 
@@ -380,7 +258,7 @@ export type Query = {
   checkAuth: CheckAuth;
   children: Array<Child>;
   clientStats: Array<ClientStat>;
-  domains: Array<Domain>;
+  getBrandInfo: Brand;
   hello: Scalars['String']['output'];
   helloWorld: Scalars['String']['output'];
   me: User;
@@ -395,8 +273,8 @@ export type QueryClientStatsArgs = {
 };
 
 
-export type QueryDomainsArgs = {
-  filters?: InputMaybe<DomainsFiltersInput>;
+export type QueryGetBrandInfoArgs = {
+  input: GetBrandInfoInput;
 };
 
 
@@ -425,28 +303,6 @@ export type RenewPackageInput = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
-}
-
-export type Server = {
-  __typename?: 'Server';
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  domain: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  inboundId: Scalars['Int']['output'];
-  ip: Scalars['String']['output'];
-  token: Scalars['String']['output'];
-  type: ServerCountry;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
-};
-
-/** ServerCountry */
-export enum ServerCountry {
-  De = 'DE',
-  Ir = 'IR',
-  Nl = 'NL',
-  Tr = 'TR'
 }
 
 export type SignupInput = {
@@ -491,16 +347,6 @@ export type UpdateChildInput = {
   role?: InputMaybe<Role>;
 };
 
-export type UpdateDnsIpInput = {
-  domain: Scalars['String']['input'];
-  ip: Scalars['String']['input'];
-};
-
-export type UpdateDnsPortInput = {
-  domain: Scalars['String']['input'];
-  port: Scalars['String']['input'];
-};
-
 export type UpdateUserInput = {
   cardBandName?: InputMaybe<Scalars['String']['input']>;
   cardBandNumber?: InputMaybe<Scalars['String']['input']>;
@@ -512,14 +358,6 @@ export type UpdateUserInput = {
 export type UploadInput = {
   image: Scalars['Upload']['input'];
 };
-
-/** Upstream Https */
-export enum UpstreamHttps {
-  Auto = 'auto',
-  Default = 'default',
-  Http = 'http',
-  Https = 'https'
-}
 
 export type User = {
   __typename?: 'User';

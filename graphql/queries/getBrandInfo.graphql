@@ -1,0 +1,7 @@
+query getBrandInfo($input: GetBrandInfoInput!) {
+    getBrandInfo(input: $input){
+      	title
+    	description
+    	logo
+    }
+}
