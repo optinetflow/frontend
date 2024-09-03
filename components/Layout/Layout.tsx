@@ -1,21 +1,68 @@
-// import localFont from "next/font/local"
-import Head from 'next/head'
-import { Toaster } from "@/components/ui/toaster"
-
-// import styles from './layout.module.css'
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { Toaster } from '@/components/ui/toaster';
+import { GetBrandInfoQueryResult } from '../../graphql/queries/getBrandInfo.graphql.interface';
+import { removeWWW } from '../../helpers';
 
 type LayoutProps = {
-  children: React.ReactNode
-}
-
-// const iranSans = localFont({ src: "../../assets/fonts/IRANSansWeb.woff2" })
+  children: React.ReactNode;
+};
 
 export default function Layout({ children }: LayoutProps) {
+  const [meta, setMeta] = useState({
+    title: 'در حال بارگذاری...',
+    description: 'در حال بارگذاری اطلاعات، لطفاً صبر کنید...',
+  });
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+      try {
+          const query = `
+            query getBrandInfo($input: GetBrandInfoInput!) {
+              getBrandInfo(input: $input) {
+                id
+                title
+                description
+                logo
+              }
+            }
+          `;
+        
+          const variables = {
+            input: {
+              domainName: removeWWW(window.location.host) 
+            }
+          };
+        
+          const response = await fetch(`${document.location.origin}${process.env.NEXT_PUBLIC_GRAPHQL_URI}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              query,
+              variables,
+            }),
+          });
+        const data = await response.json() as GetBrandInfoQueryResult;
+        setMeta({
+          title:  data.data?.getBrandInfo.title || 'Vaslkon.com | وصل کن دات کام',
+          description:  data.data?.getBrandInfo.description || 'سایت وصل کن دات کام (vaslkon.com) با کیفیت‌ترین سرورها.',
+        });
+    } catch (error) {
+        console.error('Error fetching meta data:', error);
+      }
+    };
+
+    fetchMeta();
+  }, []);
+
   return (
     <>
       <Head>
-        <title>وصل کن دات کام | Vaslkon.com</title>
-        <meta name="description" content="سایت وصل کن دات کام (vaslkon.com) با کیفیت‌ترین سرورها." />
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
       <main>
@@ -23,5 +70,5 @@ export default function Layout({ children }: LayoutProps) {
         <Toaster />
       </main>
     </>
-  )
+  );
 }
