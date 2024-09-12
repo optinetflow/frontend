@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client';
 import Link from "next/link"
 import React from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -9,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
-import { useChildrenQuery } from "../graphql/queries/children.graphql.interface"
+import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface"
 import { copyText } from '../helpers';
 import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
@@ -36,45 +37,63 @@ interface CustomerOptionsProps {
   isDisabled: boolean
 }
 const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => {
-  const [updateChild] = useUpdateChildMutation()
+  const [updateChild, updateChildData] = useUpdateChildMutation()
+  const client = useApolloClient();
 
-  const handleBlockChild = (isEnabled: boolean, childId: string) => {
-    updateChild({
-      variables: {
-        input: { childId, isDisabled: !isEnabled },
-      },
-    })
-      .catch((e) => {
-        console.log("e ==>", e)
-      })
-  }
+  const handleBlockChild = async (isEnabled: boolean, childId: string) => {
+    try {
+      await updateChild({
+        variables: {
+          input: { childId, isDisabled: !isEnabled },
+        },
+        update: () => {
+          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument });
+
+          if (existingData) {
+            const updatedChildren = existingData.children.map(child =>
+              child.id === childId ? { ...child, isDisabled: !isEnabled } : child
+            );
+
+            client.writeQuery({
+              query: ChildrenDocument,
+              data: { children: updatedChildren },
+            });
+          }
+        },
+      });
+    } catch (e) {
+      console.log("Error updating child status:", e);
+    }
+  };
 
   return (
     <DropdownMenu>
       {/* <DropdownMenuTrigger className="rounded-full w-12 h-12 text-slate-500 flex justify-center items-center hover:bg-slate-200"><EllipsisHorizontalIcon  /></DropdownMenuTrigger> */}
       <DropdownMenuTrigger asChild>
-        <Button className="mr-4 h-12 w-12 rounded-full text-slate-500" size="sm" variant="ghost" type="button">
+        <Button className="mr-4 size-12 rounded-full text-slate-500" size="sm" variant="ghost" type="button">
           <EllipsisHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="rtl mx-4 w-48">
         <DropdownMenuItem asChild>
           <Link href={`/customer-edit/${id}`}>
-            <PencilIcon className="ml-2 h-4 w-4" />
+            <PencilIcon className="ml-2 size-4" />
             <span>ویرایش</span>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild disabled={updateChildData.loading}>
           <label
             htmlFor="isDisabled"
             onClick={(e) => e.stopPropagation()}
             className="flex items-center justify-between"
           >
             <div className="flex items-center">
-              <NoSymbolIcon className="ml-2 h-4 w-4" />
-              <span>{isDisabled ? "فعال کردن" : "مسدود کردن"}</span>
+              <NoSymbolIcon className="ml-2 size-4" />
+              {updateChildData.loading ? <span>در حال انجام...</span> :<span>{isDisabled ? "فعال کردن" : "مسدود کردن"}</span>}
+              
             </div>
             <Switch
+              disabled={updateChildData.loading}
               onClick={(e) => e.stopPropagation()}
               id="isDisabled"
               defaultChecked={!isDisabled}
@@ -104,14 +123,14 @@ const Customer: React.FC<CustomerProps> = ({ id, fullname, isDisabled, phone, av
   return (
     <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="relative flex flex-1 overflow-hidden items-center">
-        <Avatar className="relative h-12 w-12 text-xs">
+        <Avatar className="relative size-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
           <AvatarFallback className={avatarColor(`${fullname}`)}>
             {fullname[0]}‌
           </AvatarFallback>
         </Avatar>
-        {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? description ? 'top-6 right-8' : 'top-4 right-8' : 'top-0 right-8'}  text-xs w-6 h-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
-        <div className="mr-4 flex h-full w-full flex-col justify-between overflow-hidden text-sm space-y-2">
+        {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? description ? 'top-6 right-8' : 'top-4 right-8' : 'top-0 right-8'}  text-xs size-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
+        <div className="mr-4 flex size-full flex-col justify-between overflow-hidden text-sm space-y-2">
           <div className="truncate font-black text-slate-800">
             {fullname}
           </div>
@@ -137,7 +156,7 @@ const CustomersPage: NextPageWithLayout = () => {
         <div className="w-full space-y-4">
           <Link href="/signup">
             <Button className="flex w-full">
-              <UserPlusIcon className="ml-2 h-5 w-5" />
+              <UserPlusIcon className="ml-2 size-5" />
               <span>ثبت نام</span>
             </Button>
           </Link>
