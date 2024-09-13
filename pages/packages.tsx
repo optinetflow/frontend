@@ -22,13 +22,6 @@ const PackagesPage: NextPageWithLayout = () => {
   const userPackageId = searchParams.get("userPackageId")
   const router = useRouter()
 
-  const filteredPackages = me.data?.me.parent?.id === '801d871d-879a-4ad0-9e8c-a5577ffd682d' ? packages.data?.packages.filter(pack => {
-    if ([20, 50, 40].includes(pack.traffic)) return false;
-    return true;
-  }).map((pack) => {
-    return ({...pack,  price: ceilTo(pack.price * 0.7, 0)})
-  }): packages.data?.packages;
-
   return (
     <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
       <div className="w-full space-y-4">
@@ -36,7 +29,7 @@ const PackagesPage: NextPageWithLayout = () => {
           <ArrowUTurnLeftIcon className="ml-2 h-5 w-5" />
           <span>بازگشت</span>
         </Button>
-        {filteredPackages?.map((pack) => (
+        {packages.data?.packages?.map((pack) => (
           <Link
             href={
               userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`
