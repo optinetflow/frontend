@@ -82,7 +82,7 @@ const SignupPage: NextPageWithLayout = () => {
       </div>
 
       <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (signupData.error && "این شماره موبایل قبلا ثبت نام کرده است.")}&nbsp;
+        {errors?.[firstError]?.message || (signupData.error?.message)}&nbsp;
       </div>
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}

@@ -77,7 +77,7 @@ const LoginPage: NextPageWithLayout = () => {
               <Input {...register("password")} className="ltr" id="password" required type="password" />
             </div>
             <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (loginData?.error && "شماره موبایل یا رمز عبور اشتباهه!")}&nbsp;
+              {errors?.[firstError]?.message || (loginData?.error?.message)}&nbsp;
             </div>
             <Button disabled={loginData?.loading} className="w-full" type="submit">
               {loginData?.loading ? "لطفا کمی صبر کنید..." : "ورود"}

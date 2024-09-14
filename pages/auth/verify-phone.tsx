@@ -137,18 +137,18 @@ const VerifyPhonePage: NextPageWithLayout = () => {
         <Card className="mb-4 w-full">
           <CardContent className="mt-4 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="otp">تایید شماره موبایل ({phone || meData?.me.phone})</Label>
+              <Label htmlFor="otp">کد تایید را وارد کنید ({phone || meData?.me.phone})</Label>
               <Input
                 {...register("otp")}
                 className="ltr"
                 id="otp"
-                placeholder="1234"
+                placeholder="مثلا 1234"
                 required
                 type="number"
               />
             </div>
             <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (verifyPhoneData?.error && "شماره موبایل یا کد تایید اشتباهه!")}&nbsp;
+              {errors?.[firstError]?.message || (verifyPhoneData.error?.message)}&nbsp;
             </div>
             <div className="text-sm text-gray-600">
               {timer > 0 ? `مدت زمان باقی‌مانده: ${formatSecondsToMMSS(timer)}` : "کد را دریافت نکردید؟"}

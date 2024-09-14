@@ -43,7 +43,6 @@ const HomePageComponent: React.FC = () => {
   }
 
   const botRef = `https://t.me/${me.data?.me.brand?.botUsername}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`
-  console.log({botRef})
   const isAdmin = me?.data?.me.role !== "USER"
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
