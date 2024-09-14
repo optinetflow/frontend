@@ -124,8 +124,10 @@ const VerifyPhonePage: NextPageWithLayout = () => {
           domainName
         },
       },
-    }).then(() => {
-        router.replace('/');
+    }).then((res) => {
+        if(res.data?.verifyPhone.accessToken) {
+            router.replace('/');
+        }
     })
   })
 
