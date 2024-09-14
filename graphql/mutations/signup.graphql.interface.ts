@@ -8,16 +8,12 @@ export type SignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'Auth', user: { __typename?: 'User', id: string } } };
+export type SignupMutation = { __typename?: 'Mutation', signup: boolean };
 
 
 export const SignupDocument = gql`
     mutation signup($input: SignupInput!) {
-  signup(data: $input) {
-    user {
-      id
-    }
-  }
+  signup(data: $input)
 }
     `;
 export type SignupMutationFn = Apollo.MutationFunction<SignupMutation, SignupMutationVariables>;

@@ -19,15 +19,6 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
-export type Auth = {
-  __typename?: 'Auth';
-  /** JWT access token */
-  accessToken: Scalars['JWT']['output'];
-  /** JWT refresh token */
-  refreshToken: Scalars['JWT']['output'];
-  user: User;
-};
-
 export type BankCard = {
   __typename?: 'BankCard';
   name: Scalars['String']['output'];
@@ -85,9 +76,12 @@ export type Child = {
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
+  isVerified: Scalars['Boolean']['output'];
   lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   onlinePackages: Scalars['Int']['output'];
+  otp?: Maybe<Scalars['String']['output']>;
+  otpExpiration?: Maybe<Scalars['DateTime']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
@@ -99,6 +93,7 @@ export type Child = {
   totalProfit: Scalars['Float']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+  user: User;
   userGift?: Maybe<Array<UserGift>>;
 };
 
@@ -159,10 +154,13 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
-  signup: Auth;
+  sendOtpAgain: Scalars['Boolean']['output'];
+  signup: Scalars['Boolean']['output'];
   updateChild: User;
+  updatePhone: Scalars['Boolean']['output'];
   updateUser: User;
   uploadImage: Scalars['String']['output'];
+  verifyPhone: Token;
 };
 
 
@@ -201,6 +199,11 @@ export type MutationRenewPackageArgs = {
 };
 
 
+export type MutationSendOtpAgainArgs = {
+  data: SendOtpAgainInput;
+};
+
+
 export type MutationSignupArgs = {
   data: SignupInput;
 };
@@ -211,6 +214,11 @@ export type MutationUpdateChildArgs = {
 };
 
 
+export type MutationUpdatePhoneArgs = {
+  data: UpdatePhoneInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
 };
@@ -218,6 +226,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUploadImageArgs = {
   input: UploadInput;
+};
+
+
+export type MutationVerifyPhoneArgs = {
+  data: VerifyPhoneInput;
 };
 
 export type Package = {
@@ -305,6 +318,11 @@ export enum Role {
   User = 'USER'
 }
 
+export type SendOtpAgainInput = {
+  domainName: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type SignupInput = {
   domainName: Scalars['String']['input'];
   fullname: Scalars['String']['input'];
@@ -347,6 +365,11 @@ export type UpdateChildInput = {
   role?: InputMaybe<Role>;
 };
 
+export type UpdatePhoneInput = {
+  domainName: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
 export type UpdateUserInput = {
   cardBandName?: InputMaybe<Scalars['String']['input']>;
   cardBandNumber?: InputMaybe<Scalars['String']['input']>;
@@ -373,7 +396,10 @@ export type User = {
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
+  isVerified: Scalars['Boolean']['output'];
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
+  otp?: Maybe<Scalars['String']['output']>;
+  otpExpiration?: Maybe<Scalars['DateTime']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
@@ -385,6 +411,7 @@ export type User = {
   totalProfit: Scalars['Float']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+  user: User;
   userGift?: Maybe<Array<UserGift>>;
 };
 
@@ -407,4 +434,10 @@ export type UserPackage = {
   totalTraffic: Scalars['BigNumber']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type VerifyPhoneInput = {
+  domainName: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
 };

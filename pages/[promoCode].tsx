@@ -40,11 +40,7 @@ const PromoCodePage: NextPageWithLayout = () => {
       },
     })
       .then(() => {
-        if (promoCode) {
-          router.replace("/")
-          return
-        }
-        router.replace("/customers")
+        router.push(`/auth/verify-phone?phone=${data.phone}`)
       })
       .catch((e) => {
         console.error(e)

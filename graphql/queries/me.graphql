@@ -7,6 +7,7 @@ query Me {
         createdAt
         updatedAt
         isDisabled
+        isVerified
         isParentDisabled
         balance
         totalProfit
