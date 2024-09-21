@@ -103,7 +103,7 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
             {otpSent && (
                 <div className="space-y-2">
                     <Label htmlFor="otp">
-                    کد تایید را وارد کنید
+                      کد تایید ارسال شده به شماره موبایل
                     </Label>
                     <Input
                     {...register("otp")}
@@ -120,7 +120,7 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
             </div>
             {otpSent && (
                 <Button disabled={resetPasswordData?.loading} className="w-full" onClick={handleResetPassword}>
-                {resetPasswordData?.loading ? "لطفا کمی صبر کنید..." : "تایید کد"}
+                {resetPasswordData?.loading ? "لطفا کمی صبر کنید..." : "تغییر رمز ورود"}
               </Button>
             )}
             {!otpSent && (
