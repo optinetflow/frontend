@@ -26,7 +26,7 @@ const VerifyPhonePage: NextPageWithLayout = () => {
   const [timer, setTimer] = useState<number>(120); // 2 minutes in seconds
   const [otpSent, setOtpSent] = useState<boolean>(false); // Track if OTP has been sent
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Track the interval ID
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const phone = router.query.phone as string
 
 
@@ -153,7 +153,7 @@ const VerifyPhonePage: NextPageWithLayout = () => {
               <CardContent className="mt-4 space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="otp">
-                    کد تایید را وارد کنید ({phone || meData?.me.phone})
+                    کد تایید ارسالی به 0{phone || meData?.me.phone}:
                   </Label>
                   <Input
                     {...register("otp")}

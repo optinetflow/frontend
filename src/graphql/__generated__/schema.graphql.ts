@@ -149,6 +149,7 @@ export type Mutation = {
   buyPackage: Scalars['String']['output'];
   buyRechargePackage: User;
   changePassword: User;
+  enableGift: Scalars['Boolean']['output'];
   enterCost: User;
   login: Login;
   logout: Scalars['Boolean']['output'];
