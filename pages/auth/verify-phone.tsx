@@ -39,13 +39,14 @@ const VerifyPhonePage: NextPageWithLayout = () => {
             domainName,
           },
         },
-      }).then(() => {
-        setOtpSent(true)
-        setLoading(false)
+      }).then((res) => {
+        if(res.data?.sendOtpAgain === true) {
+          setOtpSent(true)
+          setLoading(false)
+        }
       })
       .catch((error) => console.error('Failed to send OTP:', error));
     }
-    setLoading(false)
     const intervalId = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer <= 1) {
