@@ -72,7 +72,6 @@ const HomePageComponent: React.FC = () => {
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
   const hasPackage = Boolean(data?.userPackages?.length)
   const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic
-  // const gif = 4
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
