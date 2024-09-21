@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useVerifyPhoneMutation } from "graphql/mutations/verifyPhone.graphql.interface"
 import Layout from "../../components/Layout/Layout"
+import Loading from "../../components/Loading/Loading"
 import { useLogoutMutation } from "../../graphql/mutations/logout.graphql.interface"
 import { useSendOtpAgainMutation } from "../../graphql/mutations/sendOtpAgain.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
@@ -20,25 +21,31 @@ interface FormValues {
 
 const VerifyPhonePage: NextPageWithLayout = () => {
   const router = useRouter()
-  const phone = router.query.phone as string
   const domainName = removeWWW(window.location.host)
   const [sendOtpAgain] = useSendOtpAgainMutation({errorPolicy: "all"});
   const [timer, setTimer] = useState<number>(120); // 2 minutes in seconds
   const [otpSent, setOtpSent] = useState<boolean>(false); // Track if OTP has been sent
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Track the interval ID
+  const [loading, setLoading] = useState(true);
+  const phone = router.query.phone as string
 
 
   useEffect(() => {
     if (!phone) {
+      setLoading(true)
       sendOtpAgain({
         variables: {
           input: {
             domainName,
           },
         },
-      }).then(() => setOtpSent(true))
+      }).then(() => {
+        setOtpSent(true)
+        setLoading(false)
+      })
       .catch((error) => console.error('Failed to send OTP:', error));
     }
+    setLoading(false)
     const intervalId = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer <= 1) {
@@ -69,6 +76,7 @@ const VerifyPhonePage: NextPageWithLayout = () => {
         variables: {
           input: {
             domainName,
+            phone: phone || undefined
           },
         },
       }).then(() => {
@@ -134,70 +142,85 @@ const VerifyPhonePage: NextPageWithLayout = () => {
   const firstError = Object.keys(errors)?.[0] as keyof FormValues
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto flex h-screen max-w-xs">
-      <div className="m-auto w-full">
-        <Card className="mb-4 w-full">
-          <CardContent className="mt-4 space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="otp">کد تایید را وارد کنید ({phone || meData?.me.phone})</Label>
-              <Input
-                {...register("otp")}
-                className="ltr"
-                id="otp"
-                placeholder="مثلا 1234"
-                required
-                type="number"
-              />
-            </div>
-            <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (verifyPhoneData.error?.message)}&nbsp;
-            </div>
-            <div className="text-sm text-gray-600">
-              {timer > 0 ? `مدت زمان باقی‌مانده: ${formatSecondsToMMSS(timer)}` : "کد را دریافت نکردید؟"}
-            </div>
-            {timer === 0 && (
-              <div className="text-center mt-4">
-                <Button onClick={handleResendOtp} className="w-full">
-                  ارسال مجدد کد تایید
-                </Button>
-              </div>
-            )}
-            {timer > 0 && (
-                <Button disabled={verifyPhoneData?.loading} className="w-full" type="submit">
-                  {verifyPhoneData?.loading ? "لطفا کمی صبر کنید..." : "تایید"}
-                </Button>
-            )}
-            {phone && (
-                <div className="mt-4 text-center text-sm">
+    <>
+      {loading ? ( // If loading is true, show a loading spinner or message
+        <Loading></Loading>
+      ) : (
+        <form onSubmit={onSubmit} className="mx-auto flex h-screen max-w-xs">
+          <div className="m-auto w-full">
+            <Card className="mb-4 w-full">
+              <CardContent className="mt-4 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="otp">
+                    کد تایید را وارد کنید ({phone || meData?.me.phone})
+                  </Label>
+                  <Input
+                    {...register("otp")}
+                    className="ltr"
+                    id="otp"
+                    placeholder="مثلا 1234"
+                    required
+                    type="number"
+                  />
+                </div>
+                <div className="text-sm text-red-600">
+                  {errors?.[firstError]?.message || verifyPhoneData.error?.message}&nbsp;
+                </div>
+                <div className="text-sm text-gray-600">
+                  {timer > 0
+                    ? `مدت زمان باقی‌مانده: ${formatSecondsToMMSS(timer)}`
+                    : "کد را دریافت نکردید؟"}
+                </div>
+                {timer === 0 && (
+                  <div className="text-center mt-4">
+                    <Button onClick={handleResendOtp} className="w-full">
+                      ارسال مجدد کد تایید
+                    </Button>
+                  </div>
+                )}
+                {timer > 0 && (
+                  <Button
+                    disabled={verifyPhoneData?.loading}
+                    className="w-full"
+                    type="submit"
+                  >
+                    {verifyPhoneData?.loading ? "لطفا کمی صبر کنید..." : "تایید"}
+                  </Button>
+                )}
+                {phone && (
+                  <div className="mt-4 text-center text-sm">
                     <p>
-                            شماره اشتباه است؟{' '}
-                        <button
-                            onClick={handleBackClick}
-                            className="text-blue-600 underline bg-transparent border-none cursor-pointer"
-                            >
-                            تغییر دهید
-                        </button>
+                      شماره اشتباه است؟{' '}
+                      <button
+                        onClick={handleBackClick}
+                        className="text-blue-600 underline bg-transparent border-none cursor-pointer"
+                      >
+                        تغییر دهید
+                      </button>
                     </p>
-               </div>
-            )}
-            {!phone && (
-                <div className="mt-4 text-center text-sm">
+                  </div>
+                )}
+                {!phone && (
+                  <div className="mt-4 text-center text-sm">
                     <p>
-                            با شماره دیگری میخواهید وارد شوید؟{' '}
-                        <button
-                            onClick={handleLogout}
-                            className="text-blue-600 underline bg-transparent border-none cursor-pointer"
-                            >
-                            خروج از حساب کاربری
-                        </button>
+                      با شماره دیگری میخواهید وارد شوید؟{' '}
+                      <button
+                        onClick={handleLogout}
+                        className="text-blue-600 underline bg-transparent border-none cursor-pointer"
+                      >
+                        خروج از حساب کاربری
+                      </button>
                     </p>
-               </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </form>
-  )
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </form>
+      )}
+    </>
+  );
+  
 }
 
 export default VerifyPhonePage

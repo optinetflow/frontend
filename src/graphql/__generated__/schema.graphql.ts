@@ -154,6 +154,8 @@ export type Mutation = {
   logout: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
+  resetPassword: Scalars['Boolean']['output'];
+  sendForgetPasswordOtp: Scalars['Boolean']['output'];
   sendOtpAgain: Scalars['Boolean']['output'];
   signup: Scalars['Boolean']['output'];
   updateChild: User;
@@ -196,6 +198,16 @@ export type MutationRefreshTokenArgs = {
 
 export type MutationRenewPackageArgs = {
   input: RenewPackageInput;
+};
+
+
+export type MutationResetPasswordArgs = {
+  data: ResetPasswordInput;
+};
+
+
+export type MutationSendForgetPasswordOtpArgs = {
+  data: SendForgetPasswordOtpInput;
 };
 
 
@@ -312,11 +324,23 @@ export type RenewPackageInput = {
   userPackageId: Scalars['String']['input'];
 };
 
+export type ResetPasswordInput = {
+  domainName: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
 /** User role */
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
 }
+
+export type SendForgetPasswordOtpInput = {
+  domainName: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
 
 export type SendOtpAgainInput = {
   domainName: Scalars['String']['input'];
