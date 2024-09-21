@@ -51,6 +51,10 @@ const LoginPage: NextPageWithLayout = () => {
     router.push(redirected ? decodeURIComponent(redirected) : "/")
   }
 
+  const handleForgetPassword = () => {
+    router.push('/auth/forget-password')
+  }
+
   const firstError = Object.keys(errors)?.[0] as keyof FormValues
 
   return (
@@ -77,11 +81,22 @@ const LoginPage: NextPageWithLayout = () => {
               <Input {...register("password")} className="ltr" id="password" required type="password" />
             </div>
             <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (loginData?.error && "شماره موبایل یا رمز عبور اشتباهه!")}&nbsp;
+              {errors?.[firstError]?.message || (loginData?.error?.message)}&nbsp;
             </div>
             <Button disabled={loginData?.loading} className="w-full" type="submit">
               {loginData?.loading ? "لطفا کمی صبر کنید..." : "ورود"}
             </Button>
+            <div className="mt-4 text-center text-sm">
+                    <p>
+                     رمز عبور خود را فراموش کرده اید؟{' '}
+                      <button
+                        onClick={handleForgetPassword}
+                        className="text-blue-600 underline bg-transparent border-none cursor-pointer"
+                      >
+                        تغییر رمز
+                      </button>
+                    </p>
+                  </div>
           </CardContent>
         </Card>
         {/* <Link className="w-full" href="/stat">

@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
@@ -6,8 +7,9 @@ import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { Stat } from "../components/Stat"
+import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface"
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
-import { useMeQuery } from "../graphql/queries/me.graphql.interface"
+import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
 import { convertPersianCurrency, jsonToB64Url, roundTo } from "../helpers"
@@ -26,16 +28,38 @@ const isDevelop = process.env.NODE_ENV === 'development';
 
 const HomePageComponent: React.FC = () => {
   const router = useRouter()
+  const client = useApolloClient();
   const { toast } = useToast()
-  const me = useMeQuery({ fetchPolicy: "cache-and-network" })
-  const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  const me = useMeQuery({ fetchPolicy: "network-only" })
+  if(me.data?.me.isVerified === false) {
+    router.replace("/auth/verify-phone")
+  }
+  const { data, refetch: refetchUserPackages } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
 
   const [logout] = useLogoutMutation()
+  const [enableGift, enableGiftData] = useEnableGiftMutation()
 
   const handleLogout = () => {
     logout().then(() => {
       localStorage.clear()
       router.replace("/login")
+    })
+  }
+
+  const handleEnableGift = () => {
+    enableGift({
+      update: () => {
+        const existingData = client.readQuery<MeQuery>({ query: MeDocument });
+        if (existingData) {
+          const updatedMe = existingData.me && {...existingData.me, userGift: []}
+          client.writeQuery({
+            query: MeDocument,
+            data: { me: updatedMe },
+          });
+        }
+      },
+    }).then(() => {
+      refetchUserPackages()
     })
   }
 
@@ -48,6 +72,7 @@ const HomePageComponent: React.FC = () => {
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
   const hasPackage = Boolean(data?.userPackages?.length)
   const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic
+  // const gif = 4
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e)
@@ -122,12 +147,10 @@ const HomePageComponent: React.FC = () => {
             </Button>
           </Link>
           {gif && (
-            <a className="block" href={botRef}>
-              <Button variant="outline" className="flex w-full">
-                {/* <TelegramIcon className="ml-2 h-5 w-5" /> */}
-                <span>{gif} گیگ تست با عضو شدن در ربات تلگرام</span>
-              </Button>
-            </a>
+            <Button variant="outline" disabled={enableGiftData.loading} className="flex w-full" onClick={handleEnableGift}>
+              <span>  {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}
+              </span>
+           </Button>
           )}
           {isAdmin && (
             <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>

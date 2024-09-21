@@ -17,15 +17,15 @@ const SignupPage: NextPageWithLayout = () => {
   const phone = searchParams.get("phone")
   const promoCode = searchParams.get("promoCode")
   
-  const [signup, signupData] = useSignupMutation()
+  const [signup, signupData] = useSignupMutation({errorPolicy: 'all'})
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignupInput>()
 
-  const onSubmit = handleSubmit((data) => {
-    signup({
+  const onSubmit = handleSubmit(async (data) => {
+    await signup({
       variables: {
         input: {
           ...data,
@@ -34,17 +34,11 @@ const SignupPage: NextPageWithLayout = () => {
           domainName: removeWWW(window.location.host)
         },
       },
+    }).then(() => {
+      router.push('/customers')
+    }).catch(err => {
+      console.error(err)
     })
-      .then(() => {
-        if (promoCode) {
-          router.replace("/")
-          return
-        }
-        router.replace("/customers")
-      })
-      .catch((e) => {
-        console.error(e)
-      })
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof SignupInput
@@ -88,7 +82,7 @@ const SignupPage: NextPageWithLayout = () => {
       </div>
 
       <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (signupData.error && "این شماره موبایل قبلا ثبت نام کرده است.")}&nbsp;
+        {errors?.[firstError]?.message || (signupData.error?.message)}&nbsp;
       </div>
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
