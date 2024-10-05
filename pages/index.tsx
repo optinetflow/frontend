@@ -179,7 +179,7 @@ const HomePageComponent: React.FC = () => {
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
           
-          {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
+          {!isRegisteredInTelegram && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
                 <TelegramIcon className="ml-2 h-5 w-5" />
