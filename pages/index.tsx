@@ -67,7 +67,7 @@ const HomePageComponent: React.FC = () => {
   const isAdmin = me?.data?.me.role !== "USER"
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
-  const isRegisteredInTelegram = me?.data?.me.telegram?.phone
+  const isRegisteredInTelegram = me?.data?.me.telegram?.id
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
   const hasPackage = Boolean(data?.userPackages?.length)
