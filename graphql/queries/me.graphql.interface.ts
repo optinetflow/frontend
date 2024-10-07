@@ -19,6 +19,7 @@ export const MeDocument = gql`
     createdAt
     updatedAt
     isDisabled
+    isVerified
     isParentDisabled
     balance
     totalProfit
@@ -28,6 +29,9 @@ export const MeDocument = gql`
     bankCard {
       name
       number
+    }
+    brand {
+      botUsername
     }
     telegram {
       id

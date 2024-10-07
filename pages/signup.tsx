@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizePhone, removeWWW } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const SignupPage: NextPageWithLayout = () => {
@@ -17,33 +17,28 @@ const SignupPage: NextPageWithLayout = () => {
   const phone = searchParams.get("phone")
   const promoCode = searchParams.get("promoCode")
   
-  const [signup, signupData] = useSignupMutation()
+  const [signup, signupData] = useSignupMutation({errorPolicy: 'all'})
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignupInput>()
 
-  const onSubmit = handleSubmit((data) => {
-    signup({
+  const onSubmit = handleSubmit(async (data) => {
+    await signup({
       variables: {
         input: {
           ...data,
           ...(phone && { phone }),
           promoCode,
+          domainName: removeWWW(window.location.host)
         },
       },
+    }).then(() => {
+      router.push('/customers')
+    }).catch(err => {
+      console.error(err)
     })
-      .then(() => {
-        if (promoCode) {
-          router.replace("/")
-          return
-        }
-        router.replace("/customers")
-      })
-      .catch((e) => {
-        console.error(e)
-      })
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof SignupInput
@@ -87,7 +82,7 @@ const SignupPage: NextPageWithLayout = () => {
       </div>
 
       <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (signupData.error && "این شماره موبایل قبلا ثبت نام کرده است.")}&nbsp;
+        {errors?.[firstError]?.message || (signupData.error?.message)}&nbsp;
       </div>
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}

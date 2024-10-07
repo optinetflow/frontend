@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
@@ -6,8 +7,9 @@ import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { Stat } from "../components/Stat"
+import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface"
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
-import { useMeQuery } from "../graphql/queries/me.graphql.interface"
+import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
 import { toIRR, jsonToB64Url, roundTo } from "../helpers"
@@ -26,11 +28,16 @@ const isDevelop = process.env.NODE_ENV === 'development';
 
 const HomePageComponent: React.FC = () => {
   const router = useRouter()
+  const client = useApolloClient();
   const { toast } = useToast()
-  const me = useMeQuery({ fetchPolicy: "cache-and-network" })
-  const { data } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  const me = useMeQuery({ fetchPolicy: "network-only" })
+  if(me.data?.me.isVerified === false) {
+    router.replace("/auth/verify-phone")
+  }
+  const { data, refetch: refetchUserPackages } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
 
   const [logout] = useLogoutMutation()
+  const [enableGift, enableGiftData] = useEnableGiftMutation()
 
   const handleLogout = () => {
     logout().then(() => {
@@ -39,11 +46,28 @@ const HomePageComponent: React.FC = () => {
     })
   }
 
-  const botRef = `https://t.me/${process.env.NEXT_PUBLIC_BOT_NAME}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`
+  const handleEnableGift = () => {
+    enableGift({
+      update: () => {
+        const existingData = client.readQuery<MeQuery>({ query: MeDocument });
+        if (existingData) {
+          const updatedMe = existingData.me && {...existingData.me, userGift: []}
+          client.writeQuery({
+            query: MeDocument,
+            data: { me: updatedMe },
+          });
+        }
+      },
+    }).then(() => {
+      refetchUserPackages()
+    })
+  }
+
+  const botRef = `https://t.me/${me.data?.me.brand?.botUsername}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`
   const isAdmin = me?.data?.me.role !== "USER"
   const balance = me.data?.me.balance || 0
   const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
-  const isRegisteredInTelegram = me?.data?.me.telegram?.phone
+  const isRegisteredInTelegram = me?.data?.me.telegram?.id
   const hasBankCard = me.data?.me.bankCard?.[0]?.number
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
   const hasPackage = Boolean(data?.userPackages?.length)
@@ -122,12 +146,10 @@ const HomePageComponent: React.FC = () => {
             </Button>
           </Link>
           {gif && (
-            <a className="block" href={botRef}>
-              <Button variant="outline" className="flex w-full">
-                {/* <TelegramIcon className="ml-2 h-5 w-5" /> */}
-                <span>{gif} گیگ تست با عضو شدن در ربات تلگرام</span>
-              </Button>
-            </a>
+            <Button variant="outline" disabled={enableGiftData.loading} className="flex w-full" onClick={handleEnableGift}>
+              <span>  {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}
+              </span>
+           </Button>
           )}
           {isAdmin && (
             <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
@@ -157,7 +179,7 @@ const HomePageComponent: React.FC = () => {
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
           
-          {!me?.data?.me.telegram?.phone && (data.userPackages.length > 0 || isAdmin) && (
+          {!isRegisteredInTelegram && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
                 <TelegramIcon className="ml-2 h-5 w-5" />

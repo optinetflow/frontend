@@ -14,37 +14,29 @@ export type Scalars = {
   Float: { input: number; output: number; }
   BigNumber: { input: any; output: any; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
   JWT: { input: any; output: any; }
   Upload: { input: any; output: any; }
-};
-
-export type Arvan = {
-  __typename?: 'Arvan';
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  nsKeys: Array<Scalars['String']['output']>;
-  password: Scalars['String']['output'];
-  token?: Maybe<Scalars['String']['output']>;
-  tokenExpiredAt?: Maybe<Scalars['DateTime']['output']>;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
-};
-
-export type Auth = {
-  __typename?: 'Auth';
-  /** JWT access token */
-  accessToken: Scalars['JWT']['output'];
-  /** JWT refresh token */
-  refreshToken: Scalars['JWT']['output'];
-  user: User;
 };
 
 export type BankCard = {
   __typename?: 'BankCard';
   name: Scalars['String']['output'];
   number: Scalars['String']['output'];
+};
+
+export type Brand = {
+  __typename?: 'Brand';
+  botUsername: Scalars['String']['output'];
+  /** Identifies the date and time when the object was created. */
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  domainName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  logo?: Maybe<Scalars['JSON']['output']>;
+  title: Scalars['String']['output'];
+  /** Identifies the date and time when the object was last updated. */
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type BuyPackageInput = {
@@ -74,6 +66,8 @@ export type Child = {
   appliedDiscountPercent?: Maybe<Scalars['Float']['output']>;
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
+  brand?: Maybe<Brand>;
+  brandId?: Maybe<Scalars['String']['output']>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -82,9 +76,12 @@ export type Child = {
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
+  isVerified: Scalars['Boolean']['output'];
   lastConnectedAt?: Maybe<Scalars['DateTime']['output']>;
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
   onlinePackages: Scalars['Int']['output'];
+  otp?: Maybe<Scalars['String']['output']>;
+  otpExpiration?: Maybe<Scalars['DateTime']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
@@ -96,6 +93,7 @@ export type Child = {
   totalProfit: Scalars['Float']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+  user: User;
   userGift?: Maybe<Array<UserGift>>;
 };
 
@@ -114,87 +112,18 @@ export type ClientStat = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-export type CreateArvanAccountInput = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-export type CreateDomainInput = {
-  arvanAccount: Scalars['String']['input'];
-  domain: Scalars['String']['input'];
-  expiredAt?: InputMaybe<Scalars['String']['input']>;
-  serverDomain: Scalars['String']['input'];
-};
-
-export type CreateServerInput = {
-  domain: Scalars['String']['input'];
-  inboundId: Scalars['Int']['input'];
-  ip: Scalars['String']['input'];
-  type: ServerCountry;
-};
-
-export type Dns = {
-  __typename?: 'Dns';
-  cloud: Scalars['Boolean']['output'];
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  ttl: Scalars['Int']['output'];
-  type: Scalars['String']['output'];
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
-  upstream_https: UpstreamHttps;
-  value: Array<DnsValue>;
-};
-
-export type DnsValue = {
-  __typename?: 'DnsValue';
-  country: Scalars['String']['output'];
-  ip: Scalars['String']['output'];
-  port?: Maybe<Scalars['String']['output']>;
-  weight: Scalars['Int']['output'];
-};
-
-export type Domain = {
-  __typename?: 'Domain';
-  arvanSslState: DomainState;
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  domain: Scalars['String']['output'];
-  expiredAt: Scalars['DateTime']['output'];
-  id: Scalars['ID']['output'];
-  letsEncryptSsl: DomainState;
-  nsState: DomainState;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
-};
-
-/** Domain state */
-export enum DomainState {
-  Applied = 'APPLIED',
-  Pending = 'PENDING'
-}
-
-export type DomainsFiltersInput = {
-  arvanSslState?: InputMaybe<DomainState>;
-  domain?: InputMaybe<Scalars['String']['input']>;
-  letsEncryptSsl?: InputMaybe<DomainState>;
-  nsState?: InputMaybe<DomainState>;
-};
-
 export type EnterCostInput = {
   amount: Scalars['Int']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   type: PaymentType;
 };
 
-export type GetClientStatsFiltersInput = {
-  id: Scalars['String']['input'];
+export type GetBrandInfoInput = {
+  domainName: Scalars['String']['input'];
 };
 
-export type IssueCertInput = {
-  domain: Scalars['String']['input'];
+export type GetClientStatsFiltersInput = {
+  id: Scalars['String']['input'];
 };
 
 export type Login = {
@@ -210,48 +139,31 @@ export type LoginData = {
 };
 
 export type LoginInput = {
+  domainName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addArvanAccount: Arvan;
-  addDomain: Domain;
-  addServer: Server;
   buyPackage: Scalars['String']['output'];
   buyRechargePackage: User;
   changePassword: User;
+  enableGift: Scalars['Boolean']['output'];
   enterCost: User;
-  issueCert: Domain;
   login: Login;
   logout: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
-  signup: Auth;
-  updateArvanSslStates: Scalars['Boolean']['output'];
+  resetPassword: Scalars['Boolean']['output'];
+  sendForgetPasswordOtp: Scalars['Boolean']['output'];
+  sendOtpAgain: Scalars['Boolean']['output'];
+  signup: Scalars['Boolean']['output'];
   updateChild: User;
-  updateIp: Array<Dns>;
-  updateLetsEncryptSslStates: Scalars['Boolean']['output'];
-  updateNsStates: Scalars['Boolean']['output'];
-  updatePort: Dns;
+  updatePhone: Scalars['Boolean']['output'];
   updateUser: User;
   uploadImage: Scalars['String']['output'];
-};
-
-
-export type MutationAddArvanAccountArgs = {
-  data: CreateArvanAccountInput;
-};
-
-
-export type MutationAddDomainArgs = {
-  data: CreateDomainInput;
-};
-
-
-export type MutationAddServerArgs = {
-  data: CreateServerInput;
+  verifyPhone: Token;
 };
 
 
@@ -275,11 +187,6 @@ export type MutationEnterCostArgs = {
 };
 
 
-export type MutationIssueCertArgs = {
-  data: IssueCertInput;
-};
-
-
 export type MutationLoginArgs = {
   data: LoginInput;
 };
@@ -295,6 +202,21 @@ export type MutationRenewPackageArgs = {
 };
 
 
+export type MutationResetPasswordArgs = {
+  data: ResetPasswordInput;
+};
+
+
+export type MutationSendForgetPasswordOtpArgs = {
+  data: SendForgetPasswordOtpInput;
+};
+
+
+export type MutationSendOtpAgainArgs = {
+  data: SendOtpAgainInput;
+};
+
+
 export type MutationSignupArgs = {
   data: SignupInput;
 };
@@ -305,13 +227,8 @@ export type MutationUpdateChildArgs = {
 };
 
 
-export type MutationUpdateIpArgs = {
-  data: UpdateDnsIpInput;
-};
-
-
-export type MutationUpdatePortArgs = {
-  data: UpdateDnsPortInput;
+export type MutationUpdatePhoneArgs = {
+  data: UpdatePhoneInput;
 };
 
 
@@ -322,6 +239,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUploadImageArgs = {
   input: UploadInput;
+};
+
+
+export type MutationVerifyPhoneArgs = {
+  data: VerifyPhoneInput;
 };
 
 export type Package = {
@@ -363,7 +285,7 @@ export type Query = {
   checkAuth: CheckAuth;
   children: Array<Child>;
   clientStats: Array<ClientStat>;
-  domains: Array<Domain>;
+  getBrandInfo: Brand;
   hello: Scalars['String']['output'];
   helloWorld: Scalars['String']['output'];
   me: User;
@@ -378,8 +300,8 @@ export type QueryClientStatsArgs = {
 };
 
 
-export type QueryDomainsArgs = {
-  filters?: InputMaybe<DomainsFiltersInput>;
+export type QueryGetBrandInfoArgs = {
+  input: GetBrandInfoInput;
 };
 
 
@@ -404,35 +326,31 @@ export type RenewPackageInput = {
   userPackageId: Scalars['String']['input'];
 };
 
+export type ResetPasswordInput = {
+  domainName: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
 /** User role */
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
 }
 
-export type Server = {
-  __typename?: 'Server';
-  /** Identifies the date and time when the object was created. */
-  createdAt: Scalars['DateTime']['output'];
-  domain: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  inboundId: Scalars['Int']['output'];
-  ip: Scalars['String']['output'];
-  token: Scalars['String']['output'];
-  type: ServerCountry;
-  /** Identifies the date and time when the object was last updated. */
-  updatedAt: Scalars['DateTime']['output'];
+export type SendForgetPasswordOtpInput = {
+  domainName: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
 };
 
-/** ServerCountry */
-export enum ServerCountry {
-  De = 'DE',
-  Ir = 'IR',
-  Nl = 'NL',
-  Tr = 'TR'
-}
+export type SendOtpAgainInput = {
+  domainName: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type SignupInput = {
+  domainName: Scalars['String']['input'];
   fullname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
@@ -442,11 +360,16 @@ export type SignupInput = {
 export type TelegramUser = {
   __typename?: 'TelegramUser';
   bigAvatar?: Maybe<Scalars['String']['output']>;
+  chatId?: Maybe<Scalars['BigNumber']['output']>;
+  /** Identifies the date and time when the object was created. */
+  createdAt: Scalars['DateTime']['output'];
   firstname?: Maybe<Scalars['String']['output']>;
-  id: Scalars['BigNumber']['output'];
+  id: Scalars['ID']['output'];
   lastname?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
   smallAvatar?: Maybe<Scalars['String']['output']>;
+  /** Identifies the date and time when the object was last updated. */
+  updatedAt: Scalars['DateTime']['output'];
   username?: Maybe<Scalars['String']['output']>;
 };
 
@@ -469,14 +392,9 @@ export type UpdateChildInput = {
   role?: InputMaybe<Role>;
 };
 
-export type UpdateDnsIpInput = {
-  domain: Scalars['String']['input'];
-  ip: Scalars['String']['input'];
-};
-
-export type UpdateDnsPortInput = {
-  domain: Scalars['String']['input'];
-  port: Scalars['String']['input'];
+export type UpdatePhoneInput = {
+  domainName: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
 };
 
 export type UpdateUserInput = {
@@ -492,19 +410,13 @@ export type UploadInput = {
   image: Scalars['Upload']['input'];
 };
 
-/** Upstream Https */
-export enum UpstreamHttps {
-  Auto = 'auto',
-  Default = 'default',
-  Http = 'http',
-  Https = 'https'
-}
-
 export type User = {
   __typename?: 'User';
   appliedDiscountPercent?: Maybe<Scalars['Float']['output']>;
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
+  brand?: Maybe<Brand>;
+  brandId?: Maybe<Scalars['String']['output']>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   fullname: Scalars['String']['output'];
@@ -512,7 +424,10 @@ export type User = {
   initialDiscountPercent?: Maybe<Scalars['Float']['output']>;
   isDisabled?: Maybe<Scalars['Boolean']['output']>;
   isParentDisabled?: Maybe<Scalars['Boolean']['output']>;
+  isVerified: Scalars['Boolean']['output'];
   maxRechargeDiscountPercent?: Maybe<Scalars['Float']['output']>;
+  otp?: Maybe<Scalars['String']['output']>;
+  otpExpiration?: Maybe<Scalars['DateTime']['output']>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars['String']['output']>;
   phone: Scalars['String']['output'];
@@ -524,6 +439,7 @@ export type User = {
   totalProfit: Scalars['Float']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+  user: User;
   userGift?: Maybe<Array<UserGift>>;
 };
 
@@ -546,4 +462,10 @@ export type UserPackage = {
   totalTraffic: Scalars['BigNumber']['output'];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type VerifyPhoneInput = {
+  domainName: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
 };

@@ -10,7 +10,7 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 
 import { useLoginMutation } from "../graphql/mutations/login.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizePhone, removeWWW } from "../helpers"
 
 interface FormValues {
   phone: string
@@ -32,7 +32,10 @@ const LoginPage: NextPageWithLayout = () => {
   const onSubmit = handleSubmit((data) => {
     login({
       variables: {
-        input: data,
+        input: {
+          ...data, 
+          domainName: removeWWW(window.location.host)
+        },
       },
     })
   })
@@ -46,6 +49,10 @@ const LoginPage: NextPageWithLayout = () => {
  
     const redirected = searchParams.get("redirected")
     router.push(redirected ? decodeURIComponent(redirected) : "/")
+  }
+
+  const handleForgetPassword = () => {
+    router.push('/auth/forget-password')
   }
 
   const firstError = Object.keys(errors)?.[0] as keyof FormValues
@@ -70,15 +77,26 @@ const LoginPage: NextPageWithLayout = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">رمز عبور (یا کد ثبت‌نام)</Label>
+              <Label htmlFor="password">رمز عبور</Label>
               <Input {...register("password")} className="ltr" id="password" required type="password" />
             </div>
             <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (loginData?.error && "شماره موبایل یا رمز عبور اشتباهه!")}&nbsp;
+              {errors?.[firstError]?.message || (loginData?.error?.message)}&nbsp;
             </div>
             <Button disabled={loginData?.loading} className="w-full" type="submit">
               {loginData?.loading ? "لطفا کمی صبر کنید..." : "ورود"}
             </Button>
+            <div className="mt-4 text-center text-sm">
+                    <p>
+                     رمز عبور خود را فراموش کرده اید؟{' '}
+                      <button
+                        onClick={handleForgetPassword}
+                        className="text-blue-600 underline bg-transparent border-none cursor-pointer"
+                      >
+                        تغییر رمز
+                      </button>
+                    </p>
+                  </div>
           </CardContent>
         </Card>
         {/* <Link className="w-full" href="/stat">

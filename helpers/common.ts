@@ -152,3 +152,18 @@ export function copyText(text: string) {
     document.body.removeChild(copyTextarea);
   }
 }
+
+export function removeWWW(domain: string): string {
+  if (domain.startsWith("www.")) {
+    return domain.substring(4);
+  }
+  return domain;
+}
+
+export function formatSecondsToMMSS(seconds: number): string {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+  return `${formattedMinutes}:${formattedSeconds}`;
+}

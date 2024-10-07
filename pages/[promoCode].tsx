@@ -9,7 +9,7 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
 import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizePhone, removeWWW } from "../helpers"
 import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 
 const PromoCodePage: NextPageWithLayout = () => {
@@ -35,15 +35,12 @@ const PromoCodePage: NextPageWithLayout = () => {
         input: {
           ...data,
           promoCode,
+          domainName: removeWWW(window.location.host)
         },
       },
     })
       .then(() => {
-        if (promoCode) {
-          router.replace("/")
-          return
-        }
-        router.replace("/customers")
+        router.push(`/auth/verify-phone?phone=${data.phone}`)
       })
       .catch((e) => {
         console.error(e)
@@ -92,7 +89,7 @@ const PromoCodePage: NextPageWithLayout = () => {
       </div>
 
       <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (signupData.error && "این شماره موبایل قبلا ثبت نام کرده است.")}&nbsp;
+        {errors?.[firstError]?.message || (signupData.error?.message)}&nbsp;
       </div>
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
