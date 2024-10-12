@@ -35,7 +35,11 @@ const SignupPage: NextPageWithLayout = () => {
         },
       },
     }).then(() => {
-      router.push('/customers')
+      if(promoCode) {
+        router.push(`/auth/verify-phone?phone=${phone}`)
+      } else {
+        router.push('/customers')
+      }
     }).catch(err => {
       console.error(err)
     })

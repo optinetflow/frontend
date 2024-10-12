@@ -1,11 +1,12 @@
 import { useApolloClient } from "@apollo/client"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
+import Loading from "../components/Loading/Loading"
 import { Stat } from "../components/Stat"
 import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface"
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
@@ -30,14 +31,25 @@ const HomePageComponent: React.FC = () => {
   const router = useRouter()
   const client = useApolloClient();
   const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(true) // Loading state
   const me = useMeQuery({ fetchPolicy: "network-only" })
-  if(me.data?.me.isVerified === false) {
-    router.replace("/auth/verify-phone")
-  }
-  const { data, refetch: refetchUserPackages } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+
+  const { data, refetch: refetchUserPackages, loading:  userPackagesLoading} = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
 
   const [logout] = useLogoutMutation()
   const [enableGift, enableGiftData] = useEnableGiftMutation()
+
+  useEffect(() => {
+    if (!me.loading && !userPackagesLoading) {
+      setIsLoading(false) // When both queries are finished, stop loading
+    }
+  }, [me.loading, userPackagesLoading])
+
+  useEffect(() => {
+    if (me.data?.me.isVerified === false) {
+      router.replace("/auth/verify-phone")
+    }
+  }, [router, me.data])
 
   const handleLogout = () => {
     logout().then(() => {
@@ -105,7 +117,11 @@ const HomePageComponent: React.FC = () => {
     }
   }
 
-  if (data) {
+  if(isLoading) {
+    return <Loading />
+  }
+
+  if (data && me.data?.me.isVerified === true) {
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
         <div className="w-full space-y-4">
