@@ -126,6 +126,18 @@ export type GetClientStatsFiltersInput = {
   id: Scalars['String']['input'];
 };
 
+export type GetOptinetflowCustomerInfoInput = {
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  fullname: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
+export type GetPackageInput = {
+  category?: InputMaybe<PackageCategory>;
+};
+
 export type Login = {
   __typename?: 'Login';
   isPromoCodeValid?: Maybe<Scalars['Boolean']['output']>;
@@ -153,6 +165,7 @@ export type Mutation = {
   enterCost: User;
   login: Login;
   logout: Scalars['Boolean']['output'];
+  notifOptinetflowCustomerInfoToUs: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
   resetPassword: Scalars['Boolean']['output'];
@@ -189,6 +202,11 @@ export type MutationEnterCostArgs = {
 
 export type MutationLoginArgs = {
   data: LoginInput;
+};
+
+
+export type MutationNotifOptinetflowCustomerInfoToUsArgs = {
+  data: GetOptinetflowCustomerInfoInput;
 };
 
 
@@ -248,6 +266,7 @@ export type MutationVerifyPhoneArgs = {
 
 export type Package = {
   __typename?: 'Package';
+  category: PackageCategory;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   expirationDays: Scalars['Int']['output'];
@@ -258,6 +277,12 @@ export type Package = {
   updatedAt: Scalars['DateTime']['output'];
   userCount: Scalars['Int']['output'];
 };
+
+/** Package Category */
+export enum PackageCategory {
+  Economic = 'ECONOMIC',
+  Quality = 'QUALITY'
+}
 
 export type Parent = {
   __typename?: 'Parent';
@@ -306,6 +331,11 @@ export type QueryGetBrandInfoArgs = {
 
 export type QueryHelloArgs = {
   name: Scalars['String']['input'];
+};
+
+
+export type QueryPackagesArgs = {
+  data: GetPackageInput;
 };
 
 export type RechargePackage = {

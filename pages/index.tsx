@@ -32,7 +32,7 @@ const HomePageComponent: React.FC = () => {
   const client = useApolloClient();
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true) // Loading state
-  const me = useMeQuery({ fetchPolicy: "network-only" })
+  const me = useMeQuery({ fetchPolicy: "cache-and-network" })
 
   const { data, refetch: refetchUserPackages, loading:  userPackagesLoading} = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
 

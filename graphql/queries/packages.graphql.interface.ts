@@ -3,20 +3,23 @@ import * as Types from '../../src/graphql/__generated__/schema.graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type GetPackagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type GetPackagesQueryVariables = Types.Exact<{
+  input: Types.GetPackageInput;
+}>;
 
 
-export type GetPackagesQuery = { __typename?: 'Query', packages: Array<{ __typename?: 'Package', id: string, price: number, traffic: number, expirationDays: number, userCount: number }> };
+export type GetPackagesQuery = { __typename?: 'Query', packages: Array<{ __typename?: 'Package', id: string, price: number, traffic: number, expirationDays: number, userCount: number, category: Types.PackageCategory }> };
 
 
 export const GetPackagesDocument = gql`
-    query GetPackages {
-  packages {
+    query GetPackages($input: GetPackageInput!) {
+  packages(data: $input) {
     id
     price
     traffic
     expirationDays
     userCount
+    category
   }
 }
     `;
@@ -33,10 +36,11 @@ export const GetPackagesDocument = gql`
  * @example
  * const { data, loading, error } = useGetPackagesQuery({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetPackagesQuery(baseOptions?: Apollo.QueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables>) {
+export function useGetPackagesQuery(baseOptions: Apollo.QueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables> & ({ variables: GetPackagesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options);
       }
