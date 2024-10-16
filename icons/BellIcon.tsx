@@ -1,4 +1,4 @@
-import { IconProps } from './type';
+import { IconProps } from "./type"
 export const BellIcon = ({ className }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

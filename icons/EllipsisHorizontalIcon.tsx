@@ -7,7 +7,7 @@ export const EllipsisHorizontalIcon = ({ className }: IconProps) => (
     strokeWidth={1.5}
     stroke="currentColor"
     className={className}
-    >
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"

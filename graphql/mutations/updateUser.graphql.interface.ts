@@ -1,27 +1,28 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql"
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { gql } from "@apollo/client"
+import * as Apollo from "@apollo/client"
+const defaultOptions = {} as const
 export type UpdateUserMutationVariables = Types.Exact<{
-  input: Types.UpdateUserInput;
-}>;
+  input: Types.UpdateUserInput
+}>
 
-
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, bankCard?: Array<{ __typename?: 'BankCard', number: string }> | null } };
-
+export type UpdateUserMutation = {
+  __typename?: "Mutation"
+  updateUser: { __typename?: "User"; id: string; bankCard?: Array<{ __typename?: "BankCard"; number: string }> | null }
+}
 
 export const UpdateUserDocument = gql`
-    mutation updateUser($input: UpdateUserInput!) {
-  updateUser(input: $input) {
-    id
-    bankCard {
-      number
+  mutation updateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      id
+      bankCard {
+        number
+      }
     }
   }
-}
-    `;
-export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+`
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>
 
 /**
  * __useUpdateUserMutation__
@@ -40,10 +41,12 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *   },
  * });
  */
-export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
-      }
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export function useUpdateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options)
+}
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>

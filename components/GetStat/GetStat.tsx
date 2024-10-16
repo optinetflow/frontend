@@ -86,7 +86,8 @@ export function GetStat() {
   const currentStat = clientStats?.data?.clientStats?.[0]
   const totalTraffic = currentStat && roundTo(bytesToGB(currentStat?.total), 1)
   const consumedTraffic = currentStat && getConsumedTraffic(currentStat.up, currentStat.down)
-  const remainingDays = currentStat?.expiryTime === 0 ? false : currentStat?.expiryTime && getRemainingDays(currentStat?.expiryTime)
+  const remainingDays =
+    currentStat?.expiryTime === 0 ? false : currentStat?.expiryTime && getRemainingDays(currentStat?.expiryTime)
 
   const uuid = extractUUID(input)
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -118,15 +119,13 @@ export function GetStat() {
             مشاهده
           </SubmitButton>
         </form>
-        {typeof remainingDays === 'number' && remainingDays > 0 && (
+        {typeof remainingDays === "number" && remainingDays > 0 && (
           <div>{remainingDays} روز مانده تا اتمام بسته‌ی شما</div>
         )}
-        {typeof remainingDays === 'number' && remainingDays <= 0 && (
-          <div>بسته‌ی شما منقضی شده است.</div>
-        )}
+        {typeof remainingDays === "number" && remainingDays <= 0 && <div>بسته‌ی شما منقضی شده است.</div>}
 
         {currentStat && (
-          <div className="flex flex-row items-center justify-center mt-2">
+          <div className="mt-2 flex flex-row items-center justify-center">
             <ProgressBar progress={(consumedTraffic! / totalTraffic!) * 100} />
             <div className="ltr mr-4">
               {consumedTraffic} / {totalTraffic} GB

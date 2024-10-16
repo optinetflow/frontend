@@ -25,16 +25,20 @@ import {
   UsersIcon,
 } from "../icons"
 
-const isDevelop = process.env.NODE_ENV === 'development';
+const isDevelop = process.env.NODE_ENV === "development"
 
 const HomePageComponent: React.FC = () => {
   const router = useRouter()
-  const client = useApolloClient();
+  const client = useApolloClient()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true) // Loading state
-  const me = useMeQuery({ fetchPolicy: "network-only" })
+  const me = useMeQuery({ fetchPolicy: "cache-and-network" })
 
-  const { data, refetch: refetchUserPackages, loading:  userPackagesLoading} = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  const {
+    data,
+    refetch: refetchUserPackages,
+    loading: userPackagesLoading,
+  } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
 
   const [logout] = useLogoutMutation()
   const [enableGift, enableGiftData] = useEnableGiftMutation()
@@ -61,13 +65,13 @@ const HomePageComponent: React.FC = () => {
   const handleEnableGift = () => {
     enableGift({
       update: () => {
-        const existingData = client.readQuery<MeQuery>({ query: MeDocument });
+        const existingData = client.readQuery<MeQuery>({ query: MeDocument })
         if (existingData) {
-          const updatedMe = existingData.me && {...existingData.me, userGift: []}
+          const updatedMe = existingData.me && { ...existingData.me, userGift: [] }
           client.writeQuery({
             query: MeDocument,
             data: { me: updatedMe },
-          });
+          })
         }
       },
     }).then(() => {
@@ -117,7 +121,7 @@ const HomePageComponent: React.FC = () => {
     }
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <Loading />
   }
 
@@ -127,16 +131,14 @@ const HomePageComponent: React.FC = () => {
         <div className="w-full space-y-4">
           <div className="space-y-2 rounded-lg bg-slate-50 p-4">
             <div className="flex items-center justify-between ">
-              <div className="truncate text-sm text-slate-700">
-                {me.data?.me?.fullname}
-              </div>
+              <div className="truncate text-sm text-slate-700">{me.data?.me?.fullname}</div>
               <Button
                 onClick={handleLogout}
                 variant="ghost"
                 className="mr-4 flex items-center rounded-full px-4 py-2 text-xs text-slate-400"
               >
                 <span>خروج</span>
-                <PowerIcon className="mr-2 h-4 w-4" />
+                <PowerIcon className="mr-2 size-5" />
               </Button>
             </div>
             {isAdmin && (
@@ -156,21 +158,25 @@ const HomePageComponent: React.FC = () => {
           </div>
 
           <Link className="flex" href="/packages" onClick={handleBuyPackageClick}>
-            <Button className="flex w-full">
-              <PlusIcon className="ml-2 h-5 w-5" />
+            <Button className="flex w-full bg-blue-600 hover:bg-blue-800">
+              <PlusIcon className="ml-2 size-5" />
               <span>خرید بسته جدید</span>
             </Button>
           </Link>
           {gif && (
-            <Button variant="outline" disabled={enableGiftData.loading} className="flex w-full" onClick={handleEnableGift}>
-              <span>  {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}
-              </span>
-           </Button>
+            <Button
+              variant="outline"
+              disabled={enableGiftData.loading}
+              className="flex w-full"
+              onClick={handleEnableGift}
+            >
+              <span> {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}</span>
+            </Button>
           )}
           {isAdmin && (
             <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
               <Button variant="outline" className="flex w-full">
-                <UsersIcon className="ml-2 h-5 w-5" />
+                <UsersIcon className="ml-2 size-5" />
                 <span>مشتری‌ها</span>
               </Button>
             </Link>
@@ -178,7 +184,7 @@ const HomePageComponent: React.FC = () => {
           {isAdmin && (
             <Link className="flex" href="/rechargePackages" onClick={checkAdminRequirements}>
               <Button variant="outline" className="flex w-full">
-                <BanknotesIcon className="ml-2 h-5 w-5" />
+                <BanknotesIcon className="ml-2 size-5" />
                 <span>افزایش شارژ حساب</span>
               </Button>
             </Link>
@@ -186,7 +192,7 @@ const HomePageComponent: React.FC = () => {
           {isAdmin && (
             <Link className="flex" href="/setting">
               <Button variant="outline" className="flex w-full">
-                <Cog6ToothIcon className="ml-2 h-5 w-5" />
+                <Cog6ToothIcon className="ml-2 size-5" />
                 <span>تنظیمات</span>
               </Button>
             </Link>
@@ -194,16 +200,16 @@ const HomePageComponent: React.FC = () => {
           {data.userPackages?.map((userPackage) => (
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
-          
+
           {!isRegisteredInTelegram && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
-                <TelegramIcon className="ml-2 h-5 w-5" />
+                <TelegramIcon className="ml-2 size-5" />
                 <span>{registerToBotText}</span>
               </Button>
             </a>
           )}
-          <div className="flex space-x-4 flex-row-reverse">
+          <div className="flex flex-row-reverse space-x-4">
             {me.data?.me.parent?.telegram?.username && (
               <a
                 target="_blank"
@@ -212,7 +218,7 @@ const HomePageComponent: React.FC = () => {
                 href={`https://t.me/${me.data?.me.parent?.telegram?.username}`}
               >
                 <Button variant="outline" className="flex w-full">
-                  <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
+                  <ChatBubbleOvalLeftIcon className="ml-2 size-5" />
                   <span>پشتیبانی تلگرام</span>
                 </Button>
               </a>
@@ -220,13 +226,12 @@ const HomePageComponent: React.FC = () => {
             {hasPackage && (
               <Link className="flex w-full" href="/help">
                 <Button variant="outline" className="flex w-full">
-                  <InformationCircleIcon className="ml-2 h-5 w-5" />
+                  <InformationCircleIcon className="ml-2 size-5" />
                   <span>آموزش اتصال</span>
                 </Button>
               </Link>
             )}
           </div>
-          
         </div>
       </div>
     )
@@ -234,32 +239,32 @@ const HomePageComponent: React.FC = () => {
 }
 
 const HomePage: NextPageWithLayout = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   React.useEffect(() => {
     if (router.pathname !== window.location.pathname) {
-      const idPattern = /^\/([\w-]+)$/;
+      const idPattern = /^\/([\w-]+)$/
 
-      const match = window.location.pathname.match(idPattern);
+      const match = window.location.pathname.match(idPattern)
 
       if (match) {
-        const promoCode = match[1]; // Extract the alphanumeric id part
+        const promoCode = match[1] // Extract the alphanumeric id part
         router.replace({
-          pathname: '/[promoCode]',
+          pathname: "/[promoCode]",
           query: { promoCode },
-        });
+        })
       } else {
-        router.replace(window.location.pathname); // Directly replace for other paths
+        router.replace(window.location.pathname) // Directly replace for other paths
       }
     }
-  }, [router]);
+  }, [router])
 
   // // Only render the HomePageContent if the current route is "/"
-  if (window.location.pathname !== '/') {
-    return null;
+  if (window.location.pathname !== "/") {
+    return null
   }
 
-  return <HomePageComponent />;
+  return <HomePageComponent />
 }
 
 export default HomePage

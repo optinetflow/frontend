@@ -1,22 +1,20 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql"
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { gql } from "@apollo/client"
+import * as Apollo from "@apollo/client"
+const defaultOptions = {} as const
 export type SendOtpAgainMutationVariables = Types.Exact<{
-  input: Types.SendOtpAgainInput;
-}>;
+  input: Types.SendOtpAgainInput
+}>
 
-
-export type SendOtpAgainMutation = { __typename?: 'Mutation', sendOtpAgain: boolean };
-
+export type SendOtpAgainMutation = { __typename?: "Mutation"; sendOtpAgain: boolean }
 
 export const SendOtpAgainDocument = gql`
-    mutation sendOtpAgain($input: SendOtpAgainInput!) {
-  sendOtpAgain(data: $input)
-}
-    `;
-export type SendOtpAgainMutationFn = Apollo.MutationFunction<SendOtpAgainMutation, SendOtpAgainMutationVariables>;
+  mutation sendOtpAgain($input: SendOtpAgainInput!) {
+    sendOtpAgain(data: $input)
+  }
+`
+export type SendOtpAgainMutationFn = Apollo.MutationFunction<SendOtpAgainMutation, SendOtpAgainMutationVariables>
 
 /**
  * __useSendOtpAgainMutation__
@@ -35,10 +33,15 @@ export type SendOtpAgainMutationFn = Apollo.MutationFunction<SendOtpAgainMutatio
  *   },
  * });
  */
-export function useSendOtpAgainMutation(baseOptions?: Apollo.MutationHookOptions<SendOtpAgainMutation, SendOtpAgainMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SendOtpAgainMutation, SendOtpAgainMutationVariables>(SendOtpAgainDocument, options);
-      }
-export type SendOtpAgainMutationHookResult = ReturnType<typeof useSendOtpAgainMutation>;
-export type SendOtpAgainMutationResult = Apollo.MutationResult<SendOtpAgainMutation>;
-export type SendOtpAgainMutationOptions = Apollo.BaseMutationOptions<SendOtpAgainMutation, SendOtpAgainMutationVariables>;
+export function useSendOtpAgainMutation(
+  baseOptions?: Apollo.MutationHookOptions<SendOtpAgainMutation, SendOtpAgainMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<SendOtpAgainMutation, SendOtpAgainMutationVariables>(SendOtpAgainDocument, options)
+}
+export type SendOtpAgainMutationHookResult = ReturnType<typeof useSendOtpAgainMutation>
+export type SendOtpAgainMutationResult = Apollo.MutationResult<SendOtpAgainMutation>
+export type SendOtpAgainMutationOptions = Apollo.BaseMutationOptions<
+  SendOtpAgainMutation,
+  SendOtpAgainMutationVariables
+>
