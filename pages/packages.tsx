@@ -41,7 +41,7 @@ const PackagesPage: NextPageWithLayout = () => {
       key: null,
       value: null,
       toggleAllFilters: true,
-      icon: <SlidersHorizontal className="mr-1 h-4 w-4" />,
+      icon: <SlidersHorizontal className="mr-1 size-4" />,
     },
     { text: "بسیار با کیفیت", key: "category", value: "QUALITY" },
     { text: "بسته های اقتصادی", key: "category", value: "ECONOMIC" },
@@ -112,17 +112,17 @@ const PackagesPage: NextPageWithLayout = () => {
                   )}
                 </div>
                 <span className="flex items-center text-sm text-gray-600">
-                  <UserIcon className="mr-1 h-4 w-4" /> چند کاربره
+                  <UserIcon className="mr-1 size-4" /> چند کاربره
                 </span>
 
                 {pack.category === PackageCategory.Quality && (
                   <span className="mt-2 flex items-center text-sm font-semibold text-blue-800">
-                    <CheckCheck className="mr-1 h-4 w-4 text-blue-500" /> کیفیت بسیار بالا
+                    <CheckCheck className="mr-1 size-4 text-blue-500" /> کیفیت بسیار بالا
                   </span>
                 )}
                 {pack.category === PackageCategory.Economic && (
                   <span className="mt-2 flex items-center text-sm font-semibold text-teal-700">
-                    <CircleDollarSign className="mr-1 h-4 w-4 text-teal-700" /> اقتصادی
+                    <CircleDollarSign className="mr-1 size-4 text-teal-700" /> اقتصادی
                   </span>
                 )}
 

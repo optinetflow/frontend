@@ -13,7 +13,7 @@ import { UploadImage } from "../../components/UploadImage/UploadImage"
 import { useRenewPackageMutation } from "../../graphql/mutations/renewPackage.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface"
-import { ceilTo, convertPersianCurrency } from "../../helpers"
+import { convertPersianCurrency } from "../../helpers"
 import { RenewPackageInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
@@ -29,7 +29,7 @@ const BuyPackagePage: NextPageWithLayout = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RenewPackageInput>()
-  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only" })
+  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: { input: {} } })
   const me = useMeQuery({ fetchPolicy: "cache-only" })
   const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId)
 
