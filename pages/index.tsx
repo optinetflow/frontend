@@ -25,16 +25,20 @@ import {
   UsersIcon,
 } from "../icons"
 
-const isDevelop = process.env.NODE_ENV === 'development';
+const isDevelop = process.env.NODE_ENV === "development"
 
 const HomePageComponent: React.FC = () => {
   const router = useRouter()
-  const client = useApolloClient();
+  const client = useApolloClient()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true) // Loading state
   const me = useMeQuery({ fetchPolicy: "cache-and-network" })
 
-  const { data, refetch: refetchUserPackages, loading:  userPackagesLoading} = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  const {
+    data,
+    refetch: refetchUserPackages,
+    loading: userPackagesLoading,
+  } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
 
   const [logout] = useLogoutMutation()
   const [enableGift, enableGiftData] = useEnableGiftMutation()
@@ -61,13 +65,13 @@ const HomePageComponent: React.FC = () => {
   const handleEnableGift = () => {
     enableGift({
       update: () => {
-        const existingData = client.readQuery<MeQuery>({ query: MeDocument });
+        const existingData = client.readQuery<MeQuery>({ query: MeDocument })
         if (existingData) {
-          const updatedMe = existingData.me && {...existingData.me, userGift: []}
+          const updatedMe = existingData.me && { ...existingData.me, userGift: [] }
           client.writeQuery({
             query: MeDocument,
             data: { me: updatedMe },
-          });
+          })
         }
       },
     }).then(() => {
@@ -117,7 +121,7 @@ const HomePageComponent: React.FC = () => {
     }
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <Loading />
   }
 
@@ -127,9 +131,7 @@ const HomePageComponent: React.FC = () => {
         <div className="w-full space-y-4">
           <div className="space-y-2 rounded-lg bg-slate-50 p-4">
             <div className="flex items-center justify-between ">
-              <div className="truncate text-sm text-slate-700">
-                {me.data?.me?.fullname}
-              </div>
+              <div className="truncate text-sm text-slate-700">{me.data?.me?.fullname}</div>
               <Button
                 onClick={handleLogout}
                 variant="ghost"
@@ -162,10 +164,14 @@ const HomePageComponent: React.FC = () => {
             </Button>
           </Link>
           {gif && (
-            <Button variant="outline" disabled={enableGiftData.loading} className="flex w-full" onClick={handleEnableGift}>
-              <span>  {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}
-              </span>
-           </Button>
+            <Button
+              variant="outline"
+              disabled={enableGiftData.loading}
+              className="flex w-full"
+              onClick={handleEnableGift}
+            >
+              <span> {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}</span>
+            </Button>
           )}
           {isAdmin && (
             <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
@@ -194,7 +200,7 @@ const HomePageComponent: React.FC = () => {
           {data.userPackages?.map((userPackage) => (
             <Stat key={userPackage.id} pack={userPackage} onRenewClick={handleBuyPackageClick} />
           ))}
-          
+
           {!isRegisteredInTelegram && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
@@ -203,7 +209,7 @@ const HomePageComponent: React.FC = () => {
               </Button>
             </a>
           )}
-          <div className="flex space-x-4 flex-row-reverse">
+          <div className="flex flex-row-reverse space-x-4">
             {me.data?.me.parent?.telegram?.username && (
               <a
                 target="_blank"
@@ -226,7 +232,6 @@ const HomePageComponent: React.FC = () => {
               </Link>
             )}
           </div>
-          
         </div>
       </div>
     )
@@ -234,32 +239,32 @@ const HomePageComponent: React.FC = () => {
 }
 
 const HomePage: NextPageWithLayout = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   React.useEffect(() => {
     if (router.pathname !== window.location.pathname) {
-      const idPattern = /^\/([\w-]+)$/;
+      const idPattern = /^\/([\w-]+)$/
 
-      const match = window.location.pathname.match(idPattern);
+      const match = window.location.pathname.match(idPattern)
 
       if (match) {
-        const promoCode = match[1]; // Extract the alphanumeric id part
+        const promoCode = match[1] // Extract the alphanumeric id part
         router.replace({
-          pathname: '/[promoCode]',
+          pathname: "/[promoCode]",
           query: { promoCode },
-        });
+        })
       } else {
-        router.replace(window.location.pathname); // Directly replace for other paths
+        router.replace(window.location.pathname) // Directly replace for other paths
       }
     }
-  }, [router]);
+  }, [router])
 
   // // Only render the HomePageContent if the current route is "/"
-  if (window.location.pathname !== '/') {
-    return null;
+  if (window.location.pathname !== "/") {
+    return null
   }
 
-  return <HomePageComponent />;
+  return <HomePageComponent />
 }
 
 export default HomePage

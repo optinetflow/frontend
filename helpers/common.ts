@@ -15,10 +15,11 @@
 //   }
 
 export function convertPersianCurrency(number: number): string {
-  const numberAbs = Math.abs(number);
+  const numberAbs = Math.abs(number)
   if (numberAbs >= 1 && numberAbs < 1000) return `${number > 0 ? number : `${-number}-`} هزار تومان`
-  if (numberAbs >= 1000 && numberAbs < 1000000) return `${number > 0 ? number / 1000 : `${-number / 1000}-`} میلیون تومان`
-  return number.toString();
+  if (numberAbs >= 1000 && numberAbs < 1000000)
+    return `${number > 0 ? number / 1000 : `${-number / 1000}-`} میلیون تومان`
+  return number.toString()
 }
 
 export function b64UrlToJson(b64url: string): Record<string, unknown> {
@@ -69,34 +70,31 @@ export const avatarColor = (str: string) => {
   ]
   // return colors[Math.floor(Math.random() * colors.length)]
 
-  let hash = 0;
+  let hash = 0
   for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
   }
-  
-  // Convert hash to index
-  const index = Math.abs(hash % colors.length);
 
-  return `${colors[index]} text-slate-50`;
+  // Convert hash to index
+  const index = Math.abs(hash % colors.length)
+
+  return `${colors[index]} text-slate-50`
 }
 
-export const  faNumToEn = (value: string) =>
-value.replace(/([۰-۹])/g, (token: string) => String.fromCharCode(token.charCodeAt(0) - 1728));
+export const faNumToEn = (value: string) =>
+  value.replace(/([۰-۹])/g, (token: string) => String.fromCharCode(token.charCodeAt(0) - 1728))
 
 function removePhonePrefix(phoneNumber: string): string {
-  if (phoneNumber.startsWith('0')) {
-    return phoneNumber.substring(1);
-  } else if (phoneNumber.startsWith('+98')) {
-    return phoneNumber.substring(3);
+  if (phoneNumber.startsWith("0")) {
+    return phoneNumber.substring(1)
+  } else if (phoneNumber.startsWith("+98")) {
+    return phoneNumber.substring(3)
   } else {
-    return phoneNumber;
+    return phoneNumber
   }
 }
 
-
-export const normalizePhone = (phoneNumber: string): string =>  removePhonePrefix(faNumToEn(phoneNumber));
-
-
+export const normalizePhone = (phoneNumber: string): string => removePhonePrefix(faNumToEn(phoneNumber))
 
 export function bytesToGB(bytes: number): number {
   const gigabyte = 1024 * 1024 * 1024 // 1 gigabyte = 1024 megabytes * 1024 kilobytes * 1024 bytes
@@ -114,39 +112,39 @@ export function floorTo(number: number, decimalPlaces: number) {
 }
 
 export function ceilTo(number: number, decimalPlaces: number) {
-  const factor = Math.pow(10, decimalPlaces);
+  const factor = Math.pow(10, decimalPlaces)
 
-  return Math.ceil(number * factor) / factor;
+  return Math.ceil(number * factor) / factor
 }
 
 export function copyText(text: string) {
   if (navigator.clipboard) {
     // Clipboard API method
-    return navigator.clipboard.writeText(text);
+    return navigator.clipboard.writeText(text)
   } else {
-    const copyTextarea = document.createElement('textarea');
-    copyTextarea.textContent = text;
-    copyTextarea.style.position = "fixed";
-    copyTextarea.style.opacity = '0';
-    document.body.appendChild(copyTextarea);
-    copyTextarea.select();
-    copyTextarea.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    document.body.removeChild(copyTextarea);
+    const copyTextarea = document.createElement("textarea")
+    copyTextarea.textContent = text
+    copyTextarea.style.position = "fixed"
+    copyTextarea.style.opacity = "0"
+    document.body.appendChild(copyTextarea)
+    copyTextarea.select()
+    copyTextarea.setSelectionRange(0, 99999)
+    document.execCommand("copy")
+    document.body.removeChild(copyTextarea)
   }
 }
 
 export function removeWWW(domain: string): string {
   if (domain.startsWith("www.")) {
-    return domain.substring(4);
+    return domain.substring(4)
   }
-  return domain;
+  return domain
 }
 
 export function formatSecondsToMMSS(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
-  return `${formattedMinutes}:${formattedSeconds}`;
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  const formattedMinutes = minutes.toString().padStart(2, "0")
+  const formattedSeconds = remainingSeconds.toString().padStart(2, "0")
+  return `${formattedMinutes}:${formattedSeconds}`
 }

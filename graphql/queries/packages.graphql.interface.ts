@@ -1,28 +1,37 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql"
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { gql } from "@apollo/client"
+import * as Apollo from "@apollo/client"
+const defaultOptions = {} as const
 export type GetPackagesQueryVariables = Types.Exact<{
-  input: Types.GetPackageInput;
-}>;
+  input: Types.GetPackageInput
+}>
 
-
-export type GetPackagesQuery = { __typename?: 'Query', packages: Array<{ __typename?: 'Package', id: string, price: number, traffic: number, expirationDays: number, userCount: number, category: Types.PackageCategory }> };
-
+export type GetPackagesQuery = {
+  __typename?: "Query"
+  packages: Array<{
+    __typename?: "Package"
+    id: string
+    price: number
+    traffic: number
+    expirationDays: number
+    userCount: number
+    category: Types.PackageCategory
+  }>
+}
 
 export const GetPackagesDocument = gql`
-    query GetPackages($input: GetPackageInput!) {
-  packages(data: $input) {
-    id
-    price
-    traffic
-    expirationDays
-    userCount
-    category
+  query GetPackages($input: GetPackageInput!) {
+    packages(data: $input) {
+      id
+      price
+      traffic
+      expirationDays
+      userCount
+      category
+    }
   }
-}
-    `;
+`
 
 /**
  * __useGetPackagesQuery__
@@ -40,19 +49,26 @@ export const GetPackagesDocument = gql`
  *   },
  * });
  */
-export function useGetPackagesQuery(baseOptions: Apollo.QueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables> & ({ variables: GetPackagesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options);
-      }
-export function useGetPackagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options);
-        }
-export function useGetPackagesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options);
-        }
-export type GetPackagesQueryHookResult = ReturnType<typeof useGetPackagesQuery>;
-export type GetPackagesLazyQueryHookResult = ReturnType<typeof useGetPackagesLazyQuery>;
-export type GetPackagesSuspenseQueryHookResult = ReturnType<typeof useGetPackagesSuspenseQuery>;
-export type GetPackagesQueryResult = Apollo.QueryResult<GetPackagesQuery, GetPackagesQueryVariables>;
+export function useGetPackagesQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables> &
+    ({ variables: GetPackagesQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options)
+}
+export function useGetPackagesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options)
+}
+export function useGetPackagesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetPackagesQuery, GetPackagesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetPackagesQuery, GetPackagesQueryVariables>(GetPackagesDocument, options)
+}
+export type GetPackagesQueryHookResult = ReturnType<typeof useGetPackagesQuery>
+export type GetPackagesLazyQueryHookResult = ReturnType<typeof useGetPackagesLazyQuery>
+export type GetPackagesSuspenseQueryHookResult = ReturnType<typeof useGetPackagesSuspenseQuery>
+export type GetPackagesQueryResult = Apollo.QueryResult<GetPackagesQuery, GetPackagesQueryVariables>

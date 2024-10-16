@@ -25,7 +25,7 @@ export function Copyable({ className, content, isCenter }: CopyableProps) {
         value={content}
         onClick={handleCopy}
         readOnly
-        className={`bg-transparent outline-none text-center ltr mr-2 mt-1 flex w-full items-center overflow-x-auto overflow-y-hidden whitespace-nowrap ${
+        className={`ltr mr-2 mt-1 flex w-full items-center overflow-x-auto overflow-y-hidden whitespace-nowrap bg-transparent text-center outline-none ${
           isCenter ? "justify-center" : ""
         }`}
       />

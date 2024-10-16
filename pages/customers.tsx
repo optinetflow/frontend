@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from "@apollo/client"
 import Link from "next/link"
 import React from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,11 +11,10 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface"
-import { copyText } from '../helpers';
+import { copyText } from "../helpers"
 import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
-import * as Types from '../src/graphql/__generated__/schema.graphql';
-
+import * as Types from "../src/graphql/__generated__/schema.graphql"
 
 interface CustomerProps {
   id: string
@@ -23,13 +22,13 @@ interface CustomerProps {
   fullname: string
   phone: string
   isDisabled: boolean
-  role: Types.Role;
-  balance: number;
-  totalProfit: number;
-  activePackages: number;
-  onlinePackages: number;
-  lastConnectedAt?: Date;
-  description?: string | null;
+  role: Types.Role
+  balance: number
+  totalProfit: number
+  activePackages: number
+  onlinePackages: number
+  lastConnectedAt?: Date
+  description?: string | null
 }
 
 interface CustomerOptionsProps {
@@ -38,7 +37,7 @@ interface CustomerOptionsProps {
 }
 const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => {
   const [updateChild, updateChildData] = useUpdateChildMutation()
-  const client = useApolloClient();
+  const client = useApolloClient()
 
   const handleBlockChild = async (isEnabled: boolean, childId: string) => {
     try {
@@ -47,24 +46,24 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
           input: { childId, isDisabled: !isEnabled },
         },
         update: () => {
-          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument });
+          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument })
 
           if (existingData) {
-            const updatedChildren = existingData.children.map(child =>
+            const updatedChildren = existingData.children.map((child) =>
               child.id === childId ? { ...child, isDisabled: !isEnabled } : child
-            );
+            )
 
             client.writeQuery({
               query: ChildrenDocument,
               data: { children: updatedChildren },
-            });
+            })
           }
         },
-      });
+      })
     } catch (e) {
-      console.log("Error updating child status:", e);
+      console.log("Error updating child status:", e)
     }
-  };
+  }
 
   return (
     <DropdownMenu>
@@ -89,8 +88,11 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
           >
             <div className="flex items-center">
               <NoSymbolIcon className="ml-2 size-4" />
-              {updateChildData.loading ? <span>در حال انجام...</span> :<span>{isDisabled ? "فعال کردن" : "مسدود کردن"}</span>}
-              
+              {updateChildData.loading ? (
+                <span>در حال انجام...</span>
+              ) : (
+                <span>{isDisabled ? "فعال کردن" : "مسدود کردن"}</span>
+              )}
             </div>
             <Switch
               disabled={updateChildData.loading}
@@ -107,38 +109,59 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
   )
 }
 
-
-
-const Customer: React.FC<CustomerProps> = ({ id, fullname, isDisabled, phone, avatar, balance, role, totalProfit, activePackages, lastConnectedAt, description, onlinePackages }) => {
+const Customer: React.FC<CustomerProps> = ({
+  id,
+  fullname,
+  isDisabled,
+  phone,
+  avatar,
+  balance,
+  role,
+  totalProfit,
+  activePackages,
+  lastConnectedAt,
+  description,
+  onlinePackages,
+}) => {
   const { toast } = useToast()
 
   const handlePhoneClick = () => {
-    copyText(`0${phone}`);
+    copyText(`0${phone}`)
     toast({
       description: "شماره موبایل کپی شد.",
       duration: 500,
     })
   }
-  const isOnline = lastConnectedAt && onlinePackages > 0;
+  const isOnline = lastConnectedAt && onlinePackages > 0
   return (
     <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
-      <div className="relative flex flex-1 overflow-hidden items-center">
+      <div className="relative flex flex-1 items-center overflow-hidden">
         <Avatar className="relative size-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
-          <AvatarFallback className={avatarColor(`${fullname}`)}>
-            {fullname[0]}‌
-          </AvatarFallback>
+          <AvatarFallback className={avatarColor(`${fullname}`)}>{fullname[0]}‌</AvatarFallback>
         </Avatar>
-        {activePackages > 0 && <div className={`absolute font-black ${role === 'ADMIN' ? description ? 'top-6 right-8' : 'top-4 right-8' : 'top-0 right-8'}  text-xs size-6 rounded-full border ${isOnline ? 'bg-green-50 border-green-500 text-green-500' : 'bg-slate-50 border-slate-500 text-slate-500'}  flex items-center justify-center pt-1`}>{activePackages}</div>} 
-        <div className="mr-4 flex size-full flex-col justify-between overflow-hidden text-sm space-y-2">
-          <div className="truncate font-black text-slate-800">
-            {fullname}
+        {activePackages > 0 && (
+          <div
+            className={`absolute font-black ${role === "ADMIN" ? (description ? "right-8 top-6" : "right-8 top-4") : "right-8 top-0"}  size-6 rounded-full border text-xs ${isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"}  flex items-center justify-center pt-1`}
+          >
+            {activePackages}
           </div>
-          {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
-          {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
-          <button type="button" onClick={handlePhoneClick} className="relative text-xs text-slate-600 text-right">
+        )}
+        <div className="mr-4 flex size-full flex-col justify-between space-y-2 overflow-hidden text-sm">
+          <div className="truncate font-black text-slate-800">{fullname}</div>
+          {role === "ADMIN" && (
+            <div className="text-xs text-slate-600">موجودی: {convertPersianCurrency(roundTo(balance, 0))}</div>
+          )}
+          {role === "ADMIN" && (
+            <div className="text-xs text-slate-600">سود کل: {convertPersianCurrency(roundTo(totalProfit, 0))}</div>
+          )}
+          <button type="button" onClick={handlePhoneClick} className="relative text-right text-xs text-slate-600">
             0{phone}
-            {lastConnectedAt && !isOnline && <div className="absolute top-0 left-0 text-xs font-thin rounded-full text-slate-400">{timeSince(lastConnectedAt)}</div>}
+            {lastConnectedAt && !isOnline && (
+              <div className="absolute left-0 top-0 rounded-full text-xs font-thin text-slate-400">
+                {timeSince(lastConnectedAt)}
+              </div>
+            )}
           </button>
           {description && <div className="truncate text-xs font-thin text-slate-300">{description}</div>}
         </div>
@@ -160,9 +183,13 @@ const CustomersPage: NextPageWithLayout = () => {
               <span>ثبت نام</span>
             </Button>
           </Link>
-          <div className="flex bg-slate-50 text-slate-600 rounded-md text-sm">
-            <span className="w-full p-4">بسته: {data.children.reduce((all, child) => all + child.activePackages, 0)}</span>
-            <span className="w-full p-4">آنلاین: {data.children.reduce((all, child) => all + child.onlinePackages, 0)}</span>
+          <div className="flex rounded-md bg-slate-50 text-sm text-slate-600">
+            <span className="w-full p-4">
+              بسته: {data.children.reduce((all, child) => all + child.activePackages, 0)}
+            </span>
+            <span className="w-full p-4">
+              آنلاین: {data.children.reduce((all, child) => all + child.onlinePackages, 0)}
+            </span>
           </div>
           {data.children.map((child) => (
             <Customer
@@ -177,7 +204,7 @@ const CustomersPage: NextPageWithLayout = () => {
               totalProfit={child.totalProfit}
               activePackages={child.activePackages}
               onlinePackages={child.onlinePackages}
-              lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined }
+              lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
               description={child.description}
             />
           ))}

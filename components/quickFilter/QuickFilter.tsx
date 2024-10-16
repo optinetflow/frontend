@@ -1,10 +1,10 @@
 import React from "react"
-import { PackageCategory } from "../../src/graphql/__generated__/schema.graphql";
+import { PackageCategory } from "../../src/graphql/__generated__/schema.graphql"
 
 export interface Filter {
-    key: string | null;
-    value: string | null | PackageCategory;
-    text: string | null;
+  key: string | null
+  value: string | null | PackageCategory
+  text: string | null
 }
 
 interface QuickFiltersProp {
@@ -16,13 +16,15 @@ interface QuickFiltersProp {
 const QuickFilter: React.FC<QuickFiltersProp> = ({ filter, setFilter, filters }) => {
   return (
     <div className="mb-4">
-      <div className="flex space-x-2 overflow-x-auto no-scrollbar">
+      <div className="no-scrollbar flex space-x-2 overflow-x-auto">
         <div
           onClick={() => setFilter({ key: null, value: null, text: null })}
-          className={`cursor-pointer rounded-full border py-1.5 px-4 text-sm transition-all shadow-sm whitespace-nowrap ${
-            filter.key === null && filter.value === null ? "bg-blue-600 text-white border-blue-600" : "text-slate-600 border-slate-300"
+          className={`cursor-pointer whitespace-nowrap rounded-full border px-4 py-1.5 text-sm shadow-sm transition-all ${
+            filter.key === null && filter.value === null
+              ? "border-blue-600 bg-blue-600 text-white"
+              : "border-slate-300 text-slate-600"
           }`}
-          style={{ marginInlineEnd: '8px' }}
+          style={{ marginInlineEnd: "8px" }}
         >
           همه
         </div>
@@ -31,10 +33,10 @@ const QuickFilter: React.FC<QuickFiltersProp> = ({ filter, setFilter, filters })
           <div
             onClick={() => setFilter({ key, value, text })}
             key={`${key}-${index}`}
-            className={`cursor-pointer rounded-full border py-1.5 px-4 text-sm transition-all shadow-sm whitespace-nowrap ${
+            className={`cursor-pointer whitespace-nowrap rounded-full border px-4 py-1.5 text-sm shadow-sm transition-all ${
               filter.key === key && filter.value === value
-                ? "bg-blue-600 text-white border-blue-600"
-                : "text-slate-600 border-slate-300"
+                ? "border-blue-600 bg-blue-600 text-white"
+                : "border-slate-300 text-slate-600"
             }`}
           >
             {text}

@@ -12,14 +12,13 @@ import { useRechargePackagesQuery } from "../../graphql/queries/rechargePackages
 import { convertPersianCurrency } from "../../helpers"
 import type { NextPageWithLayout } from "../_app"
 
-
 interface FormValues {
   receipt: string
 }
 
 const RechargeAccountPage: NextPageWithLayout = () => {
   const router = useRouter()
-  const me = useMeQuery({ fetchPolicy: "cache-only" });
+  const me = useMeQuery({ fetchPolicy: "cache-only" })
   const rechargePackageId = router.query?.rechargePackageId as string
   const [buyRechargePackageMutate, buyRechargePackage] = useBuyRechargePackageMutation()
   const {
@@ -57,7 +56,7 @@ const RechargeAccountPage: NextPageWithLayout = () => {
             <span className="font-black">{convertPersianCurrency(currentRechargePackage.amount)}</span> کارت به کارت
             کنید
           </Label>
-          <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ''} />
+          <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ""} />
           <Controller
             name="receipt"
             control={control}

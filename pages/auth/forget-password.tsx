@@ -12,7 +12,6 @@ import { useSendForgetPasswordOtpMutation } from "../../graphql/mutations/sendFo
 import { normalizePhone, removeWWW } from "../../helpers"
 import type { NextPageWithLayout } from "../_app"
 
-
 interface FormValues {
   phone: string
   password: string
@@ -22,7 +21,7 @@ interface FormValues {
 const ForgetPasswordPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { toast } = useToast()
-  const [otpSent, setOtpSent] = useState<boolean>(false); // Track if OTP has been sent
+  const [otpSent, setOtpSent] = useState<boolean>(false) // Track if OTP has been sent
   const [sendForgetPasswordOtp, sendForgetPasswordOtpData] = useSendForgetPasswordOtpMutation({ errorPolicy: "all" })
   const [resetPassword, resetPasswordData] = useResetPasswordMutation({ errorPolicy: "all" })
   const {
@@ -34,40 +33,39 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
   const handleSendForgetPasswordOtp = async () => {
     const data = getValues()
     sendForgetPasswordOtp({
-        variables: {
-          input: {
-            phone: data.phone, 
-            domainName: removeWWW(window.location.host)
-          },
+      variables: {
+        input: {
+          phone: data.phone,
+          domainName: removeWWW(window.location.host),
         },
+      },
     }).then((res) => {
-        if(res.data?.sendForgetPasswordOtp === true) {
-            setOtpSent(true)
-        }
+      if (res.data?.sendForgetPasswordOtp === true) {
+        setOtpSent(true)
+      }
     })
   }
 
   const handleResetPassword = async () => {
     const data = getValues()
     resetPassword({
-        variables: {
-          input: {
-            phone: data.phone, 
-            otp: data.otp,
-            password: data.password,
-            domainName: removeWWW(window.location.host)
-          },
+      variables: {
+        input: {
+          phone: data.phone,
+          otp: data.otp,
+          password: data.password,
+          domainName: removeWWW(window.location.host),
         },
+      },
     }).then((res) => {
-        if(res.data?.resetPassword === true) {
-            toast({
-                description: "رمز عبور با موفقیت تغییر یافت",
-                duration: 1000,
-                
-              })
+      if (res.data?.resetPassword === true) {
+        toast({
+          description: "رمز عبور با موفقیت تغییر یافت",
+          duration: 1000,
+        })
 
-            router.push('/login')
-        }
+        router.push("/login")
+      }
     })
   }
 
@@ -79,52 +77,50 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
         <Card className="mb-4 w-full">
           <CardContent className="mt-4 space-y-4">
             {!otpSent && (
-                <div className="space-y-2">
-                    <Label htmlFor="phone">شماره موبایل</Label>
-                    <Input
-                    {...register("phone", {
-                        setValueAs: normalizePhone,
-                        pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
-                    })}
-                    className="ltr"
-                    id="phone"
-                    placeholder="0912XXXXXXX"
-                    required
-                    type="text"
-                    />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">شماره موبایل</Label>
+                <Input
+                  {...register("phone", {
+                    setValueAs: normalizePhone,
+                    pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
+                  })}
+                  className="ltr"
+                  id="phone"
+                  placeholder="0912XXXXXXX"
+                  required
+                  type="text"
+                />
+              </div>
             )}
             {otpSent && (
-                <div className="space-y-2">
-                    <Label htmlFor="password">رمز عبور جدید را وارد کنید</Label>
-                    <Input {...register("password")} className="ltr" id="password" required type="password" />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">رمز عبور جدید را وارد کنید</Label>
+                <Input {...register("password")} className="ltr" id="password" required type="password" />
+              </div>
             )}
             {otpSent && (
-                <div className="space-y-2">
-                    <Label htmlFor="otp">
-                      کد تایید ارسال شده به شماره موبایل
-                    </Label>
-                    <Input
-                    {...register("otp")}
-                    className="ltr"
-                    id="otp"
-                    placeholder="مثلا 1234"
-                    required
-                    type="number"
-                    />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="otp">کد تایید ارسال شده به شماره موبایل</Label>
+                <Input {...register("otp")} className="ltr" id="otp" placeholder="مثلا 1234" required type="number" />
+              </div>
             )}
             <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (sendForgetPasswordOtpData?.error?.message) || (resetPasswordData.error?.message)}&nbsp;
+              {errors?.[firstError]?.message ||
+                sendForgetPasswordOtpData?.error?.message ||
+                resetPasswordData.error?.message}
+              &nbsp;
             </div>
             {otpSent && (
-                <Button disabled={resetPasswordData?.loading} className="w-full" onClick={handleResetPassword}>
+              <Button disabled={resetPasswordData?.loading} className="w-full" onClick={handleResetPassword}>
                 {resetPasswordData?.loading ? "لطفا کمی صبر کنید..." : "تغییر رمز ورود"}
               </Button>
             )}
             {!otpSent && (
-                <Button disabled={sendForgetPasswordOtpData?.loading} className="w-full" onClick={handleSendForgetPasswordOtp}>
+              <Button
+                disabled={sendForgetPasswordOtpData?.loading}
+                className="w-full"
+                onClick={handleSendForgetPasswordOtp}
+              >
                 {sendForgetPasswordOtpData?.loading ? "لطفا کمی صبر کنید..." : "ارسال کد تایید"}
               </Button>
             )}

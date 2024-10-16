@@ -17,10 +17,9 @@ import { ArrowUTurnLeftIcon } from "../../icons"
 import { BuyPackageInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
-
 const BuyPackagePage: NextPageWithLayout = () => {
   const router = useRouter()
-  const packageId = router.query?.packageId as string;
+  const packageId = router.query?.packageId as string
   const [buyPackageMutate, buyPackage] = useBuyPackageMutation()
   const {
     register,
@@ -28,7 +27,7 @@ const BuyPackagePage: NextPageWithLayout = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<BuyPackageInput>()
-  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: {input: {category: null}} })
+  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: { input: { category: null } } })
   const me = useMeQuery({ fetchPolicy: "cache-only" })
   const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId)
 
@@ -46,11 +45,9 @@ const BuyPackagePage: NextPageWithLayout = () => {
     })
   })
 
-  
-
-  const firstError = Object.keys(errors)?.[0] as keyof BuyPackageInput;
-  const isAdmin = me?.data?.me.role !== "USER";
-  const buttonLabel = isAdmin ? 'خرید' : 'ارسال';
+  const firstError = Object.keys(errors)?.[0] as keyof BuyPackageInput
+  const isAdmin = me?.data?.me.role !== "USER"
+  const buttonLabel = isAdmin ? "خرید" : "ارسال"
 
   if (currentPackage) {
     return (
@@ -63,20 +60,25 @@ const BuyPackagePage: NextPageWithLayout = () => {
           <Label htmlFor="name">نام دلخواه برای بسته</Label>
           <Input {...register("name", { required: "لطفا یک نام دلخواه برای بسته وارد کنید." })} id="name" type="text" />
         </div>
-        {!isAdmin && <div className="w-full space-y-2">
-          <Label>
-            <span className="font-black">{convertPersianCurrency(currentPackage.price)}</span> کارت به کارت کنید
-          </Label>
-          <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ''} />
-          <Controller
-            name="receipt"
-            control={control}
-            rules={{ required: "لطفا فیش واریز را وارد کنید." }}
-            render={({ field: { onChange } }) => (
-              <UploadImage label="تصویر فیش واریز را وارد کنید" onChange={onChange} />
-            )}
-          />
-        </div>}
+        {!isAdmin && (
+          <div className="w-full space-y-2">
+            <Label>
+              <span className="font-black">{convertPersianCurrency(currentPackage.price)}</span> کارت به کارت کنید
+            </Label>
+            <Copyable
+              isCenter
+              content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ""}
+            />
+            <Controller
+              name="receipt"
+              control={control}
+              rules={{ required: "لطفا فیش واریز را وارد کنید." }}
+              render={({ field: { onChange } }) => (
+                <UploadImage label="تصویر فیش واریز را وارد کنید" onChange={onChange} />
+              )}
+            />
+          </div>
+        )}
         <div className="space-y-2">
           <div className=" text-sm text-red-600">{errors?.[firstError]?.message}&nbsp;</div>
           <Button disabled={buyPackage?.loading} className="w-full" type="submit">

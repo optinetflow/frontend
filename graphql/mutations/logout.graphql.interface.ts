@@ -1,20 +1,18 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql"
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
-export type LogoutMutationVariables = Types.Exact<{ [key: string]: never; }>;
+import { gql } from "@apollo/client"
+import * as Apollo from "@apollo/client"
+const defaultOptions = {} as const
+export type LogoutMutationVariables = Types.Exact<{ [key: string]: never }>
 
-
-export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
-
+export type LogoutMutation = { __typename?: "Mutation"; logout: boolean }
 
 export const LogoutDocument = gql`
-    mutation logout {
-  logout
-}
-    `;
-export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+  mutation logout {
+    logout
+  }
+`
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>
 
 /**
  * __useLogoutMutation__
@@ -33,9 +31,9 @@ export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMut
  * });
  */
 export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
-      }
-export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
-export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options)
+}
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>

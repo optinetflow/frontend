@@ -44,13 +44,17 @@ export function Stat({ pack, onRenewClick }: StatProps) {
 
   const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85
 
-  const lastConnectedAt =  pack?.lastConnectedAt ? new Date(pack?.lastConnectedAt) : undefined
-  const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt);
+  const lastConnectedAt = pack?.lastConnectedAt ? new Date(pack?.lastConnectedAt) : undefined
+  const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt)
   return (
     <div className="space-y-4 rounded-md bg-slate-50 p-4">
-      <div className="flex justify-between items-center pb-6">
+      <div className="flex items-center justify-between pb-6">
         <div className="truncate  text-lg font-black text-slate-800">{pack.name}</div>
-        {lastConnectedAt && <div className="text-slate-300 text-xs mr-4 whitespace-nowrap text-left">{isOnline ? 'آنلاین' : timeSince(lastConnectedAt)}</div>}
+        {lastConnectedAt && (
+          <div className="mr-4 whitespace-nowrap text-left text-xs text-slate-300">
+            {isOnline ? "آنلاین" : timeSince(lastConnectedAt)}
+          </div>
+        )}
       </div>
       <div className="text-xs font-thin text-slate-500">{packageNote}</div>
       <div className="flex items-center justify-between">

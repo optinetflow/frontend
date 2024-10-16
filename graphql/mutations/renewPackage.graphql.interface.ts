@@ -1,22 +1,20 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql"
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { gql } from "@apollo/client"
+import * as Apollo from "@apollo/client"
+const defaultOptions = {} as const
 export type RenewPackageMutationVariables = Types.Exact<{
-  input: Types.RenewPackageInput;
-}>;
+  input: Types.RenewPackageInput
+}>
 
-
-export type RenewPackageMutation = { __typename?: 'Mutation', renewPackage: string };
-
+export type RenewPackageMutation = { __typename?: "Mutation"; renewPackage: string }
 
 export const RenewPackageDocument = gql`
-    mutation renewPackage($input: RenewPackageInput!) {
-  renewPackage(input: $input)
-}
-    `;
-export type RenewPackageMutationFn = Apollo.MutationFunction<RenewPackageMutation, RenewPackageMutationVariables>;
+  mutation renewPackage($input: RenewPackageInput!) {
+    renewPackage(input: $input)
+  }
+`
+export type RenewPackageMutationFn = Apollo.MutationFunction<RenewPackageMutation, RenewPackageMutationVariables>
 
 /**
  * __useRenewPackageMutation__
@@ -35,10 +33,15 @@ export type RenewPackageMutationFn = Apollo.MutationFunction<RenewPackageMutatio
  *   },
  * });
  */
-export function useRenewPackageMutation(baseOptions?: Apollo.MutationHookOptions<RenewPackageMutation, RenewPackageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RenewPackageMutation, RenewPackageMutationVariables>(RenewPackageDocument, options);
-      }
-export type RenewPackageMutationHookResult = ReturnType<typeof useRenewPackageMutation>;
-export type RenewPackageMutationResult = Apollo.MutationResult<RenewPackageMutation>;
-export type RenewPackageMutationOptions = Apollo.BaseMutationOptions<RenewPackageMutation, RenewPackageMutationVariables>;
+export function useRenewPackageMutation(
+  baseOptions?: Apollo.MutationHookOptions<RenewPackageMutation, RenewPackageMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<RenewPackageMutation, RenewPackageMutationVariables>(RenewPackageDocument, options)
+}
+export type RenewPackageMutationHookResult = ReturnType<typeof useRenewPackageMutation>
+export type RenewPackageMutationResult = Apollo.MutationResult<RenewPackageMutation>
+export type RenewPackageMutationOptions = Apollo.BaseMutationOptions<
+  RenewPackageMutation,
+  RenewPackageMutationVariables
+>
