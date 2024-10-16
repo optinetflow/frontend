@@ -148,3 +148,17 @@ export function formatSecondsToMMSS(seconds: number): string {
   const formattedSeconds = remainingSeconds.toString().padStart(2, "0")
   return `${formattedMinutes}:${formattedSeconds}`
 }
+
+export function formatDuration(days: number): string {
+  if (days <= 15) {
+    return `${days} روزه`
+  } else if (days <= 30) {
+    return "1 ماهه"
+  } else if (days <= 60) {
+    return "2 ماهه"
+  } else if (days <= 90) {
+    return "3 ماهه"
+  } else {
+    return `${Math.floor(days / 30)} ماهه` // For more than 3 months
+  }
+}

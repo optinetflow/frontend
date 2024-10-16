@@ -1,5 +1,3 @@
-// components/Skeleton/SkeletonPackage.tsx
-
 import React from "react"
 
 const SkeletonPackage = () => {
@@ -10,7 +8,7 @@ const SkeletonPackage = () => {
         <div className="mb-2 h-4 w-36 rounded bg-gray-200" /> {/* Expiration */}
         <div className="h-5 w-20 rounded bg-gray-200" /> {/* Price */}
       </div>
-      <div className="h-8 w-24 rounded-full bg-slate-800 text-center text-sm text-slate-100"></div>
+      <div className="h-8 w-24 rounded-full bg-blue-400 text-center text-sm text-slate-100"></div>
     </div>
   )
 }
