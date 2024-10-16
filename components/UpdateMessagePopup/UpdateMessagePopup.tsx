@@ -61,7 +61,7 @@ const UpdateMessagePopup = () => {
           <div className="mt-6 text-center">
             <button
               onClick={handleClose}
-              className="rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+              className="w-full rounded-md bg-slate-800 px-4 py-2 text-white transition-colors hover:bg-slate-950"
             >
               بستن
             </button>

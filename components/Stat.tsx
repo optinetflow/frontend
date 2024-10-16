@@ -67,7 +67,7 @@ export function Stat({ pack, onRenewClick }: StatProps) {
       {showRenewBtn ? (
         <Link className="flex" href={`/packages?userPackageId=${pack.id}`} onClick={onRenewClick}>
           <Button variant="outline" className="flex w-full text-slate-600">
-            <ArrowPathIcon className="ml-2 h-5 w-5" />
+            <ArrowPathIcon className="ml-2 size-5" />
             <span>تمدید بسته</span>
           </Button>
         </Link>

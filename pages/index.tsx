@@ -158,7 +158,7 @@ const HomePageComponent: React.FC = () => {
           </div>
 
           <Link className="flex" href="/packages" onClick={handleBuyPackageClick}>
-            <Button className="flex w-full bg-blue-600">
+            <Button className="flex w-full bg-blue-600 hover:bg-blue-800">
               <PlusIcon className="ml-2 size-5" />
               <span>خرید بسته جدید</span>
             </Button>
@@ -192,7 +192,7 @@ const HomePageComponent: React.FC = () => {
           {isAdmin && (
             <Link className="flex" href="/setting">
               <Button variant="outline" className="flex w-full">
-                <Cog6ToothIcon className="ml-2 h-5 w-5" />
+                <Cog6ToothIcon className="ml-2 size-5" />
                 <span>تنظیمات</span>
               </Button>
             </Link>
