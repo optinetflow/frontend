@@ -136,6 +136,7 @@ export type GetOptinetflowCustomerInfoInput = {
 
 export type GetPackageInput = {
   category?: InputMaybe<PackageCategory>
+  expirationDays?: InputMaybe<Scalars["Int"]["input"]>
 }
 
 export type Login = {
