@@ -15,11 +15,11 @@ import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
 const PromoCodePage: NextPageWithLayout = () => {
   const router = useRouter()
   const promoCode = router.query?.promoCode as string
-  const { data } = useCheckAuthQuery({ 
-    fetchPolicy: "no-cache"
-  });
+  const { data } = useCheckAuthQuery({
+    fetchPolicy: "no-cache",
+  })
   if (data?.checkAuth.loggedIn) {
-    router.replace("/");
+    router.replace("/")
   }
 
   const [signup, signupData] = useSignupMutation()
@@ -35,7 +35,7 @@ const PromoCodePage: NextPageWithLayout = () => {
         input: {
           ...data,
           promoCode,
-          domainName: removeWWW(window.location.host)
+          domainName: removeWWW(window.location.host),
         },
       },
     })
@@ -48,9 +48,9 @@ const PromoCodePage: NextPageWithLayout = () => {
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof SignupInput
-  if(!data || data?.checkAuth.loggedIn) {
+  if (!data || data?.checkAuth.loggedIn) {
     return null
-  } 
+  }
   return (
     <form
       onSubmit={onSubmit}
@@ -61,21 +61,21 @@ const PromoCodePage: NextPageWithLayout = () => {
         <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
         <Input {...register("fullname")} id="fullname" required type="text" />
       </div>
-  
+
       <div className="space-y-2">
-          <Label htmlFor="phone">شماره موبایل</Label>
-          <Input
-            {...register("phone", {
-              setValueAs: normalizePhone,
-              pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
-            })}
-            className="ltr"
-            id="phone"
-            placeholder="0912XXXXXXX"
-            required
-            type="tel"
-          />
-        </div>
+        <Label htmlFor="phone">شماره موبایل</Label>
+        <Input
+          {...register("phone", {
+            setValueAs: normalizePhone,
+            pattern: { value: /^9\d{9}$/, message: "شماره موبایل را بدون صفر وارد کنید." },
+          })}
+          className="ltr"
+          id="phone"
+          placeholder="0912XXXXXXX"
+          required
+          type="tel"
+        />
+      </div>
 
       <div className="space-y-2">
         <Label htmlFor="password">رمز عبور جدید</Label>
@@ -88,15 +88,16 @@ const PromoCodePage: NextPageWithLayout = () => {
         />
       </div>
 
-      <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (signupData.error?.message)}&nbsp;
-      </div>
+      <div className=" text-sm text-red-600">{errors?.[firstError]?.message || signupData.error?.message}&nbsp;</div>
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
       </Button>
       <div className="mt-4 text-center text-sm">
         <p>
-          قبلاً ثبت‌نام کرده‌اید؟ <Link href="/login" className="text-blue-600 underline">ورود</Link>
+          قبلاً ثبت‌نام کرده‌اید؟{" "}
+          <Link href="/login" className="text-blue-600 underline">
+            ورود
+          </Link>
         </p>
       </div>
     </form>

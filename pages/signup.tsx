@@ -16,8 +16,8 @@ const SignupPage: NextPageWithLayout = () => {
   const searchParams = useSearchParams()
   const phone = searchParams.get("phone")
   const promoCode = searchParams.get("promoCode")
-  
-  const [signup, signupData] = useSignupMutation({errorPolicy: 'all'})
+
+  const [signup, signupData] = useSignupMutation({ errorPolicy: "all" })
   const {
     register,
     handleSubmit,
@@ -31,18 +31,20 @@ const SignupPage: NextPageWithLayout = () => {
           ...data,
           ...(phone && { phone }),
           promoCode,
-          domainName: removeWWW(window.location.host)
+          domainName: removeWWW(window.location.host),
         },
       },
-    }).then(() => {
-      if(promoCode) {
-        router.push(`/auth/verify-phone?phone=${phone}`)
-      } else {
-        router.push('/customers')
-      }
-    }).catch(err => {
-      console.error(err)
     })
+      .then(() => {
+        if (promoCode) {
+          router.push(`/auth/verify-phone?phone=${phone}`)
+        } else {
+          router.push("/customers")
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof SignupInput
@@ -56,7 +58,7 @@ const SignupPage: NextPageWithLayout = () => {
         <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
         <Input {...register("fullname")} id="fullname" required type="text" />
       </div>
-      
+
       {!promoCode && (
         <div className="space-y-2">
           <Label htmlFor="phone">شماره موبایل</Label>
@@ -85,9 +87,7 @@ const SignupPage: NextPageWithLayout = () => {
         />
       </div>
 
-      <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (signupData.error?.message)}&nbsp;
-      </div>
+      <div className=" text-sm text-red-600">{errors?.[firstError]?.message || signupData.error?.message}&nbsp;</div>
       <Button disabled={signupData?.loading} className="w-full" type="submit">
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
       </Button>

@@ -1,17 +1,17 @@
 import Link from "next/link"
 import React from "react"
-import type { NextPageWithLayout } from './_app'
-import Layout from '../components/Layout/Layout'
+import type { NextPageWithLayout } from "./_app"
+import Layout from "../components/Layout/Layout"
 
 import { useRechargePackagesQuery } from "../graphql/queries/rechargePackages.graphql.interface"
 import { convertPersianCurrency } from "../helpers"
 
 const RechargePackagesPage: NextPageWithLayout = () => {
-  const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-and-network" });
+  const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-and-network" })
 
   return (
-    <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)"}}>
-        <div className="w-full space-y-4">
+    <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
+      <div className="w-full space-y-4">
         {rechargePackages.data?.rechargePackages.map((pack) => (
           <Link
             href={`/buy-recharge-package/${pack.id}`}
@@ -29,15 +29,10 @@ const RechargePackagesPage: NextPageWithLayout = () => {
       </div>
     </div>
   )
-};
+}
 
-export default RechargePackagesPage;
-
+export default RechargePackagesPage
 
 RechargePackagesPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <Layout>
-      {page}
-    </Layout>
-  )
+  return <Layout>{page}</Layout>
 }

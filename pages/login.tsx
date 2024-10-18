@@ -33,8 +33,8 @@ const LoginPage: NextPageWithLayout = () => {
     login({
       variables: {
         input: {
-          ...data, 
-          domainName: removeWWW(window.location.host)
+          ...data,
+          domainName: removeWWW(window.location.host),
         },
       },
     })
@@ -42,17 +42,17 @@ const LoginPage: NextPageWithLayout = () => {
 
   if (loginData?.data?.login) {
     if (loginData?.data?.login?.isPromoCodeValid) {
-      const formData = getValues();
-      router.push(`/signup?phone=${formData.phone}&promoCode=${formData.password}`);
-      return;
+      const formData = getValues()
+      router.push(`/signup?phone=${formData.phone}&promoCode=${formData.password}`)
+      return
     }
- 
+
     const redirected = searchParams.get("redirected")
     router.push(redirected ? decodeURIComponent(redirected) : "/")
   }
 
   const handleForgetPassword = () => {
-    router.push('/auth/forget-password')
+    router.push("/auth/forget-password")
   }
 
   const firstError = Object.keys(errors)?.[0] as keyof FormValues
@@ -81,22 +81,22 @@ const LoginPage: NextPageWithLayout = () => {
               <Input {...register("password")} className="ltr" id="password" required type="password" />
             </div>
             <div className=" text-sm text-red-600">
-              {errors?.[firstError]?.message || (loginData?.error?.message)}&nbsp;
+              {errors?.[firstError]?.message || loginData?.error?.message}&nbsp;
             </div>
             <Button disabled={loginData?.loading} className="w-full" type="submit">
               {loginData?.loading ? "لطفا کمی صبر کنید..." : "ورود"}
             </Button>
             <div className="mt-4 text-center text-sm">
-                    <p>
-                     رمز عبور خود را فراموش کرده اید؟{' '}
-                      <button
-                        onClick={handleForgetPassword}
-                        className="text-blue-600 underline bg-transparent border-none cursor-pointer"
-                      >
-                        تغییر رمز
-                      </button>
-                    </p>
-                  </div>
+              <p>
+                رمز عبور خود را فراموش کرده اید؟{" "}
+                <button
+                  onClick={handleForgetPassword}
+                  className="cursor-pointer border-none bg-transparent text-blue-600 underline"
+                >
+                  تغییر رمز
+                </button>
+              </p>
+            </div>
           </CardContent>
         </Card>
         {/* <Link className="w-full" href="/stat">
