@@ -117,7 +117,7 @@ const Filters: React.FC<FiltersProps> = ({ isOpen, onClose, setFilter }) => {
             <button
               type="button"
               onClick={handleSubmit}
-              className="w-full rounded-md bg-slate-800 px-4 py-3 text-white hover:bg-slate-800"
+              className="w-full rounded-md bg-slate-800 px-4 py-3 text-white hover:bg-slate-700"
             >
               اعمال فیلتر
             </button>
