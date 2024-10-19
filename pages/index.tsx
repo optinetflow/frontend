@@ -157,7 +157,7 @@ const HomePageComponent: React.FC = () => {
             )}
           </div>
 
-          <Link className="flex" href="/packages" onClick={handleBuyPackageClick}>
+          <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
             <Button className="flex w-full bg-blue-600 hover:bg-blue-800">
               <PlusIcon className="ml-2 size-5" />
               <span>خرید بسته جدید</span>

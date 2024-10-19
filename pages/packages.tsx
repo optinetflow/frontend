@@ -21,6 +21,7 @@ import { PackageCategory } from "../src/graphql/__generated__/schema.graphql"
 const PackagesPage: NextPageWithLayout = () => {
   const searchParams = useSearchParams()
   const userPackageId = searchParams.get("userPackageId")
+  const category = searchParams.get("category")
   const router = useRouter()
   const [quickFilter, setQuickFilter] = useState<Filter>({})
   const [bottomSheetFilters, setBottomSheetFilters] = useState<Filter[]>([])
@@ -31,20 +32,20 @@ const PackagesPage: NextPageWithLayout = () => {
     loading,
     error,
   } = useGetPackagesQuery({
-    variables: { input: { category: null } },
+    variables: { input: { category: category as PackageCategory } },
     fetchPolicy: "cache-and-network",
   })
 
   const quickFilterOptions: Filter[] = [
-    {
-      text: "فیلترها",
-      key: null,
-      value: null,
-      toggleAllFilters: true,
-      icon: <SlidersHorizontal className="mr-1 size-4" />,
-    },
-    { text: "بسیار با کیفیت", key: "category", value: "QUALITY" },
-    { text: "بسته های اقتصادی", key: "category", value: "ECONOMIC" },
+    // {
+    //   text: "فیلترها",
+    //   key: null,
+    //   value: null,
+    //   toggleAllFilters: true,
+    //   icon: <SlidersHorizontal className="mr-1 size-4" />,
+    // },
+    { text: "ماهانه", key: "expirationDays", value: 30 },
+    { text: "سه ماهه", key: "expirationDays", value: 90 },
   ]
 
   useEffect(() => {
@@ -53,10 +54,14 @@ const PackagesPage: NextPageWithLayout = () => {
     if (toggleAllFilters === true) {
       setIsFiltersOpen(true)
     } else if (key && value) {
-      const quickFilterObject = { [key]: value }
+      const quickFilterObject = { [key]: value, category: category as PackageCategory }
       refetchUserPackages({ input: quickFilterObject })
     }
-  }, [quickFilter, refetchUserPackages])
+  }, [quickFilter, refetchUserPackages, category])
+
+  const handleBack = () => {
+    router.replace("/package-categories")
+  }
 
   useEffect(() => {
     if (bottomSheetFilters.length > 0) {
@@ -76,7 +81,7 @@ const PackagesPage: NextPageWithLayout = () => {
       <div className="w-full space-y-4">
         <div className="sticky top-0 z-10 border-b border-gray-300 bg-white pt-2">
           <div className="flex items-center justify-between">
-            <Button variant="secondary" className="top-3 mb-3 flex w-full" onClick={router.back}>
+            <Button variant="secondary" className="top-3 mb-3 flex w-full" onClick={handleBack}>
               <ArrowUTurnLeftIcon className="ml-2 size-5" />
               <span>بازگشت</span>
             </Button>
