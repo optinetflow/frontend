@@ -18,9 +18,9 @@ const RechargePackagesPage: NextPageWithLayout = () => {
             key={pack.id}
             className="mb-4 flex h-28 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"
           >
-            <div className="flex h-full flex-col items-start justify-between">
-              <span className="text-xl text-slate-800">{toIRR(pack.amount)}</span>
-              <span className=" text-sm text-slate-600">{pack.discountPercent}% سود هر خرید</span>
+            <div className="flex h-full flex-col items-center justify-between">
+              <span className="text-xl text-slate-800 h-full flex items-center">{toIRR(pack.amount)}</span>
+              {/* <span className=" text-sm text-slate-600">{pack.discountPercent}% سود هر خرید</span> */}
             </div>
 
             <div className="rounded-full bg-slate-800 px-6 py-2 text-sm text-slate-100 hover:bg-slate-950">خرید</div>

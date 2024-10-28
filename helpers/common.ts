@@ -101,6 +101,8 @@ export const avatarColor = (str: string) => {
 export const  faNumToEn = (value: string) =>
 value.replace(/([۰-۹])/g, (token: string) => String.fromCharCode(token.charCodeAt(0) - 1728));
 
+
+
 function removePhonePrefix(phoneNumber: string): string {
   if (phoneNumber.startsWith('0')) {
     return phoneNumber.substring(1);
@@ -110,6 +112,14 @@ function removePhonePrefix(phoneNumber: string): string {
     return phoneNumber;
   }
 }
+
+function keepOnlyNumbers(str: string): string {
+  // Remove all non-digit characters except for the first decimal point
+  return str.replace(/[^\d.]/g, '')  // Keep only digits and the decimal point
+            .replace(/(\..*)\./g, '$1'); // Remove any additional decimal points after the first one
+}
+
+export const normalizeNumber = (phoneNumber: string): string =>  keepOnlyNumbers(faNumToEn(phoneNumber));
 
 
 export const normalizePhone = (phoneNumber: string): string =>  removePhonePrefix(faNumToEn(phoneNumber));
@@ -167,3 +177,5 @@ export function formatSecondsToMMSS(seconds: number): string {
   const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
   return `${formattedMinutes}:${formattedSeconds}`;
 }
+
+export const pctToDec = (number?: number | null): number => (typeof number === 'number' ? number / 100 : 0);

@@ -132,9 +132,9 @@ const HomePageComponent: React.FC = () => {
                 >
                   شارژ حساب: {toIRR(roundTo(me.data?.me.balance || 0, 0))}
                 </div>
-                <div className="text-xs text-slate-500">
+                {/* <div className="text-xs text-slate-500">
                   سود کل: {toIRR(roundTo(me.data?.me.totalProfit || 0, 0))}
-                </div>
+                </div> */}
               </>
             )}
           </div>

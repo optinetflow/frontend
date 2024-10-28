@@ -62,11 +62,11 @@ const BuyPackagePage: NextPageWithLayout = () => {
         {isAdmin && <div className="w-full space-y-2 bg-slate-50 text-slate-600 p-4 rounded-lg">
           <div>در حال تمدید بسته هستید، آیا مطمئنید؟</div>
           <div className="ltr text-right">{currentPackage.traffic} GB</div>
-          <div>{toIRR(currentPackage.price)}</div>
+          <div>{toIRR(currentPackage?.discountedPrice || currentPackage.price)}</div>
         </div>}
         {!isAdmin && <div className="w-full space-y-2">
           <Label>
-            <span className="font-black">{toIRR(currentPackage.price)}</span> کارت به کارت کنید
+            <span className="font-black">{toIRR(currentPackage.discountedPrice || currentPackage.price)}</span> کارت به کارت کنید
           </Label>
           <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ''} />
           <Controller
