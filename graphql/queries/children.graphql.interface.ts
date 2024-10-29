@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type ChildrenQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'Child', id: string, fullname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, activePackages: number, onlinePackages: number, lastConnectedAt?: any | null, description?: string | null, telegram?: { __typename?: 'TelegramUser', id: string, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
+export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'Child', id: string, fullname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, activePackages: number, onlinePackages: number, lastConnectedAt?: any | null, description?: string | null, initialDiscountPercent?: number | null, telegram?: { __typename?: 'TelegramUser', id: any, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
 
 
 export const ChildrenDocument = gql`
@@ -25,6 +25,7 @@ export const ChildrenDocument = gql`
     onlinePackages
     lastConnectedAt
     description
+    initialDiscountPercent
     telegram {
       id
       phone

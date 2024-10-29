@@ -5,8 +5,8 @@
   "browserslist": [
     "defaults",
     "ie >= 9",
-    "Firefox >= 4", 
-    "Chrome >= 15", 
+    "Firefox >= 4",
+    "Chrome >= 15",
     "Safari >= 5.1",
     "not op_mini all"
   ],

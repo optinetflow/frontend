@@ -1,18 +1,17 @@
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
-import { useMeQuery } from "../graphql/queries/me.graphql.interface"
 import React from "react"
-import { ceilTo } from '../helpers';
 
 import { Button } from "@/components/ui/button"
 
-
 import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
+import { useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface"
-import { convertPersianCurrency } from "../helpers"
+import { ceilTo } from '../helpers';
+import { toIRR } from "../helpers"
 import { ArrowUTurnLeftIcon } from "../icons"
 
 const PackagesPage: NextPageWithLayout = () => {
@@ -40,9 +39,17 @@ const PackagesPage: NextPageWithLayout = () => {
             <div className="flex h-full flex-col items-start justify-between">
               <span className=" ltr text-4xl text-slate-800">{pack.traffic} GB </span>
               <span className=" rounded-sm  text-xs text-slate-400">{pack.expirationDays} روزه | چند کاربره{pack.traffic === 30 ? <span className="text-red-800"> | پرطرفدار</span> : ''}{pack.traffic === 100 ? <span className="text-red-800"> | خانواده</span> : ''}</span>
-              <span className=" text-lg text-slate-600">{convertPersianCurrency(pack.price)}</span>
+              <div className="flex flex-row-reverse items-center space-x-2">
+                {pack.discountedPrice ? (
+                  <>
+                    <span className=" text-lg text-slate-600">{toIRR(pack.discountedPrice)}</span>
+                    <span className="text-sm text-slate-400 line-through">{toIRR(pack.price, "number")}</span>
+                  </>
+                ) : (
+                  <span className=" text-lg text-slate-600">{toIRR(pack.price)}</span>
+                )}
+              </div>
             </div>
-
             <div className="rounded-full bg-slate-800 px-6 py-2 text-sm text-slate-100 hover:bg-slate-950">خرید</div>
           </Link>
         ))}

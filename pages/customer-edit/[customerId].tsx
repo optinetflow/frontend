@@ -3,14 +3,14 @@ import React from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import Layout from "../../components/Layout/Layout"
 import { useUpdateChildMutation } from "../../graphql/mutations/updateChild.graphql.interface"
 import { useChildrenQuery } from "../../graphql/queries/children.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
-import { normalizePhone } from "../../helpers"
+import { normalizeNumber, normalizePhone, roundTo } from "../../helpers"
 import { UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
@@ -27,6 +27,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
   const customers = useChildrenQuery({ fetchPolicy: "cache-only" })
   const me = useMeQuery({ fetchPolicy: "cache-only" })
   const customer = customers.data?.children.find((child) => child.id === id)
+  const profitPercent = me?.data?.me?.profitPercent || 0
   const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100
 
   const onSubmit = handleSubmit((data) => {
@@ -38,6 +39,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
             {}
           ),
           childId: id,
+          initialDiscountPercent: Number(data.initialDiscountPercent),
         },
       },
     })
@@ -50,6 +52,8 @@ const CustomerEditPage: NextPageWithLayout = () => {
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof UpdateChildInput
+  const maxChildDiscount = (profitPercent / (100 + profitPercent)) * 100
+
   return (
     <form
       onSubmit={onSubmit}
@@ -60,7 +64,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
         <Label htmlFor="fullname">نام و نام خانوادگی (فارسی)</Label>
         <Input defaultValue={customer?.fullname} {...register("fullname")} id="fullname" required type="text" />
       </div>
-     
+
       {isSuperAdmin && (
         <div className="space-y-2">
           <Label htmlFor="role">دسترسی</Label>
@@ -110,12 +114,37 @@ const CustomerEditPage: NextPageWithLayout = () => {
         />
       </div>
       <div className="space-y-2">
+        <Label htmlFor="initialDiscountPercent">درصد تخفیف (تا {roundTo(maxChildDiscount, 2)} درصد):</Label>
+        <Input
+          defaultValue={customer?.initialDiscountPercent || undefined}
+          {...register("initialDiscountPercent", {
+            setValueAs: (val) => normalizeNumber(val),
+            max: {
+              value: maxChildDiscount,
+              message: `با این درصد تخفیف شما ضرر می‌کنید. بالاترین درصد تخفیف که ضرر نکنید ${roundTo(
+                maxChildDiscount,
+                2
+              )}٪ است.`,
+            },
+          })}
+          className="ltr"
+          id="initialDiscountPercent"
+          placeholder="مثلا: 5"
+        />
+      </div>
+      <div className="space-y-2">
         <Label htmlFor="description">توضیحات (اختیاری)</Label>
-        <Textarea className="resize-none" rows={3} defaultValue={customer?.description || undefined} {...register("description")} id="description" />
+        <Textarea
+          className="resize-none"
+          rows={3}
+          defaultValue={customer?.description || undefined}
+          {...register("description")}
+          id="description"
+        />
       </div>
 
       <div className=" text-sm text-red-600">
-        {errors?.[firstError]?.message || (updateChildData.error && "این شماره موبایل قبلا ثبت نام کرده است.")}&nbsp;
+        {errors?.[firstError]?.message || (updateChildData.error && updateChildData.error?.message)}&nbsp;
       </div>
       <Button disabled={updateChildData?.loading} className="w-full" type="submit">
         {updateChildData?.loading ? "لطفا کمی صبر کنید..." : "اعمال تغییرات"}

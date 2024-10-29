@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type GetPackagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetPackagesQuery = { __typename?: 'Query', packages: Array<{ __typename?: 'Package', id: string, price: number, traffic: number, expirationDays: number, userCount: number }> };
+export type GetPackagesQuery = { __typename?: 'Query', packages: Array<{ __typename?: 'Package', id: string, price: number, discountedPrice?: number | null, traffic: number, expirationDays: number, userCount: number }> };
 
 
 export const GetPackagesDocument = gql`
@@ -14,6 +14,7 @@ export const GetPackagesDocument = gql`
   packages {
     id
     price
+    discountedPrice
     traffic
     expirationDays
     userCount

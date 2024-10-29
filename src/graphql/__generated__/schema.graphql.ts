@@ -250,6 +250,7 @@ export type Package = {
   __typename?: 'Package';
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
+  discountedPrice?: Maybe<Scalars['Int']['output']>;
   expirationDays: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   price: Scalars['Int']['output'];
@@ -384,6 +385,7 @@ export type UpdateChildInput = {
   childId: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   fullname?: InputMaybe<Scalars['String']['input']>;
+  initialDiscountPercent?: InputMaybe<Scalars['Int']['input']>;
   isDisabled?: InputMaybe<Scalars['Boolean']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
@@ -401,6 +403,7 @@ export type UpdateUserInput = {
   fullname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
+  profitPercent?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UploadInput = {

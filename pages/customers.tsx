@@ -12,7 +12,7 @@ import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface"
 import { copyText } from '../helpers';
-import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
+import { avatarColor, roundTo, timeSince, toIRR } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
 import * as Types from '../src/graphql/__generated__/schema.graphql';
 
@@ -134,8 +134,8 @@ const Customer: React.FC<CustomerProps> = ({ id, fullname, isDisabled, phone, av
           <div className="truncate font-black text-slate-800">
             {fullname}
           </div>
-          {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {convertPersianCurrency(roundTo(balance,0))}</div>}
-          {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {convertPersianCurrency(roundTo(totalProfit,0))}</div>}
+          {role === 'ADMIN' && <div className="text-slate-600 text-xs">موجودی: {toIRR(roundTo(balance,0))}</div>}
+          {role === 'ADMIN' && <div className="text-slate-600 text-xs">سود کل: {toIRR(roundTo(totalProfit,0))}</div>}
           <button type="button" onClick={handlePhoneClick} className="relative text-xs text-slate-600 text-right">
             0{phone}
             {lastConnectedAt && !isOnline && <div className="absolute top-0 left-0 text-xs font-thin rounded-full text-slate-400">{timeSince(lastConnectedAt)}</div>}

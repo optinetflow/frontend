@@ -13,7 +13,8 @@ import { UploadImage } from "../../components/UploadImage/UploadImage"
 import { useRenewPackageMutation } from "../../graphql/mutations/renewPackage.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface"
-import { ceilTo, convertPersianCurrency } from "../../helpers"
+import { toIRR } from "../../helpers"
+import { ceilTo } from "../../helpers"
 import { RenewPackageInput } from "../../src/graphql/__generated__/schema.graphql"
 import type { NextPageWithLayout } from "../_app"
 
@@ -61,11 +62,11 @@ const BuyPackagePage: NextPageWithLayout = () => {
         {isAdmin && <div className="w-full space-y-2 bg-slate-50 text-slate-600 p-4 rounded-lg">
           <div>در حال تمدید بسته هستید، آیا مطمئنید؟</div>
           <div className="ltr text-right">{currentPackage.traffic} GB</div>
-          <div>{convertPersianCurrency(currentPackage.price)}</div>
+          <div>{toIRR(currentPackage?.discountedPrice || currentPackage.price)}</div>
         </div>}
         {!isAdmin && <div className="w-full space-y-2">
           <Label>
-            <span className="font-black">{convertPersianCurrency(currentPackage.price)}</span> کارت به کارت کنید
+            <span className="font-black">{toIRR(currentPackage.discountedPrice || currentPackage.price)}</span> کارت به کارت کنید
           </Label>
           <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ''} />
           <Controller
