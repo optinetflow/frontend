@@ -67,7 +67,7 @@ export type Child = {
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
   brand?: Maybe<Brand>;
-  brandId?: Maybe<Scalars['String']['output']>;
+  brandId: Scalars['String']['output'];
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -126,6 +126,14 @@ export type GetClientStatsFiltersInput = {
   id: Scalars['String']['input'];
 };
 
+export type GetOptinetflowCustomerInfoInput = {
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  fullname: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
 export type Login = {
   __typename?: 'Login';
   isPromoCodeValid?: Maybe<Scalars['Boolean']['output']>;
@@ -153,6 +161,7 @@ export type Mutation = {
   enterCost: User;
   login: Login;
   logout: Scalars['Boolean']['output'];
+  notifOptinetflowCustomerInfoToUs: Scalars['Boolean']['output'];
   refreshToken: Token;
   renewPackage: Scalars['String']['output'];
   resetPassword: Scalars['Boolean']['output'];
@@ -189,6 +198,11 @@ export type MutationEnterCostArgs = {
 
 export type MutationLoginArgs = {
   data: LoginInput;
+};
+
+
+export type MutationNotifOptinetflowCustomerInfoToUsArgs = {
+  data: GetOptinetflowCustomerInfoInput;
 };
 
 
@@ -385,7 +399,7 @@ export type UpdateChildInput = {
   childId: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   fullname?: InputMaybe<Scalars['String']['input']>;
-  initialDiscountPercent?: InputMaybe<Scalars['Int']['input']>;
+  initialDiscountPercent?: InputMaybe<Scalars['Float']['input']>;
   isDisabled?: InputMaybe<Scalars['Boolean']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
@@ -403,7 +417,7 @@ export type UpdateUserInput = {
   fullname?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
-  profitPercent?: InputMaybe<Scalars['Int']['input']>;
+  profitPercent?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UploadInput = {
@@ -416,7 +430,7 @@ export type User = {
   balance: Scalars['Float']['output'];
   bankCard?: Maybe<Array<BankCard>>;
   brand?: Maybe<Brand>;
-  brandId?: Maybe<Scalars['String']['output']>;
+  brandId: Scalars['String']['output'];
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime']['output'];
   fullname: Scalars['String']['output'];
