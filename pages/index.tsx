@@ -13,7 +13,7 @@ import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface
 import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import { toIRR, jsonToB64Url, roundTo } from "../helpers"
+import { jsonToB64Url, roundTo, toIRR } from "../helpers"
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -136,7 +136,7 @@ const HomePageComponent: React.FC = () => {
                 className="mr-4 flex items-center rounded-full px-4 py-2 text-xs text-slate-400"
               >
                 <span>خروج</span>
-                <PowerIcon className="mr-2 h-4 w-4" />
+                <PowerIcon className="mr-2 size-4" />
               </Button>
             </div>
             {isAdmin && (
@@ -157,7 +157,7 @@ const HomePageComponent: React.FC = () => {
 
           <Link className="flex" href="/packages" onClick={handleBuyPackageClick}>
             <Button className="flex w-full">
-              <PlusIcon className="ml-2 h-5 w-5" />
+              <PlusIcon className="ml-2 size-5" />
               <span>خرید بسته جدید</span>
             </Button>
           </Link>
@@ -170,7 +170,7 @@ const HomePageComponent: React.FC = () => {
           {isAdmin && (
             <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
               <Button variant="outline" className="flex w-full">
-                <UsersIcon className="ml-2 h-5 w-5" />
+                <UsersIcon className="ml-2 size-5" />
                 <span>مشتری‌ها</span>
               </Button>
             </Link>
@@ -178,7 +178,7 @@ const HomePageComponent: React.FC = () => {
           {isAdmin && (
             <Link className="flex" href="/rechargePackages" onClick={checkAdminRequirements}>
               <Button variant="outline" className="flex w-full">
-                <BanknotesIcon className="ml-2 h-5 w-5" />
+                <BanknotesIcon className="ml-2 size-5" />
                 <span>افزایش شارژ حساب</span>
               </Button>
             </Link>
@@ -186,7 +186,7 @@ const HomePageComponent: React.FC = () => {
           {isAdmin && (
             <Link className="flex" href="/setting">
               <Button variant="outline" className="flex w-full">
-                <Cog6ToothIcon className="ml-2 h-5 w-5" />
+                <Cog6ToothIcon className="ml-2 size-5" />
                 <span>تنظیمات</span>
               </Button>
             </Link>
@@ -198,7 +198,7 @@ const HomePageComponent: React.FC = () => {
           {!isRegisteredInTelegram && (data.userPackages.length > 0 || isAdmin) && (
             <a className="block" href={botRef}>
               <Button variant="outline" className="flex w-full">
-                <TelegramIcon className="ml-2 h-5 w-5" />
+                <TelegramIcon className="ml-2 size-5" />
                 <span>{registerToBotText}</span>
               </Button>
             </a>
@@ -212,7 +212,7 @@ const HomePageComponent: React.FC = () => {
                 href={`https://t.me/${me.data?.me.parent?.telegram?.username}`}
               >
                 <Button variant="outline" className="flex w-full">
-                  <ChatBubbleOvalLeftIcon className="ml-2 h-5 w-5" />
+                  <ChatBubbleOvalLeftIcon className="ml-2 size-5" />
                   <span>پشتیبانی تلگرام</span>
                 </Button>
               </a>
@@ -220,7 +220,7 @@ const HomePageComponent: React.FC = () => {
             {hasPackage && (
               <Link className="flex w-full" href="/help">
                 <Button variant="outline" className="flex w-full">
-                  <InformationCircleIcon className="ml-2 h-5 w-5" />
+                  <InformationCircleIcon className="ml-2 size-5" />
                   <span>آموزش اتصال</span>
                 </Button>
               </Link>
