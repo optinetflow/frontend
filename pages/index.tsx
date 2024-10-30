@@ -8,12 +8,13 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import Loading from "../components/Loading/Loading"
 import { Stat } from "../components/Stat"
+import UpdateMessagePopup from "../components/UpdateMessagePopup/UpdateMessagePopup"
 import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface"
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
 import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import { convertPersianCurrency, jsonToB64Url, roundTo } from "../helpers"
+import { clearLocalStorageExcept, convertPersianCurrency, jsonToB64Url, roundTo } from "../helpers"
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -57,7 +58,7 @@ const HomePageComponent: React.FC = () => {
 
   const handleLogout = () => {
     logout().then(() => {
-      localStorage.clear()
+      clearLocalStorageExcept("appVersion")
       router.replace("/login")
     })
   }
@@ -150,15 +151,12 @@ const HomePageComponent: React.FC = () => {
                 >
                   شارژ حساب: {convertPersianCurrency(roundTo(me.data?.me.balance || 0, 0))}
                 </div>
-                <div className="text-xs text-slate-500">
-                  سود کل: {convertPersianCurrency(roundTo(me.data?.me.totalProfit || 0, 0))}
-                </div>
               </>
             )}
           </div>
 
           <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
-            <Button className="flex w-full bg-blue-600 hover:bg-blue-800">
+            <Button className="flex w-full">
               <PlusIcon className="ml-2 size-5" />
               <span>خرید بسته جدید</span>
             </Button>
@@ -232,6 +230,7 @@ const HomePageComponent: React.FC = () => {
               </Link>
             )}
           </div>
+          <UpdateMessagePopup />
         </div>
       </div>
     )

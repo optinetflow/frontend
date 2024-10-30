@@ -13,24 +13,29 @@ interface QuickFiltersProp {
   filter: Filter
   setFilter: (filter: Filter) => void
   filters: Filter[]
+  className?: string
 }
 
-const QuickFilter: React.FC<QuickFiltersProp> = ({ filter, setFilter, filters }) => {
+const QuickFilter: React.FC<QuickFiltersProp> = ({ filter, setFilter, filters, className }) => {
   return (
-    <div className="mb-4">
+    <div className={`${className}`}>
       <div className="no-scrollbar flex space-x-2 overflow-x-auto">
         {filters.map(({ text, key, value, toggleAllFilters, icon }, index) => (
           <div
-            onClick={() => setFilter({ key, value, text, toggleAllFilters })}
-            key={`${key}-${index}`}
-            className={`flex cursor-pointer items-center whitespace-nowrap rounded-full border px-4 py-1.5 text-sm shadow-sm transition-all ${
+            onClick={() =>
               filter.key === key && filter.value === value
-                ? "border-blue-600 bg-blue-600 text-white"
+                ? setFilter({})
+                : setFilter({ key, value, text, toggleAllFilters })
+            }
+            key={`${key}-${index}`}
+            className={`flex cursor-pointer items-center whitespace-nowrap rounded-full border px-4 py-1.5 text-sm transition-all ${
+              filter.key === key && filter.value === value
+                ? "border-slate-600 bg-slate-600 text-white"
                 : "border-slate-300 text-slate-600"
             }`}
             style={index === 0 ? { marginInlineEnd: "8px" } : {}}
           >
-            {icon && <span className="mr-1">{icon}</span>} {/* Render the icon if it exists */}
+            {icon && <span className="mr-1">{icon}</span>}
             <span>{text}</span>
           </div>
         ))}

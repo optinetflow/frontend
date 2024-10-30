@@ -1,67 +1,52 @@
-import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { ArrowUTurnLeftIcon } from "icons"
 import { NextPageWithLayout } from "./_app"
-import { Button } from "../components/Button/Button"
 import Layout from "../components/Layout/Layout"
-import router from "next/router"
+import { useSearchParams } from "next/navigation"
 
-// Example data: Array of package categories
-const packages = [
+const packageCategories = [
   {
     id: "ECONOMIC",
     title: "بسته های اقتصادی",
-    description:
-      "طراحی شده برای کاربرانی که به دنبال سرعت و قیمت مناسب هستند. این بسته‌ها تجربه‌ای متعادل از سرعت و هزینه را ارائه می‌دهند.",
-    image: "/images/economic.webp", // Image path
+    description: "برای کاربرانی که به دنبال سرعت خوب و قیمت مناسب هستند.",
   },
   {
     id: "QUALITY",
-    title: "بسته های پرسرعت",
-    description:
-      "برای کاربرانی که به دنبال بالاترین سرعت اینترنت هستند. این بسته‌ها تجربه‌ای سریع و بدون توقف را فراهم می‌کنند.",
-    image: "/images/diamond2.webp", // Replace with actual image path
+    title: "بسته های ویژه",
+    description: "بسته‌های ویژه مخصوص افرادی است که کیفیت و سرعت بالا برایشان حیاتی است.",
   },
-  // Add more packages as needed
 ]
 
 const PackageCategoriesPage: NextPageWithLayout = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const userPackageId = searchParams.get("userPackageId")
   return (
-    <div className="mx-auto my-12 flex min-h-screen max-w-xs flex-col items-center justify-center">
+    <div
+      className="mx-auto my-12 flex min-h-screen max-w-xs flex-col items-center justify-center"
+      style={{ minHeight: "calc(100vh - 6rem)" }}
+    >
       <div className="sticky top-0 z-10 mb-4 w-full bg-white p-2">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push("/")}
           className="flex w-full items-center justify-center rounded-lg bg-gray-100 px-4 py-2 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           <ArrowUTurnLeftIcon className="ml-1 size-4" />
           <span>بازگشت</span>
         </button>
       </div>
-      {packages.map((pack) => (
-        <div
-          key={pack.id}
-          className="mb-4 w-full max-w-sm rounded-lg border border-gray-200 bg-slate-50 p-4 shadow hover:bg-slate-100"
+      {packageCategories.map((category) => (
+        <Link
+          href={`/packages?category=${category.id}${userPackageId ? `&userPackageId=${userPackageId}` : ""}`}
+          key={category.id}
+          className="mb-4 flex h-32 w-full items-center justify-between rounded-lg bg-slate-50 p-5 hover:bg-slate-100"
         >
-          <div className="relative h-64 w-full">
-            <Image
-              className="rounded-t-lg"
-              src={pack.image} // Dynamic image path
-              alt={pack.title}
-              layout="fill" // This makes the image take up the full container
-              objectFit="cover" // Ensures the image covers the entire card
-            />
+          <div className="flex h-full flex-col items-start">
+            <h2 className="flex items-center text-lg font-extrabold text-gray-900">{category.title}</h2>
+            <p className="mt-4 rounded-sm text-slate-400">{category.description}</p>
           </div>
-          <div className="mt-3">
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{pack.title}</h5>
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{pack.description}</p>
-          </div>
-          {/* Full width button */}
-          <Link href={`/packages?category=${pack.id}`}>
-            <button className="mt-4 w-full rounded-lg bg-slate-800 px-5 py-2.5 text-center text-white hover:bg-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-300">
-              مشاهده بسته ها
-            </button>
-          </Link>
-        </div>
+        </Link>
       ))}
     </div>
   )

@@ -153,12 +153,22 @@ export function formatDuration(days: number): string {
   if (days <= 15) {
     return `${days} روزه`
   } else if (days <= 30) {
-    return "1 ماهه"
+    return "ماهانه"
   } else if (days <= 60) {
     return "2 ماهه"
   } else if (days <= 90) {
     return "3 ماهه"
   } else {
     return `${Math.floor(days / 30)} ماهه` // For more than 3 months
+  }
+}
+
+export function clearLocalStorageExcept(exceptKey: string): void {
+  const exceptValue = localStorage.getItem(exceptKey)
+
+  localStorage.clear()
+
+  if (exceptValue !== null) {
+    localStorage.setItem(exceptKey, exceptValue)
   }
 }

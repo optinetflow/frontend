@@ -1,4 +1,3 @@
-import { CheckCheck, CircleDollarSign, SlidersHorizontal, UserIcon } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
@@ -12,7 +11,6 @@ import Layout from "../components/Layout/Layout"
 
 import QuickFilter, { Filter } from "../components/quickFilter/QuickFilter"
 import SkeletonPackage from "../components/SkeletonPackage/SkeletonPackage"
-import UpdateMessagePopup from "../components/UpdateMessagePopup/UpdateMessagePopup"
 import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface"
 import { convertPersianCurrency, formatDuration } from "../helpers"
 import { ArrowUTurnLeftIcon } from "../icons"
@@ -50,12 +48,13 @@ const PackagesPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     const { value, key, toggleAllFilters } = quickFilter
-
     if (toggleAllFilters === true) {
       setIsFiltersOpen(true)
     } else if (key && value) {
       const quickFilterObject = { [key]: value, category: category as PackageCategory }
       refetchUserPackages({ input: quickFilterObject })
+    } else if (!key && !value && !toggleAllFilters) {
+      refetchUserPackages({ input: { category: category as PackageCategory } })
     }
   }, [quickFilter, refetchUserPackages, category])
 
@@ -79,14 +78,14 @@ const PackagesPage: NextPageWithLayout = () => {
   return (
     <div className="mx-auto my-12 flex max-w-xs flex-col" style={{ minHeight: "calc(100vh - 6rem)" }}>
       <div className="w-full space-y-4">
-        <div className="sticky top-0 z-10 border-b border-gray-300 bg-white pt-2">
+        <div className="sticky top-0 z-10 border-gray-300 bg-white pt-2">
           <div className="flex items-center justify-between">
-            <Button variant="secondary" className="top-3 mb-3 flex w-full" onClick={handleBack}>
+            <Button variant="secondary" className="top-3 flex w-full" onClick={handleBack}>
               <ArrowUTurnLeftIcon className="ml-2 size-5" />
               <span>بازگشت</span>
             </Button>
           </div>
-          <QuickFilter filter={quickFilter} setFilter={setQuickFilter} filters={quickFilterOptions} />
+          <QuickFilter className="mt-4" filter={quickFilter} setFilter={setQuickFilter} filters={quickFilterOptions} />
         </div>
 
         {loading ? (
@@ -109,8 +108,8 @@ const PackagesPage: NextPageWithLayout = () => {
                   <span className="text-lg font-extrabold text-gray-900">
                     {pack.traffic} گیگ {formatDuration(pack.expirationDays)}
                   </span>
-                  <span className="mr-2 rounded bg-blue-600 px-1 py-0.5 text-[10px] text-white">
-                    {pack.category === PackageCategory.Quality ? "کیفیت بالا" : ""}
+                  <span className="mr-2 rounded bg-slate-500 px-1 py-0.5 text-[10px] text-white">
+                    {pack.category === PackageCategory.Quality ? "ویژه" : ""}
                     {pack.category === PackageCategory.Economic ? "اقتصادی" : ""}
                   </span>
                 </div>
@@ -133,7 +132,6 @@ const PackagesPage: NextPageWithLayout = () => {
           onClose={() => setIsFiltersOpen(false)}
         />
       </div>
-      <UpdateMessagePopup />
       <div></div>
     </div>
   )
