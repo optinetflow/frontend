@@ -9,7 +9,7 @@ import { UploadImage } from "../../components/UploadImage/UploadImage"
 import { useBuyRechargePackageMutation } from "../../graphql/mutations/buyRechargePackage.graphql.interface"
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
 import { useRechargePackagesQuery } from "../../graphql/queries/rechargePackages.graphql.interface"
-import { convertPersianCurrency } from "../../helpers"
+import { toIRR } from "../../helpers"
 import type { NextPageWithLayout } from "../_app"
 
 interface FormValues {
@@ -53,7 +53,7 @@ const RechargeAccountPage: NextPageWithLayout = () => {
       >
         <div className="w-full space-y-2">
           <Label>
-            <span className="font-black">{convertPersianCurrency(currentRechargePackage.amount)}</span> کارت به کارت
+            <span className="font-black">{toIRR(currentRechargePackage.amount)}</span> کارت به کارت
             کنید
           </Label>
           <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ""} />

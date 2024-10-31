@@ -14,7 +14,7 @@ import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface
 import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface"
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import { clearLocalStorageExcept, convertPersianCurrency, jsonToB64Url, roundTo } from "../helpers"
+import { clearLocalStorageExcept, jsonToB64Url, roundTo, toIRR } from "../helpers"
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -139,7 +139,7 @@ const HomePageComponent: React.FC = () => {
                 className="mr-4 flex items-center rounded-full px-4 py-2 text-xs text-slate-400"
               >
                 <span>خروج</span>
-                <PowerIcon className="mr-2 size-5" />
+                <PowerIcon className="mr-2 size-4" />
               </Button>
             </div>
             {isAdmin && (
@@ -149,7 +149,7 @@ const HomePageComponent: React.FC = () => {
                     (me.data?.me.balance || 0) < 0 ? "font-black text-red-500" : "text-slate-500"
                   } `}
                 >
-                  شارژ حساب: {convertPersianCurrency(roundTo(me.data?.me.balance || 0, 0))}
+                  شارژ حساب: {toIRR(roundTo(me.data?.me.balance || 0, 0))}
                 </div>
               </>
             )}

@@ -2,6 +2,7 @@ query GetPackages($input: GetPackageInput!) {
     packages(data: $input) {
         id
         price
+        discountedPrice
         traffic
         expirationDays
         userCount

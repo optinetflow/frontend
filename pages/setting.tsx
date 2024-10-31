@@ -11,7 +11,7 @@ import { useEnterCostMutation } from "../graphql/mutations/enterCost.graphql.int
 import { useUpdateUserMutation } from "../graphql/mutations/updateUser.graphql.interface"
 
 import { useMeQuery } from "../graphql/queries/me.graphql.interface"
-import { normalizePhone } from "../helpers"
+import { normalizeNumber, normalizePhone } from "../helpers"
 import { EnterCostInput, UpdateUserInput } from "../src/graphql/__generated__/schema.graphql"
 
 const EnterConst: React.FC = () => {
@@ -88,6 +88,7 @@ const SettingPage: NextPageWithLayout = () => {
   const router = useRouter()
   const me = useMeQuery({ fetchPolicy: "cache-only" })
   const bankCard = me?.data?.me.bankCard?.[0]
+  const profitPercent = me?.data?.me.profitPercent
   const [updateUser, updateUserData] = useUpdateUserMutation()
   const {
     register,
@@ -98,7 +99,10 @@ const SettingPage: NextPageWithLayout = () => {
   const onSubmit = handleSubmit((data) => {
     updateUser({
       variables: {
-        input: data,
+        input: {
+          ...data,
+          profitPercent: Number(data.profitPercent),
+        },
       },
     })
       .then(() => {
@@ -110,7 +114,14 @@ const SettingPage: NextPageWithLayout = () => {
   })
 
   const firstError = Object.keys(errors)?.[0] as keyof UpdateUserInput
-  const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100
+  const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100;
+
+  const serverError = updateUserData.error  && (updateUserData.error?.message.split("\n").map((line, index) => (
+    <React.Fragment key={index}>
+      {line}
+      <br />
+    </React.Fragment>
+  )) || "خطای سرور");
   return (
     <div
       className="mx-auto my-12 flex max-w-xs flex-col justify-center space-y-12"
@@ -141,8 +152,25 @@ const SettingPage: NextPageWithLayout = () => {
           />
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="profitPercent">درصد سود از هر فروش:</Label>
+          <Input
+            defaultValue={profitPercent}
+            {...register("profitPercent", {
+              setValueAs: (val) => normalizeNumber(val),
+              max: {
+                value: 500,
+                message: "درصد سود باید بین 0 تا 500 باشد.",
+              },
+            })}
+            className="ltr"
+            id="profitPercent"
+            placeholder="مثلا: 35"
+          />
+        </div>
+
         <div className=" text-sm text-red-600">
-          {errors?.[firstError]?.message || (updateUserData.error && "خطای سرور")}&nbsp;
+          {errors?.[firstError]?.message || serverError}&nbsp;
         </div>
         <Button disabled={updateUserData?.loading} className="w-full" type="submit">
           {updateUserData?.loading ? "لطفا کمی صبر کنید..." : "اعمال تغییرات"}

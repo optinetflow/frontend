@@ -13,6 +13,7 @@ query children {
         onlinePackages
         lastConnectedAt
         description
+        initialDiscountPercent
         telegram {
             id
             phone

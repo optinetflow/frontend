@@ -1,35 +1,35 @@
-import { useRouter } from "next/router"
-import React from "react"
-import { Controller, useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Copyable } from "../../components/Copyable/Copyable"
+import { useRouter } from "next/router";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Copyable } from "../../components/Copyable/Copyable";
 
-import Layout from "../../components/Layout/Layout"
+import Layout from "../../components/Layout/Layout";
 
-import { UploadImage } from "../../components/UploadImage/UploadImage"
-import { useBuyPackageMutation } from "../../graphql/mutations/buyPackage.graphql.interface"
-import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
-import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface"
-import { convertPersianCurrency } from "../../helpers"
-import { ArrowUTurnLeftIcon } from "../../icons"
-import { BuyPackageInput } from "../../src/graphql/__generated__/schema.graphql"
-import type { NextPageWithLayout } from "../_app"
+import { UploadImage } from "../../components/UploadImage/UploadImage";
+import { useBuyPackageMutation } from "../../graphql/mutations/buyPackage.graphql.interface";
+import { useMeQuery } from "../../graphql/queries/me.graphql.interface";
+import { useGetPackagesQuery } from "../../graphql/queries/packages.graphql.interface";
+import { toIRR } from "../../helpers";
+import { ArrowUTurnLeftIcon } from "../../icons";
+import { BuyPackageInput } from "../../src/graphql/__generated__/schema.graphql";
+import type { NextPageWithLayout } from "../_app";
 
 const BuyPackagePage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const packageId = router.query?.packageId as string
-  const [buyPackageMutate, buyPackage] = useBuyPackageMutation()
+  const router = useRouter();
+  const packageId = router.query?.packageId as string;
+  const [buyPackageMutate, buyPackage] = useBuyPackageMutation();
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<BuyPackageInput>()
-  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: { input: { category: null } } })
-  const me = useMeQuery({ fetchPolicy: "cache-only" })
-  const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId)
+  } = useForm<BuyPackageInput>();
+  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: { input: { category: null } } });
+  const me = useMeQuery({ fetchPolicy: "cache-only" });
+  const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId);
 
   const onSubmit = handleSubmit((data) => {
     buyPackageMutate({
@@ -41,13 +41,13 @@ const BuyPackagePage: NextPageWithLayout = () => {
         },
       },
     }).then(() => {
-      router.replace("/")
-    })
-  })
+      router.replace("/");
+    });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof BuyPackageInput
-  const isAdmin = me?.data?.me.role !== "USER"
-  const buttonLabel = isAdmin ? "خرید" : "ارسال"
+  const firstError = Object.keys(errors)?.[0] as keyof BuyPackageInput;
+  const isAdmin = me?.data?.me.role !== "USER";
+  const buttonLabel = isAdmin ? "خرید" : "ارسال";
 
   if (currentPackage) {
     return (
@@ -63,7 +63,8 @@ const BuyPackagePage: NextPageWithLayout = () => {
         {!isAdmin && (
           <div className="w-full space-y-2">
             <Label>
-              <span className="font-black">{convertPersianCurrency(currentPackage.price)}</span> کارت به کارت کنید
+              <span className="font-black">{toIRR(currentPackage.discountedPrice || currentPackage.price)}</span> کارت
+              به کارت کنید
             </Label>
             <Copyable
               isCenter
@@ -90,12 +91,12 @@ const BuyPackagePage: NextPageWithLayout = () => {
           </Button>
         </div>
       </form>
-    )
+    );
   }
-}
+};
 
-export default BuyPackagePage
+export default BuyPackagePage;
 
 BuyPackagePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

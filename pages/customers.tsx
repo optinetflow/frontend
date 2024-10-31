@@ -11,8 +11,8 @@ import type { NextPageWithLayout } from "./_app"
 import Layout from "../components/Layout/Layout"
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
 import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface"
-import { copyText } from "../helpers"
-import { avatarColor, convertPersianCurrency, roundTo, timeSince } from "../helpers"
+import { copyText } from '../helpers';
+import { avatarColor, roundTo, timeSince, toIRR } from "../helpers"
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
 import * as Types from "../src/graphql/__generated__/schema.graphql"
 
@@ -150,10 +150,10 @@ const Customer: React.FC<CustomerProps> = ({
         <div className="mr-4 flex size-full flex-col justify-between space-y-2 overflow-hidden text-sm">
           <div className="truncate font-black text-slate-800">{fullname}</div>
           {role === "ADMIN" && (
-            <div className="text-xs text-slate-600">موجودی: {convertPersianCurrency(roundTo(balance, 0))}</div>
+            <div className="text-xs text-slate-600">موجودی: {toIRR(roundTo(balance,0))}</div>
           )}
           {role === "ADMIN" && (
-            <div className="text-xs text-slate-600">سود کل: {convertPersianCurrency(roundTo(totalProfit, 0))}</div>
+            <div className="text-xs text-slate-600">سود کل: {toIRR(roundTo(totalProfit,0))}</div>
           )}
           <button type="button" onClick={handlePhoneClick} className="relative text-right text-xs text-slate-600">
             0{phone}

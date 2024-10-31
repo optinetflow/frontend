@@ -1,29 +1,29 @@
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
-import type { NextPageWithLayout } from "./_app"
-import FilterBottomSheet from "../components/FIlterBottomSheet/FilterBottomSheet"
-import Layout from "../components/Layout/Layout"
+import type { NextPageWithLayout } from "./_app";
+import FilterBottomSheet from "../components/FIlterBottomSheet/FilterBottomSheet";
+import Layout from "../components/Layout/Layout";
 
-import QuickFilter, { Filter } from "../components/quickFilter/QuickFilter"
-import SkeletonPackage from "../components/SkeletonPackage/SkeletonPackage"
-import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface"
-import { convertPersianCurrency, formatDuration } from "../helpers"
-import { ArrowUTurnLeftIcon } from "../icons"
-import { PackageCategory } from "../src/graphql/__generated__/schema.graphql"
+import QuickFilter, { Filter } from "../components/quickFilter/QuickFilter";
+import SkeletonPackage from "../components/SkeletonPackage/SkeletonPackage";
+import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface";
+import { formatDuration, toIRR } from "../helpers";
+import { ArrowUTurnLeftIcon } from "../icons";
+import { PackageCategory } from "../src/graphql/__generated__/schema.graphql";
 
 const PackagesPage: NextPageWithLayout = () => {
-  const searchParams = useSearchParams()
-  const userPackageId = searchParams.get("userPackageId")
-  const category = searchParams.get("category")
-  const router = useRouter()
-  const [quickFilter, setQuickFilter] = useState<Filter>({})
-  const [bottomSheetFilters, setBottomSheetFilters] = useState<Filter[]>([])
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false)
+  const searchParams = useSearchParams();
+  const userPackageId = searchParams.get("userPackageId");
+  const category = searchParams.get("category");
+  const router = useRouter();
+  const [quickFilter, setQuickFilter] = useState<Filter>({});
+  const [bottomSheetFilters, setBottomSheetFilters] = useState<Filter[]>([]);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const {
     data: packagesData,
     refetch: refetchUserPackages,
@@ -32,7 +32,7 @@ const PackagesPage: NextPageWithLayout = () => {
   } = useGetPackagesQuery({
     variables: { input: { category: category as PackageCategory } },
     fetchPolicy: "cache-and-network",
-  })
+  });
 
   const quickFilterOptions: Filter[] = [
     // {
@@ -44,36 +44,36 @@ const PackagesPage: NextPageWithLayout = () => {
     // },
     { text: "ماهانه", key: "expirationDays", value: 30 },
     { text: "سه ماهه", key: "expirationDays", value: 90 },
-  ]
+  ];
 
   useEffect(() => {
-    const { value, key, toggleAllFilters } = quickFilter
+    const { value, key, toggleAllFilters } = quickFilter;
     if (toggleAllFilters === true) {
-      setIsFiltersOpen(true)
+      setIsFiltersOpen(true);
     } else if (key && value) {
-      const quickFilterObject = { [key]: value, category: category as PackageCategory }
-      refetchUserPackages({ input: quickFilterObject })
+      const quickFilterObject = { [key]: value, category: category as PackageCategory };
+      refetchUserPackages({ input: quickFilterObject });
     } else if (!key && !value && !toggleAllFilters) {
-      refetchUserPackages({ input: { category: category as PackageCategory } })
+      refetchUserPackages({ input: { category: category as PackageCategory } });
     }
-  }, [quickFilter, refetchUserPackages, category])
+  }, [quickFilter, refetchUserPackages, category]);
 
   const handleBack = () => {
-    router.replace("/package-categories")
-  }
+    router.replace("/package-categories");
+  };
 
   useEffect(() => {
     if (bottomSheetFilters.length > 0) {
       const filtersObject = bottomSheetFilters.reduce((acc: Record<string, any>, filter: Filter) => {
         if (filter.key) {
-          acc[filter.key] = filter.value
+          acc[filter.key] = filter.value;
         }
-        return acc
-      }, {})
+        return acc;
+      }, {});
 
-      refetchUserPackages({ input: filtersObject })
+      refetchUserPackages({ input: filtersObject });
     }
-  }, [bottomSheetFilters, refetchUserPackages])
+  }, [bottomSheetFilters, refetchUserPackages]);
 
   return (
     <div className="mx-auto my-12 flex max-w-xs flex-col" style={{ minHeight: "calc(100vh - 6rem)" }}>
@@ -88,7 +88,7 @@ const PackagesPage: NextPageWithLayout = () => {
           <QuickFilter className="mt-4" filter={quickFilter} setFilter={setQuickFilter} filters={quickFilterOptions} />
         </div>
 
-        {loading ? (
+        {loading && !packagesData ? (
           Array.from({ length: 3 }).map((_, index) => <SkeletonPackage key={index} />)
         ) : error ? (
           <div className="text-center text-red-600">خطایی در بارگذاری بسته‌ها پیش آمد.</div>
@@ -108,7 +108,7 @@ const PackagesPage: NextPageWithLayout = () => {
                   <span className="text-lg font-extrabold text-gray-900">
                     {pack.traffic} گیگ {formatDuration(pack.expirationDays)}
                   </span>
-                  <span className="mr-2 rounded bg-slate-500 px-1 py-0.5 text-[10px] text-white">
+                  <span className="mr-2 rounded bg-slate-400 px-1 py-0.5 text-[10px] text-white">
                     {pack.category === PackageCategory.Quality ? "ویژه" : ""}
                     {pack.category === PackageCategory.Economic ? "اقتصادی" : ""}
                   </span>
@@ -119,7 +119,16 @@ const PackagesPage: NextPageWithLayout = () => {
                   {pack.traffic === 30 ? <span className="text-red-800"> | پرطرفدار</span> : ""}
                   {pack.traffic === 100 ? <span className="text-red-800"> | خانواده</span> : ""}
                 </span>
-                <span className="text-lg text-slate-600">{convertPersianCurrency(pack.price)}</span>
+                <div className="flex flex-row-reverse items-center space-x-2">
+                  {pack.discountedPrice ? (
+                    <>
+                      <span className=" text-lg text-slate-600">{toIRR(pack.discountedPrice)}</span>
+                      <span className="text-sm text-slate-400 line-through">{toIRR(pack.price, "number")}</span>
+                    </>
+                  ) : (
+                    <span className=" text-lg text-slate-600">{toIRR(pack.price)}</span>
+                  )}
+                </div>
               </div>
 
               <div className="rounded-full bg-slate-800 px-6 py-2 text-sm text-slate-100 hover:bg-slate-950">خرید</div>
@@ -134,11 +143,11 @@ const PackagesPage: NextPageWithLayout = () => {
       </div>
       <div></div>
     </div>
-  )
-}
+  );
+};
 
-export default PackagesPage
+export default PackagesPage;
 
 PackagesPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

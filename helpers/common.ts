@@ -1,4 +1,4 @@
-// export function convertPersianCurrency(number: number): string {
+// export function toIRR(number: number): string {
 //     if (number >= 1 && number < 10000) return `${number} تومان`;
 //     if (number >= 10000 && number < 1000000)
 //       return `${number % 1000 !== 0 ? Math.floor(number % 1000) : Math.floor(number / 1000)} هزار تومان`;
@@ -14,12 +14,29 @@
 //     return '';
 //   }
 
-export function convertPersianCurrency(number: number): string {
-  const numberAbs = Math.abs(number)
-  if (numberAbs >= 1 && numberAbs < 1000) return `${number > 0 ? number : `${-number}-`} هزار تومان`
-  if (numberAbs >= 1000 && numberAbs < 1000000)
-    return `${number > 0 ? number / 1000 : `${-number / 1000}-`} میلیون تومان`
-  return number.toString()
+export function toIRR(number: number, returnMode: 'number' | 'postfix' | 'both' = 'both'): string {
+  const numberAbs = Math.abs(number);
+  let numberPart;
+  let postfix;
+  let processed = false
+
+  if (numberAbs >= 1 && numberAbs < 1000){
+    if (['number', 'both'].includes(returnMode)) numberPart = number > 0 ? number.toString() : `${-number}-`;
+    if (['postfix', 'both'].includes(returnMode)) postfix = 'هزار تومان';
+    processed = true;
+  } 
+  if (numberAbs >= 1000 && numberAbs < 1000000) {
+    if (['number', 'both'].includes(returnMode)) numberPart = number > 0 ? (number / 1000).toString() : `${-number / 1000}-`;
+    if (['postfix', 'both'].includes(returnMode)) postfix = 'میلیون تومان';
+    processed = true;
+  } 
+
+  if (processed) {
+    return [numberPart, postfix].filter(Boolean).join(' ');
+  }
+
+
+  return number.toString();
 }
 
 export function b64UrlToJson(b64url: string): Record<string, unknown> {
@@ -84,6 +101,8 @@ export const avatarColor = (str: string) => {
 export const faNumToEn = (value: string) =>
   value.replace(/([۰-۹])/g, (token: string) => String.fromCharCode(token.charCodeAt(0) - 1728))
 
+
+
 function removePhonePrefix(phoneNumber: string): string {
   if (phoneNumber.startsWith("0")) {
     return phoneNumber.substring(1)
@@ -94,7 +113,18 @@ function removePhonePrefix(phoneNumber: string): string {
   }
 }
 
-export const normalizePhone = (phoneNumber: string): string => removePhonePrefix(faNumToEn(phoneNumber))
+function keepOnlyNumbers(str: string): string {
+  // Remove all non-digit characters except for the first decimal point
+  return str.replace(/[^\d.]/g, '')  // Keep only digits and the decimal point
+            .replace(/(\..*)\./g, '$1'); // Remove any additional decimal points after the first one
+}
+
+export const normalizeNumber = (phoneNumber: string): string =>  keepOnlyNumbers(faNumToEn(phoneNumber));
+
+
+export const normalizePhone = (phoneNumber: string): string =>  removePhonePrefix(faNumToEn(phoneNumber));
+
+
 
 export function bytesToGB(bytes: number): number {
   const gigabyte = 1024 * 1024 * 1024 // 1 gigabyte = 1024 megabytes * 1024 kilobytes * 1024 bytes
@@ -113,7 +143,6 @@ export function floorTo(number: number, decimalPlaces: number) {
 
 export function ceilTo(number: number, decimalPlaces: number) {
   const factor = Math.pow(10, decimalPlaces)
-
   return Math.ceil(number * factor) / factor
 }
 
@@ -142,13 +171,14 @@ export function removeWWW(domain: string): string {
 }
 
 export function formatSecondsToMMSS(seconds: number): string {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
-  const formattedMinutes = minutes.toString().padStart(2, "0")
-  const formattedSeconds = remainingSeconds.toString().padStart(2, "0")
-  return `${formattedMinutes}:${formattedSeconds}`
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+  return `${formattedMinutes}:${formattedSeconds}`;
 }
 
+export const pctToDec = (number?: number | null): number => (typeof number === 'number' ? number / 100 : 0);
 export function formatDuration(days: number): string {
   if (days <= 15) {
     return `${days} روزه`
