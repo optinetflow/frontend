@@ -27,10 +27,10 @@ const BuyPackagePage: NextPageWithLayout = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<BuyPackageInput>();
-  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: { input: { category: null } } });
-  const me = useMeQuery({ fetchPolicy: "cache-only" });
+  const packages = useGetPackagesQuery({ fetchPolicy: "network-only", variables: { input: { category: null } } });
+  const me = useMeQuery({ fetchPolicy: "network-only" });
   const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId);
-
+  console.log({packages, currentPackage, me})
   const onSubmit = handleSubmit((data) => {
     buyPackageMutate({
       variables: {
