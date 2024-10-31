@@ -1,29 +1,39 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type UpdateChildMutationVariables = Types.Exact<{
   input: Types.UpdateChildInput;
 }>;
 
-
-export type UpdateChildMutation = { __typename?: 'Mutation', updateChild: { __typename?: 'User', id: string, fullname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null } };
-
+export type UpdateChildMutation = {
+  __typename?: "Mutation";
+  updateChild: {
+    __typename?: "User";
+    id: string;
+    fullname: string;
+    phone: string;
+    role: Types.Role;
+    createdAt: any;
+    updatedAt: any;
+    isDisabled?: boolean | null;
+  };
+};
 
 export const UpdateChildDocument = gql`
-    mutation updateChild($input: UpdateChildInput!) {
-  updateChild(input: $input) {
-    id
-    fullname
-    phone
-    role
-    createdAt
-    updatedAt
-    isDisabled
+  mutation updateChild($input: UpdateChildInput!) {
+    updateChild(input: $input) {
+      id
+      fullname
+      phone
+      role
+      createdAt
+      updatedAt
+      isDisabled
+    }
   }
-}
-    `;
+`;
 export type UpdateChildMutationFn = Apollo.MutationFunction<UpdateChildMutation, UpdateChildMutationVariables>;
 
 /**
@@ -43,10 +53,12 @@ export type UpdateChildMutationFn = Apollo.MutationFunction<UpdateChildMutation,
  *   },
  * });
  */
-export function useUpdateChildMutation(baseOptions?: Apollo.MutationHookOptions<UpdateChildMutation, UpdateChildMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateChildMutation, UpdateChildMutationVariables>(UpdateChildDocument, options);
-      }
+export function useUpdateChildMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateChildMutation, UpdateChildMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateChildMutation, UpdateChildMutationVariables>(UpdateChildDocument, options);
+}
 export type UpdateChildMutationHookResult = ReturnType<typeof useUpdateChildMutation>;
 export type UpdateChildMutationResult = Apollo.MutationResult<UpdateChildMutation>;
 export type UpdateChildMutationOptions = Apollo.BaseMutationOptions<UpdateChildMutation, UpdateChildMutationVariables>;

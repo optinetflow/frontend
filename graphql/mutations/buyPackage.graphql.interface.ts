@@ -1,21 +1,19 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type BuyPackageMutationVariables = Types.Exact<{
   input: Types.BuyPackageInput;
 }>;
 
-
-export type BuyPackageMutation = { __typename?: 'Mutation', buyPackage: string };
-
+export type BuyPackageMutation = { __typename?: "Mutation"; buyPackage: string };
 
 export const BuyPackageDocument = gql`
-    mutation BuyPackage($input: BuyPackageInput!) {
-  buyPackage(data: $input)
-}
-    `;
+  mutation BuyPackage($input: BuyPackageInput!) {
+    buyPackage(data: $input)
+  }
+`;
 export type BuyPackageMutationFn = Apollo.MutationFunction<BuyPackageMutation, BuyPackageMutationVariables>;
 
 /**
@@ -35,10 +33,12 @@ export type BuyPackageMutationFn = Apollo.MutationFunction<BuyPackageMutation, B
  *   },
  * });
  */
-export function useBuyPackageMutation(baseOptions?: Apollo.MutationHookOptions<BuyPackageMutation, BuyPackageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BuyPackageMutation, BuyPackageMutationVariables>(BuyPackageDocument, options);
-      }
+export function useBuyPackageMutation(
+  baseOptions?: Apollo.MutationHookOptions<BuyPackageMutation, BuyPackageMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<BuyPackageMutation, BuyPackageMutationVariables>(BuyPackageDocument, options);
+}
 export type BuyPackageMutationHookResult = ReturnType<typeof useBuyPackageMutation>;
 export type BuyPackageMutationResult = Apollo.MutationResult<BuyPackageMutation>;
 export type BuyPackageMutationOptions = Apollo.BaseMutationOptions<BuyPackageMutation, BuyPackageMutationVariables>;

@@ -1,29 +1,39 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type GetClientStatsQueryVariables = Types.Exact<{
   filters: Types.GetClientStatsFiltersInput;
 }>;
 
-
-export type GetClientStatsQuery = { __typename?: 'Query', clientStats: Array<{ __typename?: 'ClientStat', id: string, email: string, down: any, up: any, total: any, expiryTime: any, enable: boolean }> };
-
+export type GetClientStatsQuery = {
+  __typename?: "Query";
+  clientStats: Array<{
+    __typename?: "ClientStat";
+    id: string;
+    email: string;
+    down: any;
+    up: any;
+    total: any;
+    expiryTime: any;
+    enable: boolean;
+  }>;
+};
 
 export const GetClientStatsDocument = gql`
-    query getClientStats($filters: GetClientStatsFiltersInput!) {
-  clientStats(filters: $filters) {
-    id
-    email
-    down
-    up
-    total
-    expiryTime
-    enable
+  query getClientStats($filters: GetClientStatsFiltersInput!) {
+    clientStats(filters: $filters) {
+      id
+      email
+      down
+      up
+      total
+      expiryTime
+      enable
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useGetClientStatsQuery__
@@ -41,18 +51,25 @@ export const GetClientStatsDocument = gql`
  *   },
  * });
  */
-export function useGetClientStatsQuery(baseOptions: Apollo.QueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables> & ({ variables: GetClientStatsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
-      }
-export function useGetClientStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
-        }
-export function useGetClientStatsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
-        }
+export function useGetClientStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables> &
+    ({ variables: GetClientStatsQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
+}
+export function useGetClientStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
+}
+export function useGetClientStatsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetClientStatsQuery, GetClientStatsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetClientStatsQuery, GetClientStatsQueryVariables>(GetClientStatsDocument, options);
+}
 export type GetClientStatsQueryHookResult = ReturnType<typeof useGetClientStatsQuery>;
 export type GetClientStatsLazyQueryHookResult = ReturnType<typeof useGetClientStatsLazyQuery>;
 export type GetClientStatsSuspenseQueryHookResult = ReturnType<typeof useGetClientStatsSuspenseQuery>;

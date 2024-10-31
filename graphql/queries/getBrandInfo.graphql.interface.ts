@@ -1,25 +1,26 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type GetBrandInfoQueryVariables = Types.Exact<{
   input: Types.GetBrandInfoInput;
 }>;
 
-
-export type GetBrandInfoQuery = { __typename?: 'Query', getBrandInfo: { __typename?: 'Brand', title: string, description: string, logo?: any | null } };
-
+export type GetBrandInfoQuery = {
+  __typename?: "Query";
+  getBrandInfo: { __typename?: "Brand"; title: string; description: string; logo?: any | null };
+};
 
 export const GetBrandInfoDocument = gql`
-    query getBrandInfo($input: GetBrandInfoInput!) {
-  getBrandInfo(input: $input) {
-    title
-    description
-    logo
+  query getBrandInfo($input: GetBrandInfoInput!) {
+    getBrandInfo(input: $input) {
+      title
+      description
+      logo
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useGetBrandInfoQuery__
@@ -37,18 +38,25 @@ export const GetBrandInfoDocument = gql`
  *   },
  * });
  */
-export function useGetBrandInfoQuery(baseOptions: Apollo.QueryHookOptions<GetBrandInfoQuery, GetBrandInfoQueryVariables> & ({ variables: GetBrandInfoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBrandInfoQuery, GetBrandInfoQueryVariables>(GetBrandInfoDocument, options);
-      }
-export function useGetBrandInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBrandInfoQuery, GetBrandInfoQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBrandInfoQuery, GetBrandInfoQueryVariables>(GetBrandInfoDocument, options);
-        }
-export function useGetBrandInfoSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetBrandInfoQuery, GetBrandInfoQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetBrandInfoQuery, GetBrandInfoQueryVariables>(GetBrandInfoDocument, options);
-        }
+export function useGetBrandInfoQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBrandInfoQuery, GetBrandInfoQueryVariables> &
+    ({ variables: GetBrandInfoQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBrandInfoQuery, GetBrandInfoQueryVariables>(GetBrandInfoDocument, options);
+}
+export function useGetBrandInfoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBrandInfoQuery, GetBrandInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBrandInfoQuery, GetBrandInfoQueryVariables>(GetBrandInfoDocument, options);
+}
+export function useGetBrandInfoSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetBrandInfoQuery, GetBrandInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBrandInfoQuery, GetBrandInfoQueryVariables>(GetBrandInfoDocument, options);
+}
 export type GetBrandInfoQueryHookResult = ReturnType<typeof useGetBrandInfoQuery>;
 export type GetBrandInfoLazyQueryHookResult = ReturnType<typeof useGetBrandInfoLazyQuery>;
 export type GetBrandInfoSuspenseQueryHookResult = ReturnType<typeof useGetBrandInfoSuspenseQuery>;

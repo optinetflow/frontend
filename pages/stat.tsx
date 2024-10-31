@@ -1,6 +1,6 @@
-import Head from "next/head"
-import React from "react"
-import { GetStat } from "../components/GetStat/GetStat"
+import Head from "next/head";
+import React from "react";
+import { GetStat } from "../components/GetStat/GetStat";
 
 export default function Web() {
   return (
@@ -18,5 +18,5 @@ export default function Web() {
       </Head>
       <GetStat />
     </>
-  )
+  );
 }

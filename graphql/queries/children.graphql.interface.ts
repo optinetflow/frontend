@@ -1,43 +1,70 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
-export type ChildrenQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ChildrenQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-
-export type ChildrenQuery = { __typename?: 'Query', children: Array<{ __typename?: 'Child', id: string, fullname: string, phone: string, role: Types.Role, createdAt: any, updatedAt: any, isDisabled?: boolean | null, balance: number, totalProfit: number, activePackages: number, onlinePackages: number, lastConnectedAt?: any | null, description?: string | null, initialDiscountPercent?: number | null, telegram?: { __typename?: 'TelegramUser', id: string, phone?: string | null, firstname?: string | null, lastname?: string | null, username?: string | null, smallAvatar?: string | null, bigAvatar?: string | null } | null }> };
-
+export type ChildrenQuery = {
+  __typename?: "Query";
+  children: Array<{
+    __typename?: "Child";
+    id: string;
+    fullname: string;
+    phone: string;
+    role: Types.Role;
+    createdAt: any;
+    updatedAt: any;
+    isDisabled?: boolean | null;
+    balance: number;
+    totalProfit: number;
+    activePackages: number;
+    onlinePackages: number;
+    lastConnectedAt?: any | null;
+    description?: string | null;
+    initialDiscountPercent?: number | null;
+    telegram?: {
+      __typename?: "TelegramUser";
+      id: string;
+      phone?: string | null;
+      firstname?: string | null;
+      lastname?: string | null;
+      username?: string | null;
+      smallAvatar?: string | null;
+      bigAvatar?: string | null;
+    } | null;
+  }>;
+};
 
 export const ChildrenDocument = gql`
-    query children {
-  children {
-    id
-    fullname
-    phone
-    role
-    createdAt
-    updatedAt
-    isDisabled
-    balance
-    totalProfit
-    activePackages
-    onlinePackages
-    lastConnectedAt
-    description
-    initialDiscountPercent
-    telegram {
+  query children {
+    children {
       id
+      fullname
       phone
-      firstname
-      lastname
-      username
-      smallAvatar
-      bigAvatar
+      role
+      createdAt
+      updatedAt
+      isDisabled
+      balance
+      totalProfit
+      activePackages
+      onlinePackages
+      lastConnectedAt
+      description
+      initialDiscountPercent
+      telegram {
+        id
+        phone
+        firstname
+        lastname
+        username
+        smallAvatar
+        bigAvatar
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useChildrenQuery__
@@ -55,17 +82,19 @@ export const ChildrenDocument = gql`
  * });
  */
 export function useChildrenQuery(baseOptions?: Apollo.QueryHookOptions<ChildrenQuery, ChildrenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
+}
 export function useChildrenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChildrenQuery, ChildrenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
-        }
-export function useChildrenSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ChildrenQuery, ChildrenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
+}
+export function useChildrenSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ChildrenQuery, ChildrenQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ChildrenQuery, ChildrenQueryVariables>(ChildrenDocument, options);
+}
 export type ChildrenQueryHookResult = ReturnType<typeof useChildrenQuery>;
 export type ChildrenLazyQueryHookResult = ReturnType<typeof useChildrenLazyQuery>;
 export type ChildrenSuspenseQueryHookResult = ReturnType<typeof useChildrenSuspenseQuery>;

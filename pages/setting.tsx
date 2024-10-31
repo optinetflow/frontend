@@ -1,28 +1,28 @@
-import { useRouter } from "next/router"
-import React from "react"
-import { Controller, useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
-import { useEnterCostMutation } from "../graphql/mutations/enterCost.graphql.interface"
-import { useUpdateUserMutation } from "../graphql/mutations/updateUser.graphql.interface"
+import { useRouter } from "next/router";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
+import { useEnterCostMutation } from "../graphql/mutations/enterCost.graphql.interface";
+import { useUpdateUserMutation } from "../graphql/mutations/updateUser.graphql.interface";
 
-import { useMeQuery } from "../graphql/queries/me.graphql.interface"
-import { normalizeNumber, normalizePhone } from "../helpers"
-import { EnterCostInput, UpdateUserInput } from "../src/graphql/__generated__/schema.graphql"
+import { useMeQuery } from "../graphql/queries/me.graphql.interface";
+import { normalizeNumber, normalizePhone } from "../helpers";
+import { EnterCostInput, UpdateUserInput } from "../src/graphql/__generated__/schema.graphql";
 
 const EnterConst: React.FC = () => {
-  const router = useRouter()
-  const [enterCost, enterCostData] = useEnterCostMutation()
+  const router = useRouter();
+  const [enterCost, enterCostData] = useEnterCostMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<EnterCostInput>()
+  } = useForm<EnterCostInput>();
 
   const onSubmit = handleSubmit((data) => {
     enterCost({
@@ -31,14 +31,14 @@ const EnterConst: React.FC = () => {
       },
     })
       .then(() => {
-        router.back()
+        router.back();
       })
       .catch((e) => {
-        console.error(e)
-      })
-  })
+        console.error(e);
+      });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof EnterCostInput
+  const firstError = Object.keys(errors)?.[0] as keyof EnterCostInput;
   return (
     <form onSubmit={onSubmit} className="flex  w-full flex-col justify-center space-y-4">
       <h1 className="mb-6 font-black">وارد کردن هزینه</h1>
@@ -81,20 +81,20 @@ const EnterConst: React.FC = () => {
         {enterCostData?.loading ? "لطفا کمی صبر کنید..." : "ثبت"}
       </Button>
     </form>
-  )
-}
+  );
+};
 
 const SettingPage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const me = useMeQuery({ fetchPolicy: "cache-only" })
-  const bankCard = me?.data?.me.bankCard?.[0]
-  const profitPercent = me?.data?.me.profitPercent
-  const [updateUser, updateUserData] = useUpdateUserMutation()
+  const router = useRouter();
+  const me = useMeQuery({ fetchPolicy: "cache-only" });
+  const bankCard = me?.data?.me.bankCard?.[0];
+  const profitPercent = me?.data?.me.profitPercent;
+  const [updateUser, updateUserData] = useUpdateUserMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UpdateUserInput>()
+  } = useForm<UpdateUserInput>();
 
   const onSubmit = handleSubmit((data) => {
     updateUser({
@@ -106,22 +106,25 @@ const SettingPage: NextPageWithLayout = () => {
       },
     })
       .then(() => {
-        router.back()
+        router.back();
       })
       .catch((e) => {
-        console.error(e)
-      })
-  })
+        console.error(e);
+      });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof UpdateUserInput
+  const firstError = Object.keys(errors)?.[0] as keyof UpdateUserInput;
   const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100;
 
-  const serverError = updateUserData.error  && (updateUserData.error?.message.split("\n").map((line, index) => (
-    <React.Fragment key={index}>
-      {line}
-      <br />
-    </React.Fragment>
-  )) || "خطای سرور");
+  const serverError =
+    updateUserData.error &&
+    (updateUserData.error?.message.split("\n").map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    )) ||
+      "خطای سرور");
   return (
     <div
       className="mx-auto my-12 flex max-w-xs flex-col justify-center space-y-12"
@@ -169,9 +172,7 @@ const SettingPage: NextPageWithLayout = () => {
           />
         </div>
 
-        <div className=" text-sm text-red-600">
-          {errors?.[firstError]?.message || serverError}&nbsp;
-        </div>
+        <div className=" text-sm text-red-600">{errors?.[firstError]?.message || serverError}&nbsp;</div>
         <Button disabled={updateUserData?.loading} className="w-full" type="submit">
           {updateUserData?.loading ? "لطفا کمی صبر کنید..." : "اعمال تغییرات"}
         </Button>
@@ -183,11 +184,11 @@ const SettingPage: NextPageWithLayout = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default SettingPage
+export default SettingPage;
 
 SettingPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

@@ -1,24 +1,25 @@
-import * as Types from '../../src/graphql/__generated__/schema.graphql';
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type EnterCostMutationVariables = Types.Exact<{
   input: Types.EnterCostInput;
 }>;
 
-
-export type EnterCostMutation = { __typename?: 'Mutation', enterCost: { __typename?: 'User', id: string, totalProfit: number } };
-
+export type EnterCostMutation = {
+  __typename?: "Mutation";
+  enterCost: { __typename?: "User"; id: string; totalProfit: number };
+};
 
 export const EnterCostDocument = gql`
-    mutation enterCost($input: EnterCostInput!) {
-  enterCost(input: $input) {
-    id
-    totalProfit
+  mutation enterCost($input: EnterCostInput!) {
+    enterCost(input: $input) {
+      id
+      totalProfit
+    }
   }
-}
-    `;
+`;
 export type EnterCostMutationFn = Apollo.MutationFunction<EnterCostMutation, EnterCostMutationVariables>;
 
 /**
@@ -38,10 +39,12 @@ export type EnterCostMutationFn = Apollo.MutationFunction<EnterCostMutation, Ent
  *   },
  * });
  */
-export function useEnterCostMutation(baseOptions?: Apollo.MutationHookOptions<EnterCostMutation, EnterCostMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EnterCostMutation, EnterCostMutationVariables>(EnterCostDocument, options);
-      }
+export function useEnterCostMutation(
+  baseOptions?: Apollo.MutationHookOptions<EnterCostMutation, EnterCostMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<EnterCostMutation, EnterCostMutationVariables>(EnterCostDocument, options);
+}
 export type EnterCostMutationHookResult = ReturnType<typeof useEnterCostMutation>;
 export type EnterCostMutationResult = Apollo.MutationResult<EnterCostMutation>;
 export type EnterCostMutationOptions = Apollo.BaseMutationOptions<EnterCostMutation, EnterCostMutationVariables>;
