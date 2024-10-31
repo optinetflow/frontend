@@ -179,7 +179,7 @@ export function formatDuration(days: number): string {
   if (days <= 15) {
     return `${days} روزه`;
   } else if (days <= 30) {
-    return "ماهانه";
+    return "30 روزه";
   } else if (days <= 60) {
     return "2 ماهه";
   } else if (days <= 90) {
