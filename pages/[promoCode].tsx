@@ -1,33 +1,33 @@
-import Link from "next/link"
-import { useRouter } from "next/router"
-import React from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
-import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
-import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface"
-import { normalizePhone, removeWWW } from "../helpers"
-import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
+import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface";
+import { useCheckAuthQuery } from "../graphql/queries/checkAuth.graphql.interface";
+import { normalizePhone, removeWWW } from "../helpers";
+import { SignupInput } from "../src/graphql/__generated__/schema.graphql";
 
 const PromoCodePage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const promoCode = router.query?.promoCode as string
+  const router = useRouter();
+  const promoCode = router.query?.promoCode as string;
   const { data } = useCheckAuthQuery({
     fetchPolicy: "no-cache",
-  })
+  });
   if (data?.checkAuth.loggedIn) {
-    router.replace("/")
+    router.replace("/");
   }
 
-  const [signup, signupData] = useSignupMutation()
+  const [signup, signupData] = useSignupMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupInput>()
+  } = useForm<SignupInput>();
 
   const onSubmit = handleSubmit((data) => {
     signup({
@@ -40,16 +40,16 @@ const PromoCodePage: NextPageWithLayout = () => {
       },
     })
       .then(() => {
-        router.push(`/auth/verify-phone?phone=${data.phone}`)
+        router.push(`/auth/verify-phone?phone=${data.phone}`);
       })
       .catch((e) => {
-        console.error(e)
-      })
-  })
+        console.error(e);
+      });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof SignupInput
+  const firstError = Object.keys(errors)?.[0] as keyof SignupInput;
   if (!data || data?.checkAuth.loggedIn) {
-    return null
+    return null;
   }
   return (
     <form
@@ -101,11 +101,11 @@ const PromoCodePage: NextPageWithLayout = () => {
         </p>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default PromoCodePage
+export default PromoCodePage;
 
 PromoCodePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

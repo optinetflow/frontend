@@ -1,11 +1,11 @@
-import * as Types from "../../src/graphql/__generated__/schema.graphql"
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
-const defaultOptions = {} as const
-export type CheckAuthQueryVariables = Types.Exact<{ [key: string]: never }>
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+const defaultOptions = {} as const;
+export type CheckAuthQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-export type CheckAuthQuery = { __typename?: "Query"; checkAuth: { __typename?: "CheckAuth"; loggedIn: boolean } }
+export type CheckAuthQuery = { __typename?: "Query"; checkAuth: { __typename?: "CheckAuth"; loggedIn: boolean } };
 
 export const CheckAuthDocument = gql`
   query checkAuth {
@@ -13,7 +13,7 @@ export const CheckAuthDocument = gql`
       loggedIn
     }
   }
-`
+`;
 
 /**
  * __useCheckAuthQuery__
@@ -31,22 +31,22 @@ export const CheckAuthDocument = gql`
  * });
  */
 export function useCheckAuthQuery(baseOptions?: Apollo.QueryHookOptions<CheckAuthQuery, CheckAuthQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<CheckAuthQuery, CheckAuthQueryVariables>(CheckAuthDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CheckAuthQuery, CheckAuthQueryVariables>(CheckAuthDocument, options);
 }
 export function useCheckAuthLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<CheckAuthQuery, CheckAuthQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<CheckAuthQuery, CheckAuthQueryVariables>(CheckAuthDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CheckAuthQuery, CheckAuthQueryVariables>(CheckAuthDocument, options);
 }
 export function useCheckAuthSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<CheckAuthQuery, CheckAuthQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<CheckAuthQuery, CheckAuthQueryVariables>(CheckAuthDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<CheckAuthQuery, CheckAuthQueryVariables>(CheckAuthDocument, options);
 }
-export type CheckAuthQueryHookResult = ReturnType<typeof useCheckAuthQuery>
-export type CheckAuthLazyQueryHookResult = ReturnType<typeof useCheckAuthLazyQuery>
-export type CheckAuthSuspenseQueryHookResult = ReturnType<typeof useCheckAuthSuspenseQuery>
-export type CheckAuthQueryResult = Apollo.QueryResult<CheckAuthQuery, CheckAuthQueryVariables>
+export type CheckAuthQueryHookResult = ReturnType<typeof useCheckAuthQuery>;
+export type CheckAuthLazyQueryHookResult = ReturnType<typeof useCheckAuthLazyQuery>;
+export type CheckAuthSuspenseQueryHookResult = ReturnType<typeof useCheckAuthSuspenseQuery>;
+export type CheckAuthQueryResult = Apollo.QueryResult<CheckAuthQuery, CheckAuthQueryVariables>;

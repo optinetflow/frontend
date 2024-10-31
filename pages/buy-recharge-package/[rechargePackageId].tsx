@@ -1,33 +1,33 @@
-import { useRouter } from "next/router"
-import React from "react"
-import { Controller, useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Copyable } from "../../components/Copyable/Copyable"
-import Layout from "../../components/Layout/Layout"
-import { UploadImage } from "../../components/UploadImage/UploadImage"
-import { useBuyRechargePackageMutation } from "../../graphql/mutations/buyRechargePackage.graphql.interface"
-import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
-import { useRechargePackagesQuery } from "../../graphql/queries/rechargePackages.graphql.interface"
-import { toIRR } from "../../helpers"
-import type { NextPageWithLayout } from "../_app"
+import { useRouter } from "next/router";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Copyable } from "../../components/Copyable/Copyable";
+import Layout from "../../components/Layout/Layout";
+import { UploadImage } from "../../components/UploadImage/UploadImage";
+import { useBuyRechargePackageMutation } from "../../graphql/mutations/buyRechargePackage.graphql.interface";
+import { useMeQuery } from "../../graphql/queries/me.graphql.interface";
+import { useRechargePackagesQuery } from "../../graphql/queries/rechargePackages.graphql.interface";
+import { toIRR } from "../../helpers";
+import type { NextPageWithLayout } from "../_app";
 
 interface FormValues {
-  receipt: string
+  receipt: string;
 }
 
 const RechargeAccountPage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const me = useMeQuery({ fetchPolicy: "cache-only" })
-  const rechargePackageId = router.query?.rechargePackageId as string
-  const [buyRechargePackageMutate, buyRechargePackage] = useBuyRechargePackageMutation()
+  const router = useRouter();
+  const me = useMeQuery({ fetchPolicy: "cache-only" });
+  const rechargePackageId = router.query?.rechargePackageId as string;
+  const [buyRechargePackageMutate, buyRechargePackage] = useBuyRechargePackageMutation();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>()
-  const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-only" })
-  const currentRechargePackage = rechargePackages.data?.rechargePackages.find((pack) => pack.id === rechargePackageId)
+  } = useForm<FormValues>();
+  const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-only" });
+  const currentRechargePackage = rechargePackages.data?.rechargePackages.find((pack) => pack.id === rechargePackageId);
 
   const onSubmit = handleSubmit((data) => {
     buyRechargePackageMutate({
@@ -38,11 +38,11 @@ const RechargeAccountPage: NextPageWithLayout = () => {
         },
       },
     }).then(() => {
-      router.replace("/")
-    })
-  })
+      router.replace("/");
+    });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof FormValues
+  const firstError = Object.keys(errors)?.[0] as keyof FormValues;
 
   if (currentRechargePackage) {
     return (
@@ -53,8 +53,7 @@ const RechargeAccountPage: NextPageWithLayout = () => {
       >
         <div className="w-full space-y-2">
           <Label>
-            <span className="font-black">{toIRR(currentRechargePackage.amount)}</span> کارت به کارت
-            کنید
+            <span className="font-black">{toIRR(currentRechargePackage.amount)}</span> کارت به کارت کنید
           </Label>
           <Copyable isCenter content={me.data?.me?.parent?.bankCard?.[0]?.number?.match(/.{1,4}/g)?.join(" ") || ""} />
           <Controller
@@ -73,12 +72,12 @@ const RechargeAccountPage: NextPageWithLayout = () => {
           </Button>
         </div>
       </form>
-    )
+    );
   }
-}
+};
 
-export default RechargeAccountPage
+export default RechargeAccountPage;
 
 RechargeAccountPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

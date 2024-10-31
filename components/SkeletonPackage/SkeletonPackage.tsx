@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 const SkeletonPackage = () => {
   return (
@@ -10,7 +10,7 @@ const SkeletonPackage = () => {
       </div>
       <div className="h-8 w-24 rounded-full bg-gray-400 text-center"></div>
     </div>
-  )
-}
+  );
+};
 
-export default SkeletonPackage
+export default SkeletonPackage;

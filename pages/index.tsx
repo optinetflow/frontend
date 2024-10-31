@@ -1,20 +1,20 @@
-import { useApolloClient } from "@apollo/client"
-import Link from "next/link"
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
-import type { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
-import Loading from "../components/Loading/Loading"
-import { Stat } from "../components/Stat"
-import UpdateMessagePopup from "../components/UpdateMessagePopup/UpdateMessagePopup"
-import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface"
-import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface"
-import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface"
+import { useApolloClient } from "@apollo/client";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import type { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
+import Loading from "../components/Loading/Loading";
+import { Stat } from "../components/Stat";
+import UpdateMessagePopup from "../components/UpdateMessagePopup/UpdateMessagePopup";
+import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface";
+import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface";
+import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface";
 
-import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import { clearLocalStorageExcept, jsonToB64Url, roundTo, toIRR } from "../helpers"
+import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface";
+import { clearLocalStorageExcept, jsonToB64Url, roundTo, toIRR } from "../helpers";
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -24,106 +24,106 @@ import {
   PowerIcon,
   TelegramIcon,
   UsersIcon,
-} from "../icons"
+} from "../icons";
 
-const isDevelop = process.env.NODE_ENV === "development"
+const isDevelop = process.env.NODE_ENV === "development";
 
 const HomePageComponent: React.FC = () => {
-  const router = useRouter()
-  const client = useApolloClient()
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(true) // Loading state
-  const me = useMeQuery({ fetchPolicy: "cache-and-network" })
+  const router = useRouter();
+  const client = useApolloClient();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const me = useMeQuery({ fetchPolicy: "cache-and-network" });
 
   const {
     data,
     refetch: refetchUserPackages,
     loading: userPackagesLoading,
-  } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" })
+  } = useUserPackagesQuery({ fetchPolicy: "cache-and-network" });
 
-  const [logout] = useLogoutMutation()
-  const [enableGift, enableGiftData] = useEnableGiftMutation()
+  const [logout] = useLogoutMutation();
+  const [enableGift, enableGiftData] = useEnableGiftMutation();
 
   useEffect(() => {
     if (!me.loading && !userPackagesLoading) {
-      setIsLoading(false) // When both queries are finished, stop loading
+      setIsLoading(false); // When both queries are finished, stop loading
     }
-  }, [me.loading, userPackagesLoading])
+  }, [me.loading, userPackagesLoading]);
 
   useEffect(() => {
     if (me.data?.me.isVerified === false) {
-      router.replace("/auth/verify-phone")
+      router.replace("/auth/verify-phone");
     }
-  }, [router, me.data])
+  }, [router, me.data]);
 
   const handleLogout = () => {
     logout().then(() => {
-      clearLocalStorageExcept("appVersion")
-      router.replace("/login")
-    })
-  }
+      clearLocalStorageExcept("appVersion");
+      router.replace("/login");
+    });
+  };
 
   const handleEnableGift = () => {
     enableGift({
       update: () => {
-        const existingData = client.readQuery<MeQuery>({ query: MeDocument })
+        const existingData = client.readQuery<MeQuery>({ query: MeDocument });
         if (existingData) {
-          const updatedMe = existingData.me && { ...existingData.me, userGift: [] }
+          const updatedMe = existingData.me && { ...existingData.me, userGift: [] };
           client.writeQuery({
             query: MeDocument,
             data: { me: updatedMe },
-          })
+          });
         }
       },
     }).then(() => {
-      refetchUserPackages()
-    })
-  }
+      refetchUserPackages();
+    });
+  };
 
-  const botRef = `https://t.me/${me.data?.me.brand?.botUsername}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`
-  const isAdmin = me?.data?.me.role !== "USER"
-  const balance = me.data?.me.balance || 0
-  const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false
-  const isRegisteredInTelegram = me?.data?.me.telegram?.id
-  const hasBankCard = me.data?.me.bankCard?.[0]?.number
-  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)"
-  const hasPackage = Boolean(data?.userPackages?.length)
-  const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic
+  const botRef = `https://t.me/${me.data?.me.brand?.botUsername}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`;
+  const isAdmin = me?.data?.me.role !== "USER";
+  const balance = me.data?.me.balance || 0;
+  const isBlocked = me.data?.me.isDisabled || me.data?.me.isParentDisabled || false;
+  const isRegisteredInTelegram = me?.data?.me.telegram?.id;
+  const hasBankCard = me.data?.me.bankCard?.[0]?.number;
+  const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)";
+  const hasPackage = Boolean(data?.userPackages?.length);
+  const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic;
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    pleaseCharge(e)
-    accountIsBlocked(e)
-    checkAdminRequirements(e)
-  }
+    pleaseCharge(e);
+    accountIsBlocked(e);
+    checkAdminRequirements(e);
+  };
 
   const pleaseCharge = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (balance <= 0 && isAdmin) {
-      e.preventDefault()
-      toast({ variant: "destructive", description: "ابتدا حساب خود را شارژ کنید." })
+      e.preventDefault();
+      toast({ variant: "destructive", description: "ابتدا حساب خود را شارژ کنید." });
     }
-  }
+  };
 
   const accountIsBlocked = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (isBlocked) {
-      e.preventDefault()
-      toast({ variant: "destructive", description: "حساب شما مسدود شده است." })
+      e.preventDefault();
+      toast({ variant: "destructive", description: "حساب شما مسدود شده است." });
     }
-  }
+  };
 
   const checkAdminRequirements = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (!isRegisteredInTelegram && isAdmin && !isDevelop) {
-      e.preventDefault()
-      toast({ variant: "destructive", description: "لطفا در ربات تلگرام عضو شوید." })
+      e.preventDefault();
+      toast({ variant: "destructive", description: "لطفا در ربات تلگرام عضو شوید." });
     }
 
     if (!hasBankCard && isAdmin) {
-      e.preventDefault()
-      toast({ variant: "destructive", description: "از قسمت تنظیمات حساب بانکی خود را وارد کنید." })
+      e.preventDefault();
+      toast({ variant: "destructive", description: "از قسمت تنظیمات حساب بانکی خود را وارد کنید." });
     }
-  }
+  };
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (data && me.data?.me.isVerified === true) {
@@ -233,41 +233,41 @@ const HomePageComponent: React.FC = () => {
           <UpdateMessagePopup />
         </div>
       </div>
-    )
+    );
   }
-}
+};
 
 const HomePage: NextPageWithLayout = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   React.useEffect(() => {
     if (router.pathname !== window.location.pathname) {
-      const idPattern = /^\/([\w-]+)$/
+      const idPattern = /^\/([\w-]+)$/;
 
-      const match = window.location.pathname.match(idPattern)
+      const match = window.location.pathname.match(idPattern);
 
       if (match) {
-        const promoCode = match[1] // Extract the alphanumeric id part
+        const promoCode = match[1]; // Extract the alphanumeric id part
         router.replace({
           pathname: "/[promoCode]",
           query: { promoCode },
-        })
+        });
       } else {
-        router.replace(window.location.pathname) // Directly replace for other paths
+        router.replace(window.location.pathname); // Directly replace for other paths
       }
     }
-  }, [router])
+  }, [router]);
 
   // // Only render the HomePageContent if the current route is "/"
   if (window.location.pathname !== "/") {
-    return null
+    return null;
   }
 
-  return <HomePageComponent />
-}
+  return <HomePageComponent />;
+};
 
-export default HomePage
+export default HomePage;
 
 HomePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

@@ -1,19 +1,19 @@
-import React from "react"
-import { PackageCategory } from "../../src/graphql/__generated__/schema.graphql"
+import React from "react";
+import { PackageCategory } from "../../src/graphql/__generated__/schema.graphql";
 
 export interface Filter {
-  key?: string | null
-  value?: string | number | null | PackageCategory
-  text?: string | null
-  toggleAllFilters?: boolean
-  icon?: React.JSX.Element
+  key?: string | null;
+  value?: string | number | null | PackageCategory;
+  text?: string | null;
+  toggleAllFilters?: boolean;
+  icon?: React.JSX.Element;
 }
 
 interface QuickFiltersProp {
-  filter: Filter
-  setFilter: (filter: Filter) => void
-  filters: Filter[]
-  className?: string
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
+  filters: Filter[];
+  className?: string;
 }
 
 const QuickFilter: React.FC<QuickFiltersProp> = ({ filter, setFilter, filters, className }) => {
@@ -41,7 +41,7 @@ const QuickFilter: React.FC<QuickFiltersProp> = ({ filter, setFilter, filters, c
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default QuickFilter
+export default QuickFilter;

@@ -1,37 +1,37 @@
-import { useRouter } from "next/router"
-import React, { useState } from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/use-toast"
-import Layout from "../../components/Layout/Layout"
-import { useResetPasswordMutation } from "../../graphql/mutations/resetPassword.graphql.interface"
-import { useSendForgetPasswordOtpMutation } from "../../graphql/mutations/sendForgetPasswordOtp.graphql.interface"
-import { normalizePhone, removeWWW } from "../../helpers"
-import type { NextPageWithLayout } from "../_app"
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import Layout from "../../components/Layout/Layout";
+import { useResetPasswordMutation } from "../../graphql/mutations/resetPassword.graphql.interface";
+import { useSendForgetPasswordOtpMutation } from "../../graphql/mutations/sendForgetPasswordOtp.graphql.interface";
+import { normalizePhone, removeWWW } from "../../helpers";
+import type { NextPageWithLayout } from "../_app";
 
 interface FormValues {
-  phone: string
-  password: string
-  otp: string
+  phone: string;
+  password: string;
+  otp: string;
 }
 
 const ForgetPasswordPage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const { toast } = useToast()
-  const [otpSent, setOtpSent] = useState<boolean>(false) // Track if OTP has been sent
-  const [sendForgetPasswordOtp, sendForgetPasswordOtpData] = useSendForgetPasswordOtpMutation({ errorPolicy: "all" })
-  const [resetPassword, resetPasswordData] = useResetPasswordMutation({ errorPolicy: "all" })
+  const router = useRouter();
+  const { toast } = useToast();
+  const [otpSent, setOtpSent] = useState<boolean>(false); // Track if OTP has been sent
+  const [sendForgetPasswordOtp, sendForgetPasswordOtpData] = useSendForgetPasswordOtpMutation({ errorPolicy: "all" });
+  const [resetPassword, resetPasswordData] = useResetPasswordMutation({ errorPolicy: "all" });
   const {
     register,
     formState: { errors },
     getValues,
-  } = useForm<FormValues>()
+  } = useForm<FormValues>();
 
   const handleSendForgetPasswordOtp = async () => {
-    const data = getValues()
+    const data = getValues();
     sendForgetPasswordOtp({
       variables: {
         input: {
@@ -41,13 +41,13 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
       },
     }).then((res) => {
       if (res.data?.sendForgetPasswordOtp === true) {
-        setOtpSent(true)
+        setOtpSent(true);
       }
-    })
-  }
+    });
+  };
 
   const handleResetPassword = async () => {
-    const data = getValues()
+    const data = getValues();
     resetPassword({
       variables: {
         input: {
@@ -62,14 +62,14 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
         toast({
           description: "رمز عبور با موفقیت تغییر یافت",
           duration: 1000,
-        })
+        });
 
-        router.push("/login")
+        router.push("/login");
       }
-    })
-  }
+    });
+  };
 
-  const firstError = Object.keys(errors)?.[0] as keyof FormValues
+  const firstError = Object.keys(errors)?.[0] as keyof FormValues;
 
   return (
     <form className="mx-auto flex h-screen max-w-xs">
@@ -133,11 +133,11 @@ const ForgetPasswordPage: NextPageWithLayout = () => {
         </Link> */}
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default ForgetPasswordPage
+export default ForgetPasswordPage;
 
 ForgetPasswordPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

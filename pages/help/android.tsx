@@ -1,14 +1,14 @@
-import Image from "next/image"
-import { useRouter } from "next/router"
-import React from "react"
-import { Button } from "@/components/ui/button"
-import Layout from "../../components/Layout/Layout"
-import { ArrowDownTrayIcon, ArrowUTurnLeftIcon } from "../../icons"
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import Layout from "../../components/Layout/Layout";
+import { ArrowDownTrayIcon, ArrowUTurnLeftIcon } from "../../icons";
 
-import type { NextPageWithLayout } from "../_app"
+import type { NextPageWithLayout } from "../_app";
 
 const AndroidPage: NextPageWithLayout = () => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <div
       className="mx-auto my-12 flex max-w-xs flex-col justify-center space-y-4"
@@ -66,11 +66,11 @@ const AndroidPage: NextPageWithLayout = () => {
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AndroidPage
+export default AndroidPage;
 
 AndroidPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

@@ -1,23 +1,23 @@
-import * as Types from "../../src/graphql/__generated__/schema.graphql"
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
-const defaultOptions = {} as const
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+const defaultOptions = {} as const;
 export type SendForgetPasswordOtpMutationVariables = Types.Exact<{
-  input: Types.SendForgetPasswordOtpInput
-}>
+  input: Types.SendForgetPasswordOtpInput;
+}>;
 
-export type SendForgetPasswordOtpMutation = { __typename?: "Mutation"; sendForgetPasswordOtp: boolean }
+export type SendForgetPasswordOtpMutation = { __typename?: "Mutation"; sendForgetPasswordOtp: boolean };
 
 export const SendForgetPasswordOtpDocument = gql`
   mutation sendForgetPasswordOtp($input: SendForgetPasswordOtpInput!) {
     sendForgetPasswordOtp(data: $input)
   }
-`
+`;
 export type SendForgetPasswordOtpMutationFn = Apollo.MutationFunction<
   SendForgetPasswordOtpMutation,
   SendForgetPasswordOtpMutationVariables
->
+>;
 
 /**
  * __useSendForgetPasswordOtpMutation__
@@ -39,15 +39,15 @@ export type SendForgetPasswordOtpMutationFn = Apollo.MutationFunction<
 export function useSendForgetPasswordOtpMutation(
   baseOptions?: Apollo.MutationHookOptions<SendForgetPasswordOtpMutation, SendForgetPasswordOtpMutationVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<SendForgetPasswordOtpMutation, SendForgetPasswordOtpMutationVariables>(
     SendForgetPasswordOtpDocument,
     options
-  )
+  );
 }
-export type SendForgetPasswordOtpMutationHookResult = ReturnType<typeof useSendForgetPasswordOtpMutation>
-export type SendForgetPasswordOtpMutationResult = Apollo.MutationResult<SendForgetPasswordOtpMutation>
+export type SendForgetPasswordOtpMutationHookResult = ReturnType<typeof useSendForgetPasswordOtpMutation>;
+export type SendForgetPasswordOtpMutationResult = Apollo.MutationResult<SendForgetPasswordOtpMutation>;
 export type SendForgetPasswordOtpMutationOptions = Apollo.BaseMutationOptions<
   SendForgetPasswordOtpMutation,
   SendForgetPasswordOtpMutationVariables
->
+>;

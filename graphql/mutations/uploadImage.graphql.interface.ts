@@ -1,20 +1,20 @@
-import * as Types from "../../src/graphql/__generated__/schema.graphql"
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
-const defaultOptions = {} as const
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+const defaultOptions = {} as const;
 export type UploadImageMutationVariables = Types.Exact<{
-  input: Types.UploadInput
-}>
+  input: Types.UploadInput;
+}>;
 
-export type UploadImageMutation = { __typename?: "Mutation"; uploadImage: string }
+export type UploadImageMutation = { __typename?: "Mutation"; uploadImage: string };
 
 export const UploadImageDocument = gql`
   mutation uploadImage($input: UploadInput!) {
     uploadImage(input: $input)
   }
-`
-export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation, UploadImageMutationVariables>
+`;
+export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation, UploadImageMutationVariables>;
 
 /**
  * __useUploadImageMutation__
@@ -36,9 +36,9 @@ export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation,
 export function useUploadImageMutation(
   baseOptions?: Apollo.MutationHookOptions<UploadImageMutation, UploadImageMutationVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UploadImageMutation, UploadImageMutationVariables>(UploadImageDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UploadImageMutation, UploadImageMutationVariables>(UploadImageDocument, options);
 }
-export type UploadImageMutationHookResult = ReturnType<typeof useUploadImageMutation>
-export type UploadImageMutationResult = Apollo.MutationResult<UploadImageMutation>
-export type UploadImageMutationOptions = Apollo.BaseMutationOptions<UploadImageMutation, UploadImageMutationVariables>
+export type UploadImageMutationHookResult = ReturnType<typeof useUploadImageMutation>;
+export type UploadImageMutationResult = Apollo.MutationResult<UploadImageMutation>;
+export type UploadImageMutationOptions = Apollo.BaseMutationOptions<UploadImageMutation, UploadImageMutationVariables>;

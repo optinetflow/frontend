@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 const NotFound: React.FC = () => (
   <div className="mt-20 text-center">
@@ -8,6 +8,6 @@ const NotFound: React.FC = () => (
       بازگشت به صفحه اصلی
     </Link>
   </div>
-)
+);
 
-export default NotFound
+export default NotFound;

@@ -1,14 +1,14 @@
-import * as Types from "../../src/graphql/__generated__/schema.graphql"
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
-const defaultOptions = {} as const
-export type RechargePackagesQueryVariables = Types.Exact<{ [key: string]: never }>
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+const defaultOptions = {} as const;
+export type RechargePackagesQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type RechargePackagesQuery = {
-  __typename?: "Query"
-  rechargePackages: Array<{ __typename?: "RechargePackage"; id: string; amount: number; discountPercent: number }>
-}
+  __typename?: "Query";
+  rechargePackages: Array<{ __typename?: "RechargePackage"; id: string; amount: number; discountPercent: number }>;
+};
 
 export const RechargePackagesDocument = gql`
   query rechargePackages {
@@ -18,7 +18,7 @@ export const RechargePackagesDocument = gql`
       discountPercent
     }
   }
-`
+`;
 
 /**
  * __useRechargePackagesQuery__
@@ -38,25 +38,25 @@ export const RechargePackagesDocument = gql`
 export function useRechargePackagesQuery(
   baseOptions?: Apollo.QueryHookOptions<RechargePackagesQuery, RechargePackagesQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(RechargePackagesDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(RechargePackagesDocument, options);
 }
 export function useRechargePackagesLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<RechargePackagesQuery, RechargePackagesQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(RechargePackagesDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(RechargePackagesDocument, options);
 }
 export function useRechargePackagesSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<RechargePackagesQuery, RechargePackagesQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<RechargePackagesQuery, RechargePackagesQueryVariables>(
     RechargePackagesDocument,
     options
-  )
+  );
 }
-export type RechargePackagesQueryHookResult = ReturnType<typeof useRechargePackagesQuery>
-export type RechargePackagesLazyQueryHookResult = ReturnType<typeof useRechargePackagesLazyQuery>
-export type RechargePackagesSuspenseQueryHookResult = ReturnType<typeof useRechargePackagesSuspenseQuery>
-export type RechargePackagesQueryResult = Apollo.QueryResult<RechargePackagesQuery, RechargePackagesQueryVariables>
+export type RechargePackagesQueryHookResult = ReturnType<typeof useRechargePackagesQuery>;
+export type RechargePackagesLazyQueryHookResult = ReturnType<typeof useRechargePackagesLazyQuery>;
+export type RechargePackagesSuspenseQueryHookResult = ReturnType<typeof useRechargePackagesSuspenseQuery>;
+export type RechargePackagesQueryResult = Apollo.QueryResult<RechargePackagesQuery, RechargePackagesQueryVariables>;

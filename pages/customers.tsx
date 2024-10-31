@@ -1,43 +1,48 @@
-import { useApolloClient } from "@apollo/client"
-import Link from "next/link"
-import React from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Switch } from "@/components/ui/switch"
-import { useToast } from "@/components/ui/use-toast"
+import { useApolloClient } from "@apollo/client";
+import Link from "next/link";
+import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 
-import type { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
-import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface"
-import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface"
-import { copyText } from '../helpers';
-import { avatarColor, roundTo, timeSince, toIRR } from "../helpers"
-import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons"
-import * as Types from "../src/graphql/__generated__/schema.graphql"
+import type { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
+import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface";
+import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface";
+import { copyText } from "../helpers";
+import { avatarColor, roundTo, timeSince, toIRR } from "../helpers";
+import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons";
+import * as Types from "../src/graphql/__generated__/schema.graphql";
 
 interface CustomerProps {
-  id: string
-  avatar?: string
-  fullname: string
-  phone: string
-  isDisabled: boolean
-  role: Types.Role
-  balance: number
-  totalProfit: number
-  activePackages: number
-  onlinePackages: number
-  lastConnectedAt?: Date
-  description?: string | null
+  id: string;
+  avatar?: string;
+  fullname: string;
+  phone: string;
+  isDisabled: boolean;
+  role: Types.Role;
+  balance: number;
+  totalProfit: number;
+  activePackages: number;
+  onlinePackages: number;
+  lastConnectedAt?: Date;
+  description?: string | null;
 }
 
 interface CustomerOptionsProps {
-  id: string
-  isDisabled: boolean
+  id: string;
+  isDisabled: boolean;
 }
 const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => {
-  const [updateChild, updateChildData] = useUpdateChildMutation()
-  const client = useApolloClient()
+  const [updateChild, updateChildData] = useUpdateChildMutation();
+  const client = useApolloClient();
 
   const handleBlockChild = async (isEnabled: boolean, childId: string) => {
     try {
@@ -46,24 +51,24 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
           input: { childId, isDisabled: !isEnabled },
         },
         update: () => {
-          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument })
+          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument });
 
           if (existingData) {
             const updatedChildren = existingData.children.map((child) =>
               child.id === childId ? { ...child, isDisabled: !isEnabled } : child
-            )
+            );
 
             client.writeQuery({
               query: ChildrenDocument,
               data: { children: updatedChildren },
-            })
+            });
           }
         },
-      })
+      });
     } catch (e) {
-      console.log("Error updating child status:", e)
+      console.log("Error updating child status:", e);
     }
-  }
+  };
 
   return (
     <DropdownMenu>
@@ -106,8 +111,8 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};
 
 const Customer: React.FC<CustomerProps> = ({
   id,
@@ -123,16 +128,16 @@ const Customer: React.FC<CustomerProps> = ({
   description,
   onlinePackages,
 }) => {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const handlePhoneClick = () => {
-    copyText(`0${phone}`)
+    copyText(`0${phone}`);
     toast({
       description: "شماره موبایل کپی شد.",
       duration: 500,
-    })
-  }
-  const isOnline = lastConnectedAt && onlinePackages > 0
+    });
+  };
+  const isOnline = lastConnectedAt && onlinePackages > 0;
   return (
     <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="relative flex flex-1 items-center overflow-hidden">
@@ -149,12 +154,8 @@ const Customer: React.FC<CustomerProps> = ({
         )}
         <div className="mr-4 flex size-full flex-col justify-between space-y-2 overflow-hidden text-sm">
           <div className="truncate font-black text-slate-800">{fullname}</div>
-          {role === "ADMIN" && (
-            <div className="text-xs text-slate-600">موجودی: {toIRR(roundTo(balance,0))}</div>
-          )}
-          {role === "ADMIN" && (
-            <div className="text-xs text-slate-600">سود کل: {toIRR(roundTo(totalProfit,0))}</div>
-          )}
+          {role === "ADMIN" && <div className="text-xs text-slate-600">موجودی: {toIRR(roundTo(balance, 0))}</div>}
+          {role === "ADMIN" && <div className="text-xs text-slate-600">سود کل: {toIRR(roundTo(totalProfit, 0))}</div>}
           <button type="button" onClick={handlePhoneClick} className="relative text-right text-xs text-slate-600">
             0{phone}
             {lastConnectedAt && !isOnline && (
@@ -168,11 +169,11 @@ const Customer: React.FC<CustomerProps> = ({
       </div>
       <CustomerOptions id={id} isDisabled={isDisabled} />
     </div>
-  )
-}
+  );
+};
 
 const CustomersPage: NextPageWithLayout = () => {
-  const { data } = useChildrenQuery({ fetchPolicy: "cache-and-network" })
+  const { data } = useChildrenQuery({ fetchPolicy: "cache-and-network" });
   if (data) {
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
@@ -210,12 +211,12 @@ const CustomersPage: NextPageWithLayout = () => {
           ))}
         </div>
       </div>
-    )
+    );
   }
-}
+};
 
-export default CustomersPage
+export default CustomersPage;
 
 CustomersPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

@@ -1,55 +1,55 @@
-import React, { useEffect, useState } from "react"
-import { formatDuration } from "helpers"
-import { Filter } from "../../components/quickFilter/QuickFilter"
+import React, { useEffect, useState } from "react";
+import { formatDuration } from "helpers";
+import { Filter } from "../../components/quickFilter/QuickFilter";
 
 interface FiltersProps {
-  isOpen: boolean
-  setFilter: (filters: Filter[]) => void
-  onClose: () => void
+  isOpen: boolean;
+  setFilter: (filters: Filter[]) => void;
+  onClose: () => void;
 }
 
 const categories = [
   { text: "بسیار با کیفیت", value: "QUALITY" },
   { text: "بسته های اقتصادی", value: "ECONOMIC" },
-]
+];
 
-const expirationDaysOptions = [15, 30, 60, 90]
+const expirationDaysOptions = [15, 30, 60, 90];
 
 const Filters: React.FC<FiltersProps> = ({ isOpen, onClose, setFilter }) => {
-  const [isVisible, setIsVisible] = useState(false) // State to control the visibility of the sheet (for animation)
-  const [shouldRender, setShouldRender] = useState(isOpen) // Tracks if component should be rendered
+  const [isVisible, setIsVisible] = useState(false); // State to control the visibility of the sheet (for animation)
+  const [shouldRender, setShouldRender] = useState(isOpen); // Tracks if component should be rendered
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedExpirationDays, setSelectedExpirationDays] = useState<number | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedExpirationDays, setSelectedExpirationDays] = useState<number | null>(null);
   const handleCategorySelect = (value: string) => {
-    setSelectedCategory((prev) => (prev === value ? null : value)) // Toggle selection
-  }
+    setSelectedCategory((prev) => (prev === value ? null : value)); // Toggle selection
+  };
 
   const handleExpirationDaysSelect = (value: number) => {
-    setSelectedExpirationDays((prev) => (prev === value ? null : value)) // Toggle selection
-  }
+    setSelectedExpirationDays((prev) => (prev === value ? null : value)); // Toggle selection
+  };
   const handleSubmit = () => {
-    const filters = []
+    const filters = [];
     if (selectedCategory) {
-      filters.push({ key: "category", value: selectedCategory })
+      filters.push({ key: "category", value: selectedCategory });
     }
     if (selectedExpirationDays) {
-      filters.push({ key: "expirationDays", value: selectedExpirationDays })
+      filters.push({ key: "expirationDays", value: selectedExpirationDays });
     }
-    setFilter(filters)
-    setTimeout(() => onClose(), 50)
-  }
+    setFilter(filters);
+    setTimeout(() => onClose(), 50);
+  };
   useEffect(() => {
     if (isOpen) {
-      setShouldRender(true)
-      setTimeout(() => setIsVisible(true), 20)
+      setShouldRender(true);
+      setTimeout(() => setIsVisible(true), 20);
     } else {
-      setIsVisible(false)
-      setTimeout(() => setShouldRender(false), 300)
+      setIsVisible(false);
+      setTimeout(() => setShouldRender(false), 300);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
-  if (!shouldRender) return null
+  if (!shouldRender) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-gray-900/50">
@@ -125,7 +125,7 @@ const Filters: React.FC<FiltersProps> = ({ isOpen, onClose, setFilter }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Filters
+export default Filters;

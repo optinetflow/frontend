@@ -1,21 +1,21 @@
-import Link from "next/link"
-import React from "react"
-import { Button } from "@/components/ui/button"
-import { Copyable } from "../components/Copyable/Copyable"
+import Link from "next/link";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Copyable } from "../components/Copyable/Copyable";
 
-import { UserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface"
-import { bytesToGB, getRemainingDays, isRecentlyConnected, remainingTimeToWords, roundTo, timeSince } from "../helpers"
-import { ArrowPathIcon } from "../icons"
+import { UserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface";
+import { bytesToGB, getRemainingDays, isRecentlyConnected, remainingTimeToWords, roundTo, timeSince } from "../helpers";
+import { ArrowPathIcon } from "../icons";
 
 type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
-  : never
+  : never;
 interface ProgressBarProp {
-  progress: number
+  progress: number;
 }
 
 const ProgressBar: React.FC<ProgressBarProp> = ({ progress }) => {
-  const rounded = Math.round(progress)
+  const rounded = Math.round(progress);
   return (
     <div className="ltr flex-1 rounded-full bg-slate-200">
       <div
@@ -23,29 +23,29 @@ const ProgressBar: React.FC<ProgressBarProp> = ({ progress }) => {
         style={{ width: `${rounded}%` }}
       ></div>
     </div>
-  )
-}
+  );
+};
 
 interface StatProps {
-  pack: ArrayElement<UserPackagesQuery["userPackages"]>
-  onRenewClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
+  pack: ArrayElement<UserPackagesQuery["userPackages"]>;
+  onRenewClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }
 
 export function Stat({ pack, onRenewClick }: StatProps) {
-  const remainingTime = pack.expiryTime - new Date().getTime()
-  const totalTraffic = roundTo(bytesToGB(pack.totalTraffic), 2)
-  const remainingTraffic = roundTo(bytesToGB(pack.remainingTraffic), 2)
-  const remainingDays = getRemainingDays(pack.expiryTime)
+  const remainingTime = pack.expiryTime - new Date().getTime();
+  const totalTraffic = roundTo(bytesToGB(pack.totalTraffic), 2);
+  const remainingTraffic = roundTo(bytesToGB(pack.remainingTraffic), 2);
+  const remainingDays = getRemainingDays(pack.expiryTime);
 
   const remainingTimeWords =
-    remainingTime > 0 ? `${remainingTimeToWords(remainingTime)} مانده تا اتمام بسته` : "بسته‌ی شما منقضی شده است"
-  const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords
-  const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است"
+    remainingTime > 0 ? `${remainingTimeToWords(remainingTime)} مانده تا اتمام بسته` : "بسته‌ی شما منقضی شده است";
+  const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords;
+  const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است";
 
-  const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85
+  const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85;
 
-  const lastConnectedAt = pack?.lastConnectedAt ? new Date(pack?.lastConnectedAt) : undefined
-  const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt)
+  const lastConnectedAt = pack?.lastConnectedAt ? new Date(pack?.lastConnectedAt) : undefined;
+  const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt);
   return (
     <div className="space-y-4 rounded-md bg-slate-50 p-4">
       <div className="flex items-center justify-between pb-6">
@@ -75,5 +75,5 @@ export function Stat({ pack, onRenewClick }: StatProps) {
         <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
       )}
     </div>
-  )
+  );
 }

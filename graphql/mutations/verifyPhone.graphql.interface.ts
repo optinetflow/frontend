@@ -1,16 +1,16 @@
-import * as Types from "../../src/graphql/__generated__/schema.graphql"
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
-const defaultOptions = {} as const
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+const defaultOptions = {} as const;
 export type VerifyPhoneMutationVariables = Types.Exact<{
-  input: Types.VerifyPhoneInput
-}>
+  input: Types.VerifyPhoneInput;
+}>;
 
 export type VerifyPhoneMutation = {
-  __typename?: "Mutation"
-  verifyPhone: { __typename?: "Token"; accessToken: any; refreshToken: any }
-}
+  __typename?: "Mutation";
+  verifyPhone: { __typename?: "Token"; accessToken: any; refreshToken: any };
+};
 
 export const VerifyPhoneDocument = gql`
   mutation verifyPhone($input: VerifyPhoneInput!) {
@@ -19,8 +19,8 @@ export const VerifyPhoneDocument = gql`
       refreshToken
     }
   }
-`
-export type VerifyPhoneMutationFn = Apollo.MutationFunction<VerifyPhoneMutation, VerifyPhoneMutationVariables>
+`;
+export type VerifyPhoneMutationFn = Apollo.MutationFunction<VerifyPhoneMutation, VerifyPhoneMutationVariables>;
 
 /**
  * __useVerifyPhoneMutation__
@@ -42,9 +42,9 @@ export type VerifyPhoneMutationFn = Apollo.MutationFunction<VerifyPhoneMutation,
 export function useVerifyPhoneMutation(
   baseOptions?: Apollo.MutationHookOptions<VerifyPhoneMutation, VerifyPhoneMutationVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<VerifyPhoneMutation, VerifyPhoneMutationVariables>(VerifyPhoneDocument, options)
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<VerifyPhoneMutation, VerifyPhoneMutationVariables>(VerifyPhoneDocument, options);
 }
-export type VerifyPhoneMutationHookResult = ReturnType<typeof useVerifyPhoneMutation>
-export type VerifyPhoneMutationResult = Apollo.MutationResult<VerifyPhoneMutation>
-export type VerifyPhoneMutationOptions = Apollo.BaseMutationOptions<VerifyPhoneMutation, VerifyPhoneMutationVariables>
+export type VerifyPhoneMutationHookResult = ReturnType<typeof useVerifyPhoneMutation>;
+export type VerifyPhoneMutationResult = Apollo.MutationResult<VerifyPhoneMutation>;
+export type VerifyPhoneMutationOptions = Apollo.BaseMutationOptions<VerifyPhoneMutation, VerifyPhoneMutationVariables>;

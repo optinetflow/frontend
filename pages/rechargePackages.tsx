@@ -1,13 +1,13 @@
-import Link from "next/link"
-import React from "react"
-import type { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
+import Link from "next/link";
+import React from "react";
+import type { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
 
-import { useRechargePackagesQuery } from "../graphql/queries/rechargePackages.graphql.interface"
-import { toIRR } from "../helpers"
+import { useRechargePackagesQuery } from "../graphql/queries/rechargePackages.graphql.interface";
+import { toIRR } from "../helpers";
 
 const RechargePackagesPage: NextPageWithLayout = () => {
-  const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-and-network" })
+  const rechargePackages = useRechargePackagesQuery({ fetchPolicy: "cache-and-network" });
 
   return (
     <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
@@ -19,7 +19,7 @@ const RechargePackagesPage: NextPageWithLayout = () => {
             className="mb-4 flex h-28 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"
           >
             <div className="flex h-full flex-col items-center justify-between">
-              <span className="text-xl text-slate-800 h-full flex items-center">{toIRR(pack.amount)}</span>
+              <span className="flex h-full items-center text-xl text-slate-800">{toIRR(pack.amount)}</span>
               {/* <span className=" text-sm text-slate-600">{pack.discountPercent}% سود هر خرید</span> */}
             </div>
 
@@ -28,11 +28,11 @@ const RechargePackagesPage: NextPageWithLayout = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RechargePackagesPage
+export default RechargePackagesPage;
 
 RechargePackagesPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

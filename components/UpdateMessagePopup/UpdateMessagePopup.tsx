@@ -1,28 +1,28 @@
-import { RocketIcon, XIcon } from "lucide-react" // Use relevant icons
-import React, { useEffect, useState } from "react"
+import { RocketIcon, XIcon } from "lucide-react"; // Use relevant icons
+import React, { useEffect, useState } from "react";
 
-const CURRENT_VERSION = "1.0.0" // You can get this from environment variables
+const CURRENT_VERSION = "1.0.0"; // You can get this from environment variables
 
 const UpdateMessagePopup = () => {
-  const [showUpdateMessage, setShowUpdateMessage] = useState(false)
-  const [isVisible, setIsVisible] = useState(false) // For animation control
+  const [showUpdateMessage, setShowUpdateMessage] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // For animation control
 
   useEffect(() => {
-    const storedVersion = localStorage.getItem("appVersion")
+    const storedVersion = localStorage.getItem("appVersion");
 
     if (!storedVersion || storedVersion !== CURRENT_VERSION) {
-      setShowUpdateMessage(true)
-      setTimeout(() => setIsVisible(true), 20) // Trigger animation after a short delay
-      localStorage.setItem("appVersion", CURRENT_VERSION)
+      setShowUpdateMessage(true);
+      setTimeout(() => setIsVisible(true), 20); // Trigger animation after a short delay
+      localStorage.setItem("appVersion", CURRENT_VERSION);
     }
-  }, [])
+  }, []);
 
   const handleClose = () => {
-    setIsVisible(false) // Start hiding the popup
-    setTimeout(() => setShowUpdateMessage(false), 300) // Delay the complete removal after animation
-  }
+    setIsVisible(false); // Start hiding the popup
+    setTimeout(() => setShowUpdateMessage(false), 300); // Delay the complete removal after animation
+  };
 
-  if (!showUpdateMessage) return null
+  if (!showUpdateMessage) return null;
 
   return (
     <>
@@ -69,7 +69,7 @@ const UpdateMessagePopup = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default UpdateMessagePopup
+export default UpdateMessagePopup;

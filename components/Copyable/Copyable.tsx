@@ -1,23 +1,23 @@
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
-import { copyText } from "../../helpers"
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { copyText } from "../../helpers";
 
 interface CopyableProps {
-  content: string
-  className?: string
-  isCenter?: boolean
+  content: string;
+  className?: string;
+  isCenter?: boolean;
 }
 
 export function Copyable({ className, content, isCenter }: CopyableProps) {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const handleCopy = () => {
-    copyText(content)
+    copyText(content);
     toast({
       description: "متن کپی شد.",
       duration: 500,
-    })
-  }
+    });
+  };
 
   return (
     <div className={`flex rounded-md border ${className}`}>
@@ -33,5 +33,5 @@ export function Copyable({ className, content, isCenter }: CopyableProps) {
         کپی کردن
       </Button>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { ArrowUTurnLeftIcon } from "icons"
-import { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
-import { useSearchParams } from "next/navigation"
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { ArrowUTurnLeftIcon } from "icons";
+import { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
+import { useSearchParams } from "next/navigation";
 
 const packageCategories = [
   {
@@ -16,12 +16,12 @@ const packageCategories = [
     title: "بسته های ویژه",
     description: "بسته‌های ویژه مخصوص افرادی است که کیفیت و سرعت بالا برایشان حیاتی است.",
   },
-]
+];
 
 const PackageCategoriesPage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const userPackageId = searchParams.get("userPackageId")
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const userPackageId = searchParams.get("userPackageId");
   return (
     <div
       className="mx-auto my-12 flex min-h-screen max-w-xs flex-col items-center justify-center"
@@ -49,11 +49,11 @@ const PackageCategoriesPage: NextPageWithLayout = () => {
         </Link>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default PackageCategoriesPage
+export default PackageCategoriesPage;
 
 PackageCategoriesPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

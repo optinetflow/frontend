@@ -1,13 +1,13 @@
-import Link from "next/link"
-import { useRouter } from "next/router"
-import React from "react"
-import { Button } from "@/components/ui/button"
-import Layout from "../../components/Layout/Layout"
-import { AndroidIcon, ArrowUTurnLeftIcon, IosIcon } from "../../icons"
-import type { NextPageWithLayout } from "../_app"
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import Layout from "../../components/Layout/Layout";
+import { AndroidIcon, ArrowUTurnLeftIcon, IosIcon } from "../../icons";
+import type { NextPageWithLayout } from "../_app";
 
 const HelpPage: NextPageWithLayout = () => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <div
       className="mx-auto my-12 flex max-w-xs flex-col justify-center space-y-4"
@@ -32,11 +32,11 @@ const HelpPage: NextPageWithLayout = () => {
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HelpPage
+export default HelpPage;
 
 HelpPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

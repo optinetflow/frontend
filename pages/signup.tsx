@@ -1,28 +1,28 @@
-import { useSearchParams } from "next/navigation"
-import { useRouter } from "next/router"
-import React from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { NextPageWithLayout } from "./_app"
-import Layout from "../components/Layout/Layout"
-import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface"
-import { normalizePhone, removeWWW } from "../helpers"
-import { SignupInput } from "../src/graphql/__generated__/schema.graphql"
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { NextPageWithLayout } from "./_app";
+import Layout from "../components/Layout/Layout";
+import { useSignupMutation } from "../graphql/mutations/signup.graphql.interface";
+import { normalizePhone, removeWWW } from "../helpers";
+import { SignupInput } from "../src/graphql/__generated__/schema.graphql";
 
 const SignupPage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const phone = searchParams.get("phone")
-  const promoCode = searchParams.get("promoCode")
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const phone = searchParams.get("phone");
+  const promoCode = searchParams.get("promoCode");
 
-  const [signup, signupData] = useSignupMutation({ errorPolicy: "all" })
+  const [signup, signupData] = useSignupMutation({ errorPolicy: "all" });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupInput>()
+  } = useForm<SignupInput>();
 
   const onSubmit = handleSubmit(async (data) => {
     await signup({
@@ -37,17 +37,17 @@ const SignupPage: NextPageWithLayout = () => {
     })
       .then(() => {
         if (promoCode) {
-          router.push(`/auth/verify-phone?phone=${phone}`)
+          router.push(`/auth/verify-phone?phone=${phone}`);
         } else {
-          router.push("/customers")
+          router.push("/customers");
         }
       })
       .catch((err) => {
-        console.error(err)
-      })
-  })
+        console.error(err);
+      });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof SignupInput
+  const firstError = Object.keys(errors)?.[0] as keyof SignupInput;
   return (
     <form
       onSubmit={onSubmit}
@@ -92,11 +92,11 @@ const SignupPage: NextPageWithLayout = () => {
         {signupData?.loading ? "لطفا کمی صبر کنید..." : "ثبت نام"}
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default SignupPage
+export default SignupPage;
 
 SignupPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

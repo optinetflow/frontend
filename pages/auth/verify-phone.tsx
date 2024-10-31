@@ -1,36 +1,36 @@
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useVerifyPhoneMutation } from "graphql/mutations/verifyPhone.graphql.interface"
-import Layout from "../../components/Layout/Layout"
-import Loading from "../../components/Loading/Loading"
-import { useLogoutMutation } from "../../graphql/mutations/logout.graphql.interface"
-import { useSendOtpAgainMutation } from "../../graphql/mutations/sendOtpAgain.graphql.interface"
-import { useMeQuery } from "../../graphql/queries/me.graphql.interface"
-import { formatSecondsToMMSS, removeWWW } from "../../helpers"
-import type { NextPageWithLayout } from "../_app"
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useVerifyPhoneMutation } from "graphql/mutations/verifyPhone.graphql.interface";
+import Layout from "../../components/Layout/Layout";
+import Loading from "../../components/Loading/Loading";
+import { useLogoutMutation } from "../../graphql/mutations/logout.graphql.interface";
+import { useSendOtpAgainMutation } from "../../graphql/mutations/sendOtpAgain.graphql.interface";
+import { useMeQuery } from "../../graphql/queries/me.graphql.interface";
+import { formatSecondsToMMSS, removeWWW } from "../../helpers";
+import type { NextPageWithLayout } from "../_app";
 
 interface FormValues {
-  otp: string
+  otp: string;
 }
 
 const VerifyPhonePage: NextPageWithLayout = () => {
-  const router = useRouter()
-  const domainName = removeWWW(window.location.host)
-  const [sendOtpAgain] = useSendOtpAgainMutation({ errorPolicy: "all" })
-  const [timer, setTimer] = useState<number>(120) // 2 minutes in seconds
-  const [otpSent, setOtpSent] = useState<boolean>(false) // Track if OTP has been sent
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null) // Track the interval ID
-  const [loading, setLoading] = useState(false)
-  const phone = router.query.phone as string
+  const router = useRouter();
+  const domainName = removeWWW(window.location.host);
+  const [sendOtpAgain] = useSendOtpAgainMutation({ errorPolicy: "all" });
+  const [timer, setTimer] = useState<number>(120); // 2 minutes in seconds
+  const [otpSent, setOtpSent] = useState<boolean>(false); // Track if OTP has been sent
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Track the interval ID
+  const [loading, setLoading] = useState(false);
+  const phone = router.query.phone as string;
 
   useEffect(() => {
     if (!phone) {
-      setLoading(true)
+      setLoading(true);
       sendOtpAgain({
         variables: {
           input: {
@@ -40,35 +40,35 @@ const VerifyPhonePage: NextPageWithLayout = () => {
       })
         .then((res) => {
           if (res.data?.sendOtpAgain === true) {
-            setOtpSent(true)
-            setLoading(false)
+            setOtpSent(true);
+            setLoading(false);
           }
         })
-        .catch((error) => console.error("Failed to send OTP:", error))
+        .catch((error) => console.error("Failed to send OTP:", error));
     }
     const intervalId = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer <= 1) {
-          clearInterval(intervalId)
-          return 0
+          clearInterval(intervalId);
+          return 0;
         }
-        return prevTimer - 1
-      })
-    }, 1000)
+        return prevTimer - 1;
+      });
+    }, 1000);
 
-    setIntervalId(intervalId) // Save the interval ID
+    setIntervalId(intervalId); // Save the interval ID
 
     return () => {
-      if (intervalId) clearInterval(intervalId)
-    }
-  }, [phone, domainName, sendOtpAgain])
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [phone, domainName, sendOtpAgain]);
 
-  const [verifyPhone, verifyPhoneData] = useVerifyPhoneMutation({ errorPolicy: "all" })
+  const [verifyPhone, verifyPhoneData] = useVerifyPhoneMutation({ errorPolicy: "all" });
 
   const { data: meData } = useMeQuery({
     skip: !otpSent, // Skip fetching if OTP hasn't been sent yet
     fetchPolicy: "cache-and-network",
-  })
+  });
 
   // Function to handle OTP resend
   const handleResendOtp = () => {
@@ -81,47 +81,47 @@ const VerifyPhonePage: NextPageWithLayout = () => {
       },
     })
       .then(() => {
-        setTimer(120) // Reset the timer to 2 minutes
-        if (intervalId) clearInterval(intervalId) // Clear the previous interval
+        setTimer(120); // Reset the timer to 2 minutes
+        if (intervalId) clearInterval(intervalId); // Clear the previous interval
         const id = setInterval(() => {
           setTimer((prevTimer) => {
             if (prevTimer <= 1) {
-              clearInterval(id)
-              return 0
+              clearInterval(id);
+              return 0;
             }
-            return prevTimer - 1
-          })
-        }, 1000)
-        setIntervalId(id) // Start a new interval
+            return prevTimer - 1;
+          });
+        }, 1000);
+        setIntervalId(id); // Start a new interval
       })
-      .catch((error) => console.error("Failed to resend OTP:", error))
-  }
+      .catch((error) => console.error("Failed to resend OTP:", error));
+  };
 
   const handleBackClick = () => {
     if (phone) {
-      router.back()
+      router.back();
     }
-  }
+  };
 
-  const [logout] = useLogoutMutation()
+  const [logout] = useLogoutMutation();
 
   const handleLogout = () => {
     logout().then(() => {
-      localStorage.clear()
-      router.replace("/login")
-    })
-  }
+      localStorage.clear();
+      router.replace("/login");
+    });
+  };
 
   useEffect(() => {
     if (meData?.me.isVerified === true) {
-      router.replace("/")
+      router.replace("/");
     }
-  }, [meData, router])
+  }, [meData, router]);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>()
+  } = useForm<FormValues>();
 
   const onSubmit = handleSubmit((data) => {
     verifyPhone({
@@ -134,12 +134,12 @@ const VerifyPhonePage: NextPageWithLayout = () => {
       },
     }).then((res) => {
       if (res.data?.verifyPhone.accessToken) {
-        router.replace("/")
+        router.replace("/");
       }
-    })
-  })
+    });
+  });
 
-  const firstError = Object.keys(errors)?.[0] as keyof FormValues
+  const firstError = Object.keys(errors)?.[0] as keyof FormValues;
 
   return (
     <>
@@ -204,11 +204,11 @@ const VerifyPhonePage: NextPageWithLayout = () => {
         </form>
       )}
     </>
-  )
-}
+  );
+};
 
-export default VerifyPhonePage
+export default VerifyPhonePage;
 
 VerifyPhonePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
-}
+  return <Layout>{page}</Layout>;
+};

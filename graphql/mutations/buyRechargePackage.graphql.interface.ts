@@ -1,16 +1,16 @@
-import * as Types from "../../src/graphql/__generated__/schema.graphql"
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
 
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
-const defaultOptions = {} as const
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+const defaultOptions = {} as const;
 export type BuyRechargePackageMutationVariables = Types.Exact<{
-  input: Types.BuyRechargePackageInput
-}>
+  input: Types.BuyRechargePackageInput;
+}>;
 
 export type BuyRechargePackageMutation = {
-  __typename?: "Mutation"
-  buyRechargePackage: { __typename?: "User"; id: string; balance: number; totalProfit: number }
-}
+  __typename?: "Mutation";
+  buyRechargePackage: { __typename?: "User"; id: string; balance: number; totalProfit: number };
+};
 
 export const BuyRechargePackageDocument = gql`
   mutation buyRechargePackage($input: BuyRechargePackageInput!) {
@@ -20,11 +20,11 @@ export const BuyRechargePackageDocument = gql`
       totalProfit
     }
   }
-`
+`;
 export type BuyRechargePackageMutationFn = Apollo.MutationFunction<
   BuyRechargePackageMutation,
   BuyRechargePackageMutationVariables
->
+>;
 
 /**
  * __useBuyRechargePackageMutation__
@@ -46,15 +46,15 @@ export type BuyRechargePackageMutationFn = Apollo.MutationFunction<
 export function useBuyRechargePackageMutation(
   baseOptions?: Apollo.MutationHookOptions<BuyRechargePackageMutation, BuyRechargePackageMutationVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<BuyRechargePackageMutation, BuyRechargePackageMutationVariables>(
     BuyRechargePackageDocument,
     options
-  )
+  );
 }
-export type BuyRechargePackageMutationHookResult = ReturnType<typeof useBuyRechargePackageMutation>
-export type BuyRechargePackageMutationResult = Apollo.MutationResult<BuyRechargePackageMutation>
+export type BuyRechargePackageMutationHookResult = ReturnType<typeof useBuyRechargePackageMutation>;
+export type BuyRechargePackageMutationResult = Apollo.MutationResult<BuyRechargePackageMutation>;
 export type BuyRechargePackageMutationOptions = Apollo.BaseMutationOptions<
   BuyRechargePackageMutation,
   BuyRechargePackageMutationVariables
->
+>;
