@@ -468,6 +468,7 @@ export type UserPackage = {
   lastConnectedAt?: Maybe<Scalars["DateTime"]["output"]>;
   link: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
+  package: Package;
   remainingTraffic: Scalars["BigNumber"]["output"];
   totalTraffic: Scalars["BigNumber"]["output"];
   /** Identifies the date and time when the object was last updated. */

@@ -18,6 +18,7 @@ export type UserPackagesQuery = {
     createdAt: any;
     updatedAt: any;
     lastConnectedAt?: any | null;
+    package: { __typename?: "Package"; category: Types.PackageCategory };
   }>;
 };
 
@@ -33,6 +34,9 @@ export const UserPackagesDocument = gql`
       createdAt
       updatedAt
       lastConnectedAt
+      package {
+        category
+      }
     }
   }
 `;

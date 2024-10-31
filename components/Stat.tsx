@@ -6,6 +6,7 @@ import { Copyable } from "../components/Copyable/Copyable";
 import { UserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface";
 import { bytesToGB, getRemainingDays, isRecentlyConnected, remainingTimeToWords, roundTo, timeSince } from "../helpers";
 import { ArrowPathIcon } from "../icons";
+import { PackageCategory } from "../src/graphql/__generated__/schema.graphql";
 
 type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
@@ -56,7 +57,13 @@ export function Stat({ pack, onRenewClick }: StatProps) {
           </div>
         )}
       </div>
-      <div className="text-xs font-thin text-slate-500">{packageNote}</div>
+      <div className="flex justify-between text-xs font-thin text-slate-500">
+        <div>{packageNote}</div>
+        <div className="rounded bg-slate-400 px-2 py-0.5 text-[10px] text-white">
+          {pack.package.category === PackageCategory.Quality ? "ویژه" : ""}
+          {pack.package.category === PackageCategory.Economic ? "اقتصادی" : ""}
+        </div>
+      </div>
       <div className="flex items-center justify-between">
         <div className="ltr ml-4 pt-1 text-sm font-black text-slate-500">
           {remainingTraffic > 0 ? remainingTraffic : 0} GB
@@ -65,7 +72,7 @@ export function Stat({ pack, onRenewClick }: StatProps) {
       </div>
 
       {showRenewBtn ? (
-        <Link className="flex" href={`/package-categories?userPackageId=${pack.id}`} onClick={onRenewClick}>
+        <Link className="flex" href={`/packages?category=${pack.package.category}&userPackageId=${pack.id}`} onClick={onRenewClick}>
           <Button variant="outline" className="flex w-full text-slate-600">
             <ArrowPathIcon className="ml-2 size-5" />
             <span>تمدید بسته</span>

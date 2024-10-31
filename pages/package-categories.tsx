@@ -1,9 +1,9 @@
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { ArrowUTurnLeftIcon } from "icons";
 import { NextPageWithLayout } from "./_app";
 import Layout from "../components/Layout/Layout";
-import { useSearchParams } from "next/navigation";
 
 const packageCategories = [
   {
@@ -14,7 +14,7 @@ const packageCategories = [
   {
     id: "QUALITY",
     title: "بسته های ویژه",
-    description: "بسته‌های ویژه مخصوص افرادی است که کیفیت و سرعت بالا برایشان حیاتی است.",
+    description: "برای کاربرانی که کیفیت و سرعت بسیار بالا برایشان حیاتی است.",
   },
 ];
 

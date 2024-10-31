@@ -46,7 +46,7 @@ const HomePageComponent: React.FC = () => {
 
   useEffect(() => {
     if (!me.loading && !userPackagesLoading) {
-      setIsLoading(false); // When both queries are finished, stop loading
+      setIsLoading(false);
     }
   }, [me.loading, userPackagesLoading]);
 

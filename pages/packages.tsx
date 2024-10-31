@@ -108,7 +108,7 @@ const PackagesPage: NextPageWithLayout = () => {
                   <span className="text-lg font-extrabold text-gray-900">
                     {pack.traffic} گیگ {formatDuration(pack.expirationDays)}
                   </span>
-                  <span className="mr-2 rounded bg-slate-400 px-1 py-0.5 text-[10px] text-white">
+                  <span className="mr-2 rounded bg-slate-400 px-2 py-0.5 text-[10px] text-white">
                     {pack.category === PackageCategory.Quality ? "ویژه" : ""}
                     {pack.category === PackageCategory.Economic ? "اقتصادی" : ""}
                   </span>

@@ -9,5 +9,8 @@ query UserPackages {
         createdAt
         updatedAt
         lastConnectedAt
+        package {
+            category
+        }
     }
 }
