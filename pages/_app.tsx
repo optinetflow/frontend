@@ -24,4 +24,5 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </ApolloProvider>
     );
   }
+  return null
 }
