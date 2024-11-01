@@ -32,7 +32,7 @@ const HomePageComponent: React.FC = () => {
   const router = useRouter();
   const client = useApolloClient();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true);
   const me = useMeQuery({ fetchPolicy: "cache-and-network" });
 
   const {

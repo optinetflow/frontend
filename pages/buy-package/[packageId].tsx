@@ -30,7 +30,6 @@ const BuyPackagePage: NextPageWithLayout = () => {
   const packages = useGetPackagesQuery({ fetchPolicy: "cache-and-network", variables: { input: { category: null } } });
   const me = useMeQuery({ fetchPolicy: "cache-only" });
   const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId);
-  console.log({packages, currentPackage, me})
   const onSubmit = handleSubmit((data) => {
     buyPackageMutate({
       variables: {
