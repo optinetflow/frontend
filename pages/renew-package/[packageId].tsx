@@ -29,7 +29,7 @@ const BuyPackagePage: NextPageWithLayout = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RenewPackageInput>();
-  const packages = useGetPackagesQuery({ fetchPolicy: "cache-only", variables: { input: {} } });
+  const packages = useGetPackagesQuery({ fetchPolicy: "cache-and-network", variables: { input: {} } });
   const me = useMeQuery({ fetchPolicy: "cache-only" });
   const currentPackage = packages.data?.packages?.find((pack) => pack.id === packageId);
 
