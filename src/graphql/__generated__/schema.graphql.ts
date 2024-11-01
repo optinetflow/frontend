@@ -251,6 +251,7 @@ export type MutationVerifyPhoneArgs = {
 export type Package = {
   __typename?: "Package";
   category: PackageCategory;
+  categoryFa?: Maybe<Scalars["String"]["output"]>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars["DateTime"]["output"];
   discountedPrice?: Maybe<Scalars["Int"]["output"]>;
@@ -300,7 +301,7 @@ export type Query = {
   me: User;
   packages: Array<Package>;
   rechargePackages: Array<RechargePackage>;
-  userPackages: Array<UserPackage>;
+  userPackages: Array<UserPackageOutput>;
 };
 
 export type QueryClientStatsArgs = {
@@ -459,8 +460,10 @@ export type UserGift = {
   isGiftUsed: Scalars["Boolean"]["output"];
 };
 
-export type UserPackage = {
-  __typename?: "UserPackage";
+export type UserPackageOutput = {
+  __typename?: "UserPackageOutput";
+  category: PackageCategory;
+  categoryFa?: Maybe<Scalars["String"]["output"]>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars["DateTime"]["output"];
   expiryTime: Scalars["BigNumber"]["output"];
@@ -468,7 +471,6 @@ export type UserPackage = {
   lastConnectedAt?: Maybe<Scalars["DateTime"]["output"]>;
   link: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
-  package: Package;
   remainingTraffic: Scalars["BigNumber"]["output"];
   totalTraffic: Scalars["BigNumber"]["output"];
   /** Identifies the date and time when the object was last updated. */

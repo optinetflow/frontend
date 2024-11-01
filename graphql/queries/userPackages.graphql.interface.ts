@@ -8,7 +8,7 @@ export type UserPackagesQueryVariables = Types.Exact<{ [key: string]: never }>;
 export type UserPackagesQuery = {
   __typename?: "Query";
   userPackages: Array<{
-    __typename?: "UserPackage";
+    __typename?: "UserPackageOutput";
     id: string;
     name: string;
     link: string;
@@ -18,7 +18,8 @@ export type UserPackagesQuery = {
     createdAt: any;
     updatedAt: any;
     lastConnectedAt?: any | null;
-    package: { __typename?: "Package"; category: Types.PackageCategory };
+    category: Types.PackageCategory;
+    categoryFa?: string | null;
   }>;
 };
 
@@ -34,9 +35,8 @@ export const UserPackagesDocument = gql`
       createdAt
       updatedAt
       lastConnectedAt
-      package {
-        category
-      }
+      category
+      categoryFa
     }
   }
 `;

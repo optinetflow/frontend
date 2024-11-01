@@ -18,6 +18,7 @@ export type GetPackagesQuery = {
     expirationDays: number;
     userCount: number;
     category: Types.PackageCategory;
+    categoryFa?: string | null;
   }>;
 };
 
@@ -31,6 +32,7 @@ export const GetPackagesDocument = gql`
       expirationDays
       userCount
       category
+      categoryFa
     }
   }
 `;
