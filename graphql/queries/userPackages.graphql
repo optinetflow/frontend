@@ -9,8 +9,7 @@ query UserPackages {
         createdAt
         updatedAt
         lastConnectedAt
-        package {
-            category
-        }
+        category
+        categoryFa
     }
 }

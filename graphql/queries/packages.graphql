@@ -7,5 +7,6 @@ query GetPackages($input: GetPackageInput!) {
         expirationDays
         userCount
         category
+        categoryFa
     }
 }

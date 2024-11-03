@@ -1,5 +1,6 @@
+import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,7 +20,9 @@ interface FormValues {
 }
 
 const VerifyPhonePage: NextPageWithLayout = () => {
+  const client = useApolloClient();
   const router = useRouter();
+  const hasFetchedOtp = useRef(false);
   const domainName = removeWWW(window.location.host);
   const [sendOtpAgain] = useSendOtpAgainMutation({ errorPolicy: "all" });
   const [timer, setTimer] = useState<number>(120); // 2 minutes in seconds
@@ -29,8 +32,9 @@ const VerifyPhonePage: NextPageWithLayout = () => {
   const phone = router.query.phone as string;
 
   useEffect(() => {
-    if (!phone) {
+    if (!phone && !hasFetchedOtp.current) {
       setLoading(true);
+      hasFetchedOtp.current = true;
       sendOtpAgain({
         variables: {
           input: {
@@ -61,7 +65,7 @@ const VerifyPhonePage: NextPageWithLayout = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [phone, domainName, sendOtpAgain]);
+  }, [phone, domainName, sendOtpAgain, otpSent]);
 
   const [verifyPhone, verifyPhoneData] = useVerifyPhoneMutation({ errorPolicy: "all" });
 
@@ -134,6 +138,9 @@ const VerifyPhonePage: NextPageWithLayout = () => {
       },
     }).then((res) => {
       if (res.data?.verifyPhone.accessToken) {
+        // Clear cache for meQuery
+        client.cache.evict({ id: "ROOT_QUERY", fieldName: "me" });
+        client.cache.gc();
         router.replace("/");
       }
     });
