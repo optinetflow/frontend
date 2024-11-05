@@ -72,7 +72,7 @@ const Filters: React.FC<FiltersProps> = ({ isOpen, onClose, setFilter }) => {
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-grow overflow-y-auto px-4 pb-20">
+        <div className="grow overflow-y-auto px-4 pb-20">
           {/* Category Filter */}
           <div className="mb-6">
             <h3 className="mb-2 text-sm font-semibold">نوع بسته</h3>

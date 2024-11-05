@@ -45,6 +45,7 @@ export type MeQuery = {
       __typename?: "UserGift";
       giftPackage?: { __typename?: "Package"; traffic: number } | null;
     }> | null;
+    promotion?: Array<{ __typename?: "PromotionCode"; code: string }> | null;
   };
 };
 
@@ -94,6 +95,9 @@ export const MeDocument = gql`
         giftPackage {
           traffic
         }
+      }
+      promotion {
+        code
       }
     }
   }

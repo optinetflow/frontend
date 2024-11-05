@@ -28,10 +28,11 @@ const ProgressBar: React.FC<ProgressBarProp> = ({ progress }) => {
 
 interface StatProps {
   pack: ArrayElement<UserPackagesQuery["userPackages"]>;
-  onRenewClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  onRenewClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  isFree?: boolean;
 }
 
-export function Stat({ pack, onRenewClick }: StatProps) {
+export function Stat({ pack, onRenewClick, isFree = false }: StatProps) {
   const remainingTime = pack.expiryTime - new Date().getTime();
   const totalTraffic = roundTo(bytesToGB(pack.totalTraffic), 2);
   const remainingTraffic = roundTo(bytesToGB(pack.remainingTraffic), 2);
@@ -69,7 +70,7 @@ export function Stat({ pack, onRenewClick }: StatProps) {
         <ProgressBar progress={((remainingTraffic > 0 ? remainingTraffic : 0) / totalTraffic) * 100} />
       </div>
 
-      {showRenewBtn ? (
+      {showRenewBtn && !isFree ? (
         <Link
           className="flex"
           href={`/packages?category=${pack.category}&userPackageId=${pack.id}`}

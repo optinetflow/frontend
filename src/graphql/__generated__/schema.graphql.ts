@@ -87,6 +87,7 @@ export type Child = {
   phone: Scalars["String"]["output"];
   profitBalance: Scalars["Float"]["output"];
   profitPercent: Scalars["Float"]["output"];
+  promotion?: Maybe<Array<PromotionCode>>;
   referId?: Maybe<Scalars["String"]["output"]>;
   role: Role;
   telegram?: Maybe<TelegramUser>;
@@ -106,6 +107,7 @@ export type ClientStat = {
   enable: Scalars["Boolean"]["output"];
   expiryTime: Scalars["BigNumber"]["output"];
   id: Scalars["ID"]["output"];
+  lastConnectedAt: Scalars["DateTime"]["output"];
   total: Scalars["BigNumber"]["output"];
   up: Scalars["BigNumber"]["output"];
   /** Identifies the date and time when the object was last updated. */
@@ -163,6 +165,7 @@ export type Mutation = {
   buyRechargePackage: User;
   changePassword: User;
   enableGift: Scalars["Boolean"]["output"];
+  enableTodayFreePackage?: Maybe<UserPackageOutput>;
   enterCost: User;
   login: Login;
   logout: Scalars["Boolean"]["output"];
@@ -289,6 +292,11 @@ export enum PaymentType {
   PackagePurchase = "PACKAGE_PURCHASE",
   WalletRecharge = "WALLET_RECHARGE",
 }
+
+export type PromotionCode = {
+  __typename?: "PromotionCode";
+  code: Scalars["String"]["output"];
+};
 
 export type Query = {
   __typename?: "Query";
@@ -444,6 +452,7 @@ export type User = {
   phone: Scalars["String"]["output"];
   profitBalance: Scalars["Float"]["output"];
   profitPercent: Scalars["Float"]["output"];
+  promotion?: Maybe<Array<PromotionCode>>;
   referId?: Maybe<Scalars["String"]["output"]>;
   role: Role;
   telegram?: Maybe<TelegramUser>;
