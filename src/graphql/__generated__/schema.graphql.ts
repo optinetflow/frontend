@@ -335,6 +335,7 @@ export type Query = {
   children: Array<Child>;
   clientStats: Array<ClientStat>;
   getBrandInfo: Brand;
+  getGiftPackages: Array<Package>;
   getPromotionCodes: Array<Promotion>;
   hello: Scalars["String"]["output"];
   helloWorld: Scalars["String"]["output"];

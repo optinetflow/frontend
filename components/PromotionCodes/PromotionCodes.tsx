@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import Modal from "@/components/ui/modal";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { useGetGiftPackagesQuery } from "graphql/queries/getGiftPackages.graphql.interface";
 import { GetPromotionCodesQuery, useGetPromotionCodesQuery } from "graphql/queries/getPromotionCodes.graphql.interface";
 import { removeWWW } from "helpers";
 import PromotionCodeCardSkeleton from "./PromotionCodesSkeleton";
@@ -26,9 +27,11 @@ const PromotionCodes: React.FC = () => {
     data,
     refetch: refetchPromotionCodes,
     loading,
-    error,
   } = useGetPromotionCodesQuery({
     fetchPolicy: "cache-and-network",
+  });
+  const { data: giftPackages } = useGetGiftPackagesQuery({
+    fetchPolicy: "cache-first",
   });
   const [createPromotionCode, createPromotionCodeData] = useCreatePromotionCodeMutation();
   const [deletePromotionCode, deletePromotionCodeData] = useDeletePromotionCodeMutation();
@@ -59,15 +62,19 @@ const PromotionCodes: React.FC = () => {
   const onAddPromotionCode = async (formData: PromotionCodeForm) => {
     createPromotionCode({
       variables: { input: { code: formData.code, giftPackageId: formData.giftPackageId } },
-    }).then(() => {
-      toast({
-        title: "موفقیت",
-        description: "کد تبلیغاتی جدید اضافه شد.",
+    })
+      .then(() => {
+        toast({
+          title: "موفقیت",
+          description: "کد تبلیغاتی جدید اضافه شد.",
+        });
+        resetAdd();
+        setIsAddSheetOpen(false);
+        refetchPromotionCodes();
+      })
+      .catch((err) => {
+        console.error(err);
       });
-      resetAdd();
-      setIsAddSheetOpen(false);
-      refetchPromotionCodes();
-    });
   };
 
   const onInitiateDeletePromotionCode = (code: GetPromotionCodesQuery["getPromotionCodes"][number]) => {
@@ -77,15 +84,19 @@ const PromotionCodes: React.FC = () => {
 
   const confirmDeletePromotionCode = async () => {
     if (promotionCodeToDelete) {
-      deletePromotionCode({ variables: { input: { promotionId: promotionCodeToDelete.id } } }).then(() => {
-        toast({
-          title: "موفقیت",
-          description: "کد تبلیغاتی حذف شد.",
+      deletePromotionCode({ variables: { input: { promotionId: promotionCodeToDelete.id } } })
+        .then(() => {
+          toast({
+            title: "موفقیت",
+            description: "کد تبلیغاتی حذف شد.",
+          });
+          setIsDeleteModalOpen(false);
+          setPromotionCodeToDelete(null);
+          refetchPromotionCodes();
+        })
+        .catch((err) => {
+          console.error(err);
         });
-        setIsDeleteModalOpen(false);
-        setPromotionCodeToDelete(null);
-        refetchPromotionCodes();
-      });
     }
   };
 
@@ -170,16 +181,12 @@ const PromotionCodes: React.FC = () => {
                 <p className="font-semibold">کد: {promo.code}</p>
                 <p>هدیه: {promo.giftPackage?.traffic ? `${promo.giftPackage.traffic} گیگابایت` : "ندارد"}</p>
               </div>
-              <div className="flex space-x-4">
-                <button onClick={() => handleShare(promo)} className="text-gray-600 hover:text-blue-500">
-                  <Share2 />
-                </button>
-                <button
+              <div className="flex">
+                <Share2 onClick={() => handleShare(promo)} className="text-gray-600 hover:text-blue-500" />
+                <Trash2
                   onClick={() => onInitiateDeletePromotionCode(promo)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <Trash2 />
-                </button>
+                  className="mr-3 text-red-600 hover:text-red-800"
+                />
               </div>
             </div>
           ))
@@ -219,9 +226,12 @@ const PromotionCodes: React.FC = () => {
         )}
       </Modal>
 
-      {/* Add Promotion Code Bottom Sheet */}
       <BottomSheet isOpen={isAddSheetOpen} onClose={() => setIsAddSheetOpen(false)} title="افزودن کد تبلیغاتی جدید">
-        <form onSubmit={handleSubmitAdd(onAddPromotionCode)} className="flex flex-col space-y-4">
+        <form
+          onSubmit={handleSubmitAdd(onAddPromotionCode)}
+          className="flex flex-col space-y-4"
+          style={{ height: "60vh" }}
+        >
           <div className="space-y-2">
             <Label htmlFor="code">کد تبلیغاتی</Label>
             <Input
@@ -251,9 +261,11 @@ const PromotionCodes: React.FC = () => {
                     <SelectValue placeholder="انتخاب هدیه" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value={"1eea18fb-6149-4db7-9a1b-17377fdd73eb"}>هدیه 1.5 گیگابایت</SelectItem>
-                    </SelectGroup>
+                    {giftPackages?.getGiftPackages.map((gift) => (
+                      <SelectGroup key={gift.id}>
+                        <SelectItem value={gift.id}>هدیه {gift.traffic} گیگابایت</SelectItem>
+                      </SelectGroup>
+                    ))}
                   </SelectContent>
                 </Select>
               )}
@@ -262,10 +274,15 @@ const PromotionCodes: React.FC = () => {
               {errors?.[firstError]?.message || createPromotionCodeData.error?.message}&nbsp;
             </div>
           </div>
-
-          <Button disabled={createPromotionCodeData?.loading} type="submit" className="w-full">
-            {createPromotionCodeData?.loading ? "لطفا کمی صبر کنید..." : "افزودن"}
-          </Button>
+          <div className="absolute bottom-0 left-0 w-full border-gray-200 bg-white p-4">
+            <button
+              type="submit"
+              disabled={createPromotionCodeData?.loading}
+              className="w-full rounded-md bg-slate-800 px-4 py-3 text-white hover:bg-slate-700"
+            >
+              {createPromotionCodeData?.loading ? "لطفا کمی صبر کنید..." : "افزودن"}
+            </button>
+          </div>
         </form>
       </BottomSheet>
 

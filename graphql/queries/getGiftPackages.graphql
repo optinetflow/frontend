@@ -1,0 +1,6 @@
+query getGiftPackages {
+  getGiftPackages {
+    id
+    traffic
+  }
+}

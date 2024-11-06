@@ -6,6 +6,7 @@ import { Stat } from "../Stat";
 interface FreePackageBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   freePackage: any;
   promotionCode: string;
 }
@@ -95,7 +96,7 @@ const FreePackageBottomSheet: React.FC<FreePackageBottomSheetProps> = ({
             </div>
           )}
 
-          <div className="absolute bottom-0 left-0 w-full border-t border-gray-200 bg-white p-4">
+          <div className="absolute bottom-0 left-0 w-full border-gray-200 bg-white p-4">
             <button
               type="button"
               onClick={handleSubmit}
