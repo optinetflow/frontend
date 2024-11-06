@@ -38,6 +38,7 @@ export type MeQuery = {
     parent?: {
       __typename?: "Parent";
       id: string;
+      freePackageId?: string | null;
       telegram?: { __typename?: "ParentTelegram"; username?: string | null } | null;
       bankCard?: Array<{ __typename?: "BankCard"; number: string }> | null;
     } | null;
@@ -90,6 +91,7 @@ export const MeDocument = gql`
         bankCard {
           number
         }
+        freePackageId
       }
       userGift {
         giftPackage {

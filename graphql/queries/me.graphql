@@ -38,6 +38,7 @@ query Me {
             bankCard {
                 number
             }
+            freePackageId
         }
         userGift {
             giftPackage {

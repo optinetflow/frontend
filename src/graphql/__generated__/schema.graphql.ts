@@ -107,7 +107,7 @@ export type ClientStat = {
   enable: Scalars["Boolean"]["output"];
   expiryTime: Scalars["BigNumber"]["output"];
   id: Scalars["ID"]["output"];
-  lastConnectedAt: Scalars["DateTime"]["output"];
+  lastConnectedAt?: Maybe<Scalars["DateTime"]["output"]>;
   total: Scalars["BigNumber"]["output"];
   up: Scalars["BigNumber"]["output"];
   /** Identifies the date and time when the object was last updated. */
@@ -276,6 +276,7 @@ export enum PackageCategory {
 export type Parent = {
   __typename?: "Parent";
   bankCard?: Maybe<Array<BankCard>>;
+  freePackageId?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
   telegram?: Maybe<ParentTelegram>;
 };

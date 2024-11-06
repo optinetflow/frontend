@@ -70,7 +70,7 @@ const FreePackageBottomSheet: React.FC<FreePackageBottomSheetProps> = ({
         className={`relative z-40 w-full max-w-lg rounded-t-lg bg-white shadow-xl transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "translate-y-full"
         }`}
-        style={{ height: "56%" }} // Set height to 60% of the screen
+        style={{ height: "63%" }} // Set height to 60% of the screen
       >
         <div className="flex items-center justify-between p-4">
           <h2 className="text-lg font-bold">بسته رایگان روزانه</h2>
