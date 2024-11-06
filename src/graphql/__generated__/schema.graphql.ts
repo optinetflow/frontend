@@ -114,6 +114,15 @@ export type ClientStat = {
   updatedAt: Scalars["DateTime"]["output"];
 };
 
+export type CreatePromotionInput = {
+  code: Scalars["String"]["input"];
+  giftPackageId?: InputMaybe<Scalars["ID"]["input"]>;
+};
+
+export type DeletePromotionInput = {
+  promotionId: Scalars["ID"]["input"];
+};
+
 export type EnterCostInput = {
   amount: Scalars["Int"]["input"];
   description?: InputMaybe<Scalars["String"]["input"]>;
@@ -164,6 +173,8 @@ export type Mutation = {
   buyPackage: Scalars["String"]["output"];
   buyRechargePackage: User;
   changePassword: User;
+  createPromotionCode: Promotion;
+  deletePromotionCode: Scalars["Boolean"]["output"];
   enableGift: Scalars["Boolean"]["output"];
   enableTodayFreePackage?: Maybe<UserPackageOutput>;
   enterCost: User;
@@ -193,6 +204,14 @@ export type MutationBuyRechargePackageArgs = {
 
 export type MutationChangePasswordArgs = {
   data: ChangePasswordInput;
+};
+
+export type MutationCreatePromotionCodeArgs = {
+  data: CreatePromotionInput;
+};
+
+export type MutationDeletePromotionCodeArgs = {
+  data: DeletePromotionInput;
 };
 
 export type MutationEnterCostArgs = {
@@ -294,6 +313,17 @@ export enum PaymentType {
   WalletRecharge = "WALLET_RECHARGE",
 }
 
+export type Promotion = {
+  __typename?: "Promotion";
+  code: Scalars["String"]["output"];
+  createdAt: Scalars["DateTime"]["output"];
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  giftPackage?: Maybe<Package>;
+  id: Scalars["ID"]["output"];
+  parentUser: User;
+  updatedAt: Scalars["DateTime"]["output"];
+};
+
 export type PromotionCode = {
   __typename?: "PromotionCode";
   code: Scalars["String"]["output"];
@@ -305,6 +335,7 @@ export type Query = {
   children: Array<Child>;
   clientStats: Array<ClientStat>;
   getBrandInfo: Brand;
+  getPromotionCodes: Array<Promotion>;
   hello: Scalars["String"]["output"];
   helloWorld: Scalars["String"]["output"];
   me: User;

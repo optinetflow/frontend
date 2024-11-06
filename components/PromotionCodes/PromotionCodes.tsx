@@ -9,34 +9,41 @@ import { Label } from "@/components/ui/label";
 import Modal from "@/components/ui/modal";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { GetPromotionCodesQuery, useGetPromotionCodesQuery } from "graphql/queries/getPromotionCodes.graphql.interface";
 import { removeWWW } from "helpers";
+import PromotionCodeCardSkeleton from "./PromotionCodesSkeleton";
 import { Copyable } from "../../components/Copyable/Copyable";
-
-type GiftType = "FOUR_GB" | "EIGHT_GB";
-
-interface PromotionCode {
-  id: string;
-  code: string;
-  gift: GiftType;
-}
+import { useCreatePromotionCodeMutation } from "../../graphql/mutations/createPromotionCode.graphql.interface";
+import { useDeletePromotionCodeMutation } from "../../graphql/mutations/deletePromotionCode.graphql.interface";
 
 interface PromotionCodeForm {
   code: string;
-  gift: GiftType;
+  giftPackageId: string;
 }
 
 const PromotionCodes: React.FC = () => {
-  const [promotionCodes, setPromotionCodes] = useState<PromotionCode[]>([
-    // Example initial data
-    { id: "1", code: "PROMO2024", gift: "FOUR_GB" },
-    { id: "2", code: "SAVE50", gift: "EIGHT_GB" },
-  ]);
+  const {
+    data,
+    refetch: refetchPromotionCodes,
+    loading,
+    error,
+  } = useGetPromotionCodesQuery({
+    fetchPolicy: "cache-and-network",
+  });
+  const [createPromotionCode, createPromotionCodeData] = useCreatePromotionCodeMutation();
+  const [deletePromotionCode, deletePromotionCodeData] = useDeletePromotionCodeMutation();
+
+  const promotionCodes = data?.getPromotionCodes || [];
 
   const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [selectedPromoForShare, setSelectedPromoForShare] = useState<PromotionCode | null>(null);
+  const [selectedPromoForShare, setSelectedPromoForShare] = useState<
+    GetPromotionCodesQuery["getPromotionCodes"][number] | null
+  >(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [promotionCodeToDelete, setPromotionCodeToDelete] = useState<PromotionCode | null>(null);
+  const [promotionCodeToDelete, setPromotionCodeToDelete] = useState<
+    GetPromotionCodesQuery["getPromotionCodes"][number] | null
+  >(null);
 
   const { toast } = useToast();
 
@@ -45,49 +52,40 @@ const PromotionCodes: React.FC = () => {
     handleSubmit: handleSubmitAdd,
     control: controlAdd,
     reset: resetAdd,
-    formState: { errors: errorsAdd },
+    formState: { errors },
   } = useForm<PromotionCodeForm>();
+  const firstError = Object.keys(errors)?.[0] as keyof PromotionCodeForm;
 
-  const onAddPromotionCode = (data: PromotionCodeForm) => {
-    // Check for duplicate codes
-    const isDuplicate = promotionCodes.some((code) => code.code === data.code);
-    if (isDuplicate) {
+  const onAddPromotionCode = async (formData: PromotionCodeForm) => {
+    createPromotionCode({
+      variables: { input: { code: formData.code, giftPackageId: formData.giftPackageId } },
+    }).then(() => {
       toast({
-        title: "خطا",
-        description: "این کد تبلیغاتی قبلاً اضافه شده است.",
-        variant: "destructive",
+        title: "موفقیت",
+        description: "کد تبلیغاتی جدید اضافه شد.",
       });
-      return;
-    }
-
-    const newCode: PromotionCode = {
-      id: (promotionCodes.length + 1).toString(),
-      code: data.code,
-      gift: data.gift,
-    };
-    setPromotionCodes([...promotionCodes, newCode]);
-    toast({
-      title: "موفقیت",
-      description: "کد تبلیغاتی جدید اضافه شد.",
+      resetAdd();
+      setIsAddSheetOpen(false);
+      refetchPromotionCodes();
     });
-    resetAdd();
-    setIsAddSheetOpen(false); // Close the Add Bottom Sheet after successful addition
   };
 
-  const onInitiateDeletePromotionCode = (code: PromotionCode) => {
+  const onInitiateDeletePromotionCode = (code: GetPromotionCodesQuery["getPromotionCodes"][number]) => {
     setPromotionCodeToDelete(code);
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDeletePromotionCode = () => {
+  const confirmDeletePromotionCode = async () => {
     if (promotionCodeToDelete) {
-      setPromotionCodes(promotionCodes.filter((code) => code.id !== promotionCodeToDelete.id));
-      toast({
-        title: "موفقیت",
-        description: "کد تبلیغاتی حذف شد.",
+      deletePromotionCode({ variables: { input: { promotionId: promotionCodeToDelete.id } } }).then(() => {
+        toast({
+          title: "موفقیت",
+          description: "کد تبلیغاتی حذف شد.",
+        });
+        setIsDeleteModalOpen(false);
+        setPromotionCodeToDelete(null);
+        refetchPromotionCodes();
       });
-      setIsDeleteModalOpen(false);
-      setPromotionCodeToDelete(null);
     }
   };
 
@@ -100,7 +98,7 @@ const PromotionCodes: React.FC = () => {
     setPromotionCodeToDelete(null);
   };
 
-  const handleShare = (promo: PromotionCode) => {
+  const handleShare = (promo: GetPromotionCodesQuery["getPromotionCodes"][number]) => {
     setSelectedPromoForShare(promo);
     setIsShareModalOpen(true);
   };
@@ -149,30 +147,45 @@ const PromotionCodes: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-800">مدیریت کدهای تبلیغاتی</h2>
         <div
           onClick={() => setIsAddSheetOpen(true)}
-          className="flex items-center justify-center rounded-full bg-slate-500 p-1 text-white transition-colors hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="flex cursor-pointer items-center justify-center rounded-full bg-slate-500 p-1 text-white transition-colors hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400"
         >
           <PlusIcon />
         </div>
       </div>
 
       <div className="space-y-4">
-        {promotionCodes.length === 0 ? (
+        {loading && !data ? (
+          // Display multiple skeleton cards while loading
+          <>
+            <PromotionCodeCardSkeleton />
+            <PromotionCodeCardSkeleton />
+            <PromotionCodeCardSkeleton />
+          </>
+        ) : promotionCodes.length === 0 ? (
           <p className="text-gray-500">هیچ کد تبلیغاتی موجود نیست.</p>
         ) : (
           promotionCodes.map((promo) => (
             <div key={promo.id} className="mb-4 flex w-full items-center justify-between rounded-lg bg-slate-50 p-4">
               <div>
                 <p className="font-semibold">کد: {promo.code}</p>
-                <p>هدیه: {promo.gift === "FOUR_GB" ? "4 گیگابایت" : "8 گیگابایت"}</p>
+                <p>هدیه: {promo.giftPackage?.traffic ? `${promo.giftPackage.traffic} گیگابایت` : "ندارد"}</p>
               </div>
-              <div className="flex">
-                <Share2 onClick={() => handleShare(promo)} />
-                <Trash2 onClick={() => onInitiateDeletePromotionCode(promo)} className="mr-1 text-red-800" />
+              <div className="flex space-x-4">
+                <button onClick={() => handleShare(promo)} className="text-gray-600 hover:text-blue-500">
+                  <Share2 />
+                </button>
+                <button
+                  onClick={() => onInitiateDeletePromotionCode(promo)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  <Trash2 />
+                </button>
               </div>
             </div>
           ))
         )}
       </div>
+
       <Modal
         isOpen={isShareModalOpen}
         onClose={() => {
@@ -205,27 +218,31 @@ const PromotionCodes: React.FC = () => {
           </div>
         )}
       </Modal>
+
       {/* Add Promotion Code Bottom Sheet */}
       <BottomSheet isOpen={isAddSheetOpen} onClose={() => setIsAddSheetOpen(false)} title="افزودن کد تبلیغاتی جدید">
         <form onSubmit={handleSubmitAdd(onAddPromotionCode)} className="flex flex-col space-y-4">
-          {/* Code Input */}
           <div className="space-y-2">
-            <Label htmlFor="addCode">کد تبلیغاتی</Label>
+            <Label htmlFor="code">کد تبلیغاتی</Label>
             <Input
-              {...registerAdd("code", { required: "لطفا کد تبلیغاتی را وارد کنید." })}
-              id="addCode"
+              {...registerAdd("code", {
+                required: "لطفا کد تبلیغاتی را وارد کنید.",
+                pattern: {
+                  value: /^[\dA-Za-z]{4,10}$/,
+                  message: "کد باید بین 4 تا 10 حرف باشد و فقط شامل حروف انگلیسی و اعداد باشد.",
+                },
+              })}
+              id="code"
               type="text"
               placeholder="کد تبلیغاتی"
-              required
             />
-            {errorsAdd.code && <span className="text-sm text-red-600">{errorsAdd.code.message}</span>}
           </div>
 
           {/* Gift Select */}
           <div className="space-y-2">
             <Label htmlFor="addGift">هدیه</Label>
             <Controller
-              name="gift"
+              name="giftPackageId"
               control={controlAdd}
               rules={{ required: "لطفا نوع هدیه را انتخاب کنید." }}
               render={({ field: { onChange, value } }) => (
@@ -235,19 +252,19 @@ const PromotionCodes: React.FC = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="FOUR_GB">هدیه 4 گیگابایت</SelectItem>
-                      <SelectItem value="EIGHT_GB">هدیه 8 گیگابایت</SelectItem>
+                      <SelectItem value={"1eea18fb-6149-4db7-9a1b-17377fdd73eb"}>هدیه 1.5 گیگابایت</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               )}
             />
-            {errorsAdd.gift && <span className="text-sm text-red-600">{errorsAdd.gift.message}</span>}
+            <div className="text-sm text-red-600">
+              {errors?.[firstError]?.message || createPromotionCodeData.error?.message}&nbsp;
+            </div>
           </div>
 
-          {/* Submit Button */}
-          <Button type="submit" className="w-full">
-            افزودن
+          <Button disabled={createPromotionCodeData?.loading} type="submit" className="w-full">
+            {createPromotionCodeData?.loading ? "لطفا کمی صبر کنید..." : "افزودن"}
           </Button>
         </form>
       </BottomSheet>
@@ -256,8 +273,12 @@ const PromotionCodes: React.FC = () => {
       <BottomSheet isOpen={isDeleteModalOpen} onClose={cancelDeletePromotionCode} title="تأیید حذف کد تبلیغاتی">
         <div className="flex flex-col items-center space-y-4">
           <p>آیا مطمئن هستید که می‌خواهید این کد تبلیغاتی را حذف کنید؟</p>
-          <Button className="w-full bg-red-500" onClick={confirmDeletePromotionCode}>
-            حذف
+          <Button
+            disabled={deletePromotionCodeData?.loading}
+            className="w-full bg-red-500"
+            onClick={confirmDeletePromotionCode}
+          >
+            {deletePromotionCodeData?.loading ? "لطفا کمی صبر کنید..." : "حذف"}
           </Button>
         </div>
       </BottomSheet>

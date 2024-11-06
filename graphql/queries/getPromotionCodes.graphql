@@ -1,0 +1,9 @@
+query getPromotionCodes {
+  getPromotionCodes {
+    id
+    code
+    giftPackage {
+      traffic
+    }
+  }
+}
