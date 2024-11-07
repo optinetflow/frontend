@@ -158,7 +158,7 @@ const PromotionCodes: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-800">مدیریت کدهای تبلیغاتی</h2>
         <div
           onClick={() => setIsAddSheetOpen(true)}
-          className="flex cursor-pointer items-center justify-center rounded-full bg-slate-500 p-1 text-white transition-colors hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="flex cursor-pointer items-center justify-center rounded-full bg-slate-800 p-1 text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
         >
           <PlusIcon />
         </div>
@@ -254,7 +254,6 @@ const PromotionCodes: React.FC = () => {
             <Controller
               name="giftPackageId"
               control={controlAdd}
-              rules={{ required: "لطفا نوع هدیه را انتخاب کنید." }}
               render={({ field: { onChange, value } }) => (
                 <Select onValueChange={onChange} value={value}>
                   <SelectTrigger>

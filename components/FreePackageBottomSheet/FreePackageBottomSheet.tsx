@@ -91,7 +91,7 @@ const FreePackageBottomSheet: React.FC<FreePackageBottomSheetProps> = ({
           ) : (
             <div className="mt-10 flex flex-col items-center text-center text-slate-500">
               <ShieldBan className="size-20 text-red-500" />
-              <p>شما بسته رایگان امروزتون رو مصرف کردید.</p>
+              <p>بسته رایگان امروزت رو مصرف کردی.</p>
               <p>بسته بعدی فردا فعال میشه.</p>
             </div>
           )}
