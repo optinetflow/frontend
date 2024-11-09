@@ -22,7 +22,7 @@ export const APOLLO_STATE_PROPERTY_NAME = "__APOLLO_STATE__";
 export const COOKIES_TOKEN_NAME = "jwt";
 
 const getToken = (req?: IncomingMessage) => {
-  const parsedCookie = cookie.parse(req ? req.headers.cookie ?? "" : document.cookie);
+  const parsedCookie = cookie.parse(req ? (req.headers.cookie ?? "") : document.cookie);
 
   return parsedCookie[COOKIES_TOKEN_NAME];
 };

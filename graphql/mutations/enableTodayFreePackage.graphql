@@ -1,0 +1,15 @@
+mutation enableTodayFreePackage {
+  enableTodayFreePackage {
+        id
+        name
+        link
+        remainingTraffic
+        totalTraffic
+        expiryTime
+        createdAt
+        updatedAt
+        lastConnectedAt
+        category
+        categoryFa
+  }
+}

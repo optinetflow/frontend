@@ -5,16 +5,18 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import type { NextPageWithLayout } from "./_app";
+import FreePackageBottomSheet from "../components/FreePackageBottomSheet/FreePackageBottomSheet";
 import Layout from "../components/Layout/Layout";
 import Loading from "../components/Loading/Loading";
 import { Stat } from "../components/Stat";
 import UpdateMessagePopup from "../components/UpdateMessagePopup/UpdateMessagePopup";
 import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface";
+import { useEnableTodayFreePackageMutation } from "../graphql/mutations/enableTodayFreePackage.graphql.interface";
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface";
 import { MeDocument, MeQuery, useMeQuery } from "../graphql/queries/me.graphql.interface";
 
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface";
-import { clearLocalStorageExcept, jsonToB64Url, roundTo, toIRR } from "../helpers";
+import { clearLocalStorageExcept, jsonToB64Url, removeWWW, roundTo, toIRR } from "../helpers";
 import {
   BanknotesIcon,
   ChatBubbleOvalLeftIcon,
@@ -33,6 +35,7 @@ const HomePageComponent: React.FC = () => {
   const client = useApolloClient();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [isFreePackageBottomSheetOpen, setFreePackageBottomSheetOpen] = useState(false);
   const me = useMeQuery({ fetchPolicy: "cache-and-network" });
 
   const {
@@ -43,12 +46,13 @@ const HomePageComponent: React.FC = () => {
 
   const [logout] = useLogoutMutation();
   const [enableGift, enableGiftData] = useEnableGiftMutation();
+  const [enableTodayFreePackage, enableTodayFreePackageData] = useEnableTodayFreePackageMutation();
 
   useEffect(() => {
-    if (!me.loading && !userPackagesLoading) {
+    if ((!me.loading || me.data) && (!userPackagesLoading || data)) {
       setIsLoading(false);
     }
-  }, [me.loading, userPackagesLoading]);
+  }, [data, me.data, me.loading, userPackagesLoading]);
 
   useEffect(() => {
     if (me.data?.me.isVerified === false) {
@@ -79,6 +83,11 @@ const HomePageComponent: React.FC = () => {
       refetchUserPackages();
     });
   };
+  const handleEnableFreePackage = () => {
+    enableTodayFreePackage().then(() => {
+      setFreePackageBottomSheetOpen(true);
+    });
+  };
 
   const botRef = `https://t.me/${me.data?.me.brand?.botUsername}?start=${jsonToB64Url({ uid: me.data?.me.id || "" })}`;
   const isAdmin = me?.data?.me.role !== "USER";
@@ -89,8 +98,13 @@ const HomePageComponent: React.FC = () => {
   const registerToBotText = isAdmin ? "ثبت نام در ربات تلگرام" : "پیش از اتمام بسته خبردارم کن (عضویت ربات تلگرام)";
   const hasPackage = Boolean(data?.userPackages?.length);
   const gif = me.data?.me?.userGift?.[0]?.giftPackage?.traffic;
+  const hasFreePackage = me.data?.me.parent?.freePackageId ? true : false;
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    accountIsBlocked(e);
+    checkAdminRequirements(e);
+  };
+  const handleGetCustomersClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e);
     accountIsBlocked(e);
     checkAdminRequirements(e);
@@ -171,8 +185,18 @@ const HomePageComponent: React.FC = () => {
               <span> {enableGiftData.loading ? "در حال فعال‌سازی..." : `فعال سازی ${gif} گیگ هدیه 🎁🥳`}</span>
             </Button>
           )}
+          {hasFreePackage && (
+            <Button
+              variant="outline"
+              disabled={enableTodayFreePackageData.loading}
+              className="flex w-full"
+              onClick={handleEnableFreePackage}
+            >
+              <span>دریافت بسته رایگان امروز 🎈</span>
+            </Button>
+          )}
           {isAdmin && (
-            <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
+            <Link className="flex" href="/customers" onClick={handleGetCustomersClick}>
               <Button variant="outline" className="flex w-full">
                 <UsersIcon className="ml-2 size-5" />
                 <span>مشتری‌ها</span>
@@ -231,6 +255,18 @@ const HomePageComponent: React.FC = () => {
             )}
           </div>
           <UpdateMessagePopup />
+          <FreePackageBottomSheet
+            isOpen={isFreePackageBottomSheetOpen}
+            onClose={() => setFreePackageBottomSheetOpen(false)}
+            freePackage={enableTodayFreePackageData.data?.enableTodayFreePackage}
+            promotionCode={
+              me.data.me.promotion?.length
+                ? me.data.me.promotion[0].code
+                : removeWWW(window.location.host) === "vaslshim.com"
+                  ? "save"
+                  : "vvip"
+            }
+          />
         </div>
       </div>
     );

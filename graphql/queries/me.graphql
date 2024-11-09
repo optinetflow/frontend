@@ -38,11 +38,15 @@ query Me {
             bankCard {
                 number
             }
+            freePackageId
         }
         userGift {
             giftPackage {
                 traffic
             }
+        }
+        promotion {
+            code
         }
     }
 }

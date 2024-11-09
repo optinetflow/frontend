@@ -1,0 +1,5 @@
+mutation createPromotionCode($input: CreatePromotionInput!) {
+  createPromotionCode(data: $input)  {
+    code
+  }
+}

@@ -38,6 +38,7 @@ export type MeQuery = {
     parent?: {
       __typename?: "Parent";
       id: string;
+      freePackageId?: string | null;
       telegram?: { __typename?: "ParentTelegram"; username?: string | null } | null;
       bankCard?: Array<{ __typename?: "BankCard"; number: string }> | null;
     } | null;
@@ -45,6 +46,7 @@ export type MeQuery = {
       __typename?: "UserGift";
       giftPackage?: { __typename?: "Package"; traffic: number } | null;
     }> | null;
+    promotion?: Array<{ __typename?: "PromotionCode"; code: string }> | null;
   };
 };
 
@@ -89,11 +91,15 @@ export const MeDocument = gql`
         bankCard {
           number
         }
+        freePackageId
       }
       userGift {
         giftPackage {
           traffic
         }
+      }
+      promotion {
+        code
       }
     }
   }
