@@ -101,6 +101,10 @@ const HomePageComponent: React.FC = () => {
   const hasFreePackage = me.data?.me.parent?.freePackageId ? true : false;
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    accountIsBlocked(e);
+    checkAdminRequirements(e);
+  };
+  const handleGetCustomersClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     pleaseCharge(e);
     accountIsBlocked(e);
     checkAdminRequirements(e);
@@ -192,7 +196,7 @@ const HomePageComponent: React.FC = () => {
             </Button>
           )}
           {isAdmin && (
-            <Link className="flex" href="/customers" onClick={handleBuyPackageClick}>
+            <Link className="flex" href="/customers" onClick={handleGetCustomersClick}>
               <Button variant="outline" className="flex w-full">
                 <UsersIcon className="ml-2 size-5" />
                 <span>مشتری‌ها</span>

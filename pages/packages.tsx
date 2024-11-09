@@ -5,12 +5,14 @@ import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { useToast } from "@/components/ui/use-toast";
 import type { NextPageWithLayout } from "./_app";
 import FilterBottomSheet from "../components/FIlterBottomSheet/FilterBottomSheet";
 import Layout from "../components/Layout/Layout";
 
 import QuickFilter, { Filter } from "../components/quickFilter/QuickFilter";
 import SkeletonPackage from "../components/SkeletonPackage/SkeletonPackage";
+import { useMeQuery } from "../graphql/queries/me.graphql.interface";
 import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface";
 import { formatDuration, toIRR } from "../helpers";
 import { ArrowUTurnLeftIcon } from "../icons";
@@ -18,6 +20,7 @@ import { PackageCategory } from "../src/graphql/__generated__/schema.graphql";
 
 const PackagesPage: NextPageWithLayout = () => {
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const userPackageId = searchParams.get("userPackageId");
   const category = searchParams.get("category");
   const router = useRouter();
@@ -33,6 +36,9 @@ const PackagesPage: NextPageWithLayout = () => {
     variables: { input: { category: category as PackageCategory } },
     fetchPolicy: "cache-and-network",
   });
+  const me = useMeQuery({ fetchPolicy: "cache-first" });
+  const balance = me.data?.me.balance || 0;
+  const isAdmin = me?.data?.me.role !== "USER";
 
   const quickFilterOptions: Filter[] = [
     // {
@@ -60,6 +66,13 @@ const PackagesPage: NextPageWithLayout = () => {
 
   const handleBack = () => {
     router.replace("/package-categories");
+  };
+
+  const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (balance <= 0 && isAdmin) {
+      e.preventDefault();
+      toast({ variant: "destructive", description: "ابتدا حساب خود را شارژ کنید." });
+    }
   };
 
   useEffect(() => {
@@ -97,9 +110,8 @@ const PackagesPage: NextPageWithLayout = () => {
         ) : (
           packagesData?.packages?.map((pack) => (
             <Link
-              href={
-                userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`
-              }
+              href={userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`}
+              onClick={(e) => handleBuyPackageClick(e)}
               key={pack.id}
               className="mb-4 flex h-32 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"
             >
