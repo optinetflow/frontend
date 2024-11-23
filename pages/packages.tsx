@@ -65,7 +65,7 @@ const PackagesPage: NextPageWithLayout = () => {
   }, [quickFilter, refetchUserPackages, category]);
 
   const handleBack = () => {
-    router.replace("/package-categories");
+    router.back();
   };
 
   const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
