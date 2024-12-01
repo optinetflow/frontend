@@ -77,6 +77,7 @@ export type Child = {
   isDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isParentDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isVerified: Scalars["Boolean"]["output"];
+  joinedPromotionCode?: Maybe<Scalars["String"]["output"]>;
   lastConnectedAt?: Maybe<Scalars["DateTime"]["output"]>;
   maxRechargeDiscountPercent?: Maybe<Scalars["Float"]["output"]>;
   onlinePackages: Scalars["Int"]["output"];
@@ -479,6 +480,7 @@ export type User = {
   isDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isParentDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isVerified: Scalars["Boolean"]["output"];
+  joinedPromotionCode?: Maybe<Scalars["String"]["output"]>;
   maxRechargeDiscountPercent?: Maybe<Scalars["Float"]["output"]>;
   otp?: Maybe<Scalars["String"]["output"]>;
   otpExpiration?: Maybe<Scalars["DateTime"]["output"]>;
