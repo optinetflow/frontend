@@ -110,7 +110,9 @@ const PackagesPage: NextPageWithLayout = () => {
         ) : (
           packagesData?.packages?.map((pack) => (
             <Link
-              href={userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`}
+              href={
+                userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`
+              }
               onClick={(e) => handleBuyPackageClick(e)}
               key={pack.id}
               className="mb-4 flex h-32 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"

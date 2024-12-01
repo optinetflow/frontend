@@ -5,5 +5,6 @@ query getPromotionCodes {
     giftPackage {
       traffic
     }
+    initialDiscountPercent
   }
 }
