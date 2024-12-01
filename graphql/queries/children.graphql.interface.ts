@@ -23,6 +23,7 @@ export type ChildrenQuery = {
     lastConnectedAt?: any | null;
     description?: string | null;
     initialDiscountPercent?: number | null;
+    joinedPromotionCode?: string | null;
     telegram?: {
       __typename?: "TelegramUser";
       id: string;
@@ -53,6 +54,7 @@ export const ChildrenDocument = gql`
       lastConnectedAt
       description
       initialDiscountPercent
+      joinedPromotionCode
       telegram {
         id
         phone

@@ -20,6 +20,7 @@ import { useDeletePromotionCodeMutation } from "../../graphql/mutations/deletePr
 interface PromotionCodeForm {
   code: string;
   giftPackageId: string;
+  initialDiscountPercent: number;
 }
 
 const PromotionCodes: React.FC = () => {
@@ -61,7 +62,13 @@ const PromotionCodes: React.FC = () => {
 
   const onAddPromotionCode = async (formData: PromotionCodeForm) => {
     createPromotionCode({
-      variables: { input: { code: formData.code, giftPackageId: formData.giftPackageId } },
+      variables: {
+        input: {
+          code: formData.code,
+          giftPackageId: formData.giftPackageId,
+          initialDiscountPercent: formData.initialDiscountPercent || null,
+        },
+      },
     })
       .then(() => {
         toast({
@@ -180,6 +187,7 @@ const PromotionCodes: React.FC = () => {
               <div>
                 <p className="font-semibold">کد: {promo.code}</p>
                 <p>هدیه: {promo.giftPackage?.traffic ? `${promo.giftPackage.traffic} گیگابایت` : "ندارد"}</p>
+                <p>تخفیف: {promo.initialDiscountPercent ? `${promo.initialDiscountPercent} درصد` : "ندارد"}</p>
               </div>
               <div className="flex">
                 <Share2 onClick={() => handleShare(promo)} className="text-gray-600 hover:text-blue-500" />
@@ -245,6 +253,21 @@ const PromotionCodes: React.FC = () => {
               id="code"
               type="text"
               placeholder="کد تبلیغاتی"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="discountPercent">درصد تخفیف</Label>
+            <Input
+              {...registerAdd("initialDiscountPercent", {
+                min: { value: 0, message: "درصد تخفیف نمی‌تواند کمتر از 0 باشد." },
+                max: { value: 100, message: "درصد تخفیف نمی‌تواند بیشتر از 100 باشد." },
+                valueAsNumber: true,
+              })}
+              id="initialDiscountPercent"
+              type="number"
+              placeholder="درصد تخفیف"
+              step="0.01"
             />
           </div>
 

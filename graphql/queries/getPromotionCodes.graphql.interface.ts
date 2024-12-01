@@ -11,6 +11,7 @@ export type GetPromotionCodesQuery = {
     __typename?: "Promotion";
     id: string;
     code: string;
+    initialDiscountPercent?: number | null;
     giftPackage?: { __typename?: "Package"; traffic: number } | null;
   }>;
 };
@@ -23,6 +24,7 @@ export const GetPromotionCodesDocument = gql`
       giftPackage {
         traffic
       }
+      initialDiscountPercent
     }
   }
 `;
