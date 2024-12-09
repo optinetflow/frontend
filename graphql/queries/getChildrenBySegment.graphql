@@ -1,0 +1,154 @@
+query getChildrenBySegment {
+    getChildrenBySegment {
+        longLostCustomers {
+            id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        totalProfit
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        }
+        uncategorized {
+            id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        totalProfit
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        }
+        newProspects {
+            id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        totalProfit
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        }
+        engagedSubscribers {
+            id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        totalProfit
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        }
+        dormantSubscribers {
+            id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        totalProfit
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        }
+        recentlyLapsedCustomers {
+            id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        totalProfit
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+            id
+            phone
+            firstname
+            lastname
+            username
+            smallAvatar
+            bigAvatar
+        }
+        }
+    }
+}
