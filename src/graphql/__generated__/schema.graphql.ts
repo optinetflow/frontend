@@ -133,6 +133,16 @@ export type GetBrandInfoInput = {
   domainName: Scalars["String"]["input"];
 };
 
+export type GetChildrenBySegmentOutput = {
+  __typename?: "GetChildrenBySegmentOutput";
+  dormantSubscribers: Array<Child>;
+  engagedSubscribers: Array<Child>;
+  longLostCustomers: Array<Child>;
+  newProspects: Array<Child>;
+  recentlyLapsedCustomers: Array<Child>;
+  uncategorized: Array<Child>;
+};
+
 export type GetClientStatsFiltersInput = {
   id: Scalars["String"]["input"];
 };
@@ -332,9 +342,9 @@ export type PromotionCode = {
 export type Query = {
   __typename?: "Query";
   checkAuth: CheckAuth;
-  children: Array<Child>;
   clientStats: Array<ClientStat>;
   getBrandInfo: Brand;
+  getChildrenBySegment: GetChildrenBySegmentOutput;
   getGiftPackages: Array<Package>;
   getPromotionCodes: Array<Promotion>;
   hello: Scalars["String"]["output"];

@@ -12,10 +12,16 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
+import Accordion from "components/Accordion/Accordion";
 import type { NextPageWithLayout } from "./_app";
+import AccordionItem from "../components/Accordion/AccordionItem";
 import Layout from "../components/Layout/Layout";
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface";
-import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface";
+import {
+  GetChildrenBySegmentDocument,
+  GetChildrenBySegmentQuery,
+  useGetChildrenBySegmentQuery,
+} from "../graphql/queries/getChildrenBySegment.graphql.interface";
 import { copyText } from "../helpers";
 import { avatarColor, roundTo, timeSince, toIRR } from "../helpers";
 import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons";
@@ -36,6 +42,24 @@ interface CustomerProps {
   description?: string | null;
 }
 
+export enum UserSegment {
+  ENGAGED_SUBSCRIBERS = "engagedSubscribers",
+  DORMANT_SUBSCRIBERS = "dormantSubscribers",
+  LONG_LOST_CUSTOMERS = "longLostCustomers",
+  RECENTLY_LAPSED_CUSTOMERS = "recentlyLapsedCustomers",
+  NEW_PROSPECTS = "newProspects",
+  UNCATEGORIZED = "uncategorized",
+}
+
+const UserSegmentDisplay: { [key in UserSegment]: string } = {
+  [UserSegment.ENGAGED_SUBSCRIBERS]: "مشتریان فعال",
+  [UserSegment.DORMANT_SUBSCRIBERS]: "مشتریان غیرفعال",
+  [UserSegment.LONG_LOST_CUSTOMERS]: "مشتریان از دست رفته",
+  [UserSegment.RECENTLY_LAPSED_CUSTOMERS]: "مشتریان اخیرا غیرفعال شده",
+  [UserSegment.NEW_PROSPECTS]: "مشتریان جدید",
+  [UserSegment.UNCATEGORIZED]: "دسته‌بندی نشده",
+};
+
 interface CustomerOptionsProps {
   id: string;
   isDisabled: boolean;
@@ -51,18 +75,18 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
           input: { childId, isDisabled: !isEnabled },
         },
         update: () => {
-          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument });
+          const existingData = client.readQuery<GetChildrenBySegmentQuery>({ query: GetChildrenBySegmentDocument });
 
-          if (existingData) {
-            const updatedChildren = existingData.children.map((child) =>
-              child.id === childId ? { ...child, isDisabled: !isEnabled } : child
-            );
+          // if (existingData) {
+          //   const updatedChildren = existingData.children.map((child) =>
+          //     child.id === childId ? { ...child, isDisabled: !isEnabled } : child
+          //   );
 
-            client.writeQuery({
-              query: ChildrenDocument,
-              data: { children: updatedChildren },
-            });
-          }
+          //   client.writeQuery({
+          //     query: GetChildrenBySegmentDocument,
+          //     data: { children: updatedChildren },
+          //   });
+          // }
         },
       });
     } catch (e) {
@@ -173,10 +197,37 @@ const Customer: React.FC<CustomerProps> = ({
 };
 
 const CustomersPage: NextPageWithLayout = () => {
-  const { data } = useChildrenQuery({ fetchPolicy: "cache-and-network" });
+  const { data } = useGetChildrenBySegmentQuery({ fetchPolicy: "cache-and-network" });
   if (data) {
+    const segments = [
+      {
+        segment: UserSegment.ENGAGED_SUBSCRIBERS,
+        customers: data.getChildrenBySegment.engagedSubscribers,
+      },
+      {
+        segment: UserSegment.DORMANT_SUBSCRIBERS,
+        customers: data.getChildrenBySegment.dormantSubscribers,
+      },
+      {
+        segment: UserSegment.LONG_LOST_CUSTOMERS,
+        customers: data.getChildrenBySegment.longLostCustomers,
+      },
+      {
+        segment: UserSegment.RECENTLY_LAPSED_CUSTOMERS,
+        customers: data.getChildrenBySegment.recentlyLapsedCustomers,
+      },
+      {
+        segment: UserSegment.NEW_PROSPECTS,
+        customers: data.getChildrenBySegment.newProspects,
+      },
+      {
+        segment: UserSegment.UNCATEGORIZED,
+        customers: data.getChildrenBySegment.uncategorized || [], // Handle undefined
+      },
+    ];
+    const sortedSegments = segments.sort((a, b) => b.customers.length - a.customers.length);
     return (
-      <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
+      <div className="mx-auto my-12 flex max-w-xs flex-col justify-center">
         <div className="w-full space-y-4">
           <Link href="/signup">
             <Button className="flex w-full">
@@ -186,29 +237,44 @@ const CustomersPage: NextPageWithLayout = () => {
           </Link>
           <div className="flex rounded-md bg-slate-50 text-sm text-slate-600">
             <span className="w-full p-4">
-              بسته: {data.children.reduce((all, child) => all + child.activePackages, 0)}
+              بسته:
+              {data.getChildrenBySegment.engagedSubscribers.reduce((all, child) => all + child.activePackages, 0) +
+                data.getChildrenBySegment.dormantSubscribers.reduce((all, child) => all + child.activePackages, 0) +
+                data.getChildrenBySegment.newProspects.reduce((all, child) => all + child.activePackages, 0)}
             </span>
             <span className="w-full p-4">
-              آنلاین: {data.children.reduce((all, child) => all + child.onlinePackages, 0)}
+              آنلاین:{" "}
+              {data.getChildrenBySegment.newProspects.reduce((all, child) => all + child.onlinePackages, 0) +
+                data.getChildrenBySegment.engagedSubscribers.reduce((all, child) => all + child.onlinePackages, 0)}
             </span>
           </div>
-          {data.children.map((child) => (
-            <Customer
-              key={child.id}
-              id={child.id}
-              fullname={child.fullname}
-              phone={child.phone}
-              isDisabled={Boolean(child.isDisabled)}
-              avatar={child?.telegram?.smallAvatar || undefined}
-              role={child.role}
-              balance={child.balance}
-              totalProfit={child.totalProfit}
-              activePackages={child.activePackages}
-              onlinePackages={child.onlinePackages}
-              lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
-              description={child.description}
-            />
-          ))}
+          <Accordion className="w-full space-y-2 p-4">
+            {sortedSegments.map(({ segment, customers }) => (
+              <AccordionItem key={segment} title={`${UserSegmentDisplay[segment]} ${customers.length}`}>
+                {customers.length > 0 ? (
+                  customers.map((child) => (
+                    <Customer
+                      key={child.id}
+                      id={child.id}
+                      fullname={child.fullname}
+                      phone={child.phone}
+                      isDisabled={Boolean(child.isDisabled)}
+                      avatar={child?.telegram?.smallAvatar || undefined}
+                      role={child.role}
+                      balance={child.balance}
+                      totalProfit={child.totalProfit}
+                      activePackages={child.activePackages}
+                      onlinePackages={child.onlinePackages}
+                      lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
+                      description={child.description}
+                    />
+                  ))
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">مشتری برای این بخش وجود ندارد.</p>
+                )}
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
     );
