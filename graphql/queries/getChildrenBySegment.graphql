@@ -2,153 +2,185 @@ query getChildrenBySegment {
     getChildrenBySegment {
         longLostCustomers {
             id
-        fullname
-        phone
-        role
-        createdAt
-        updatedAt
-        isDisabled
-        balance
-        totalProfit
-        activePackages
-        onlinePackages
-        lastConnectedAt
-        description
-        initialDiscountPercent
-        telegram {
-            id
+            fullname
+            paymentCount
             phone
-            firstname
-            lastname
-            username
-            smallAvatar
-            bigAvatar
-        }
+            role
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            totalProfit
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
         uncategorized {
             id
-        fullname
-        phone
-        role
-        createdAt
-        updatedAt
-        isDisabled
-        balance
-        totalProfit
-        activePackages
-        onlinePackages
-        lastConnectedAt
-        description
-        initialDiscountPercent
-        telegram {
-            id
+            fullname
+            paymentCount
             phone
-            firstname
-            lastname
-            username
-            smallAvatar
-            bigAvatar
-        }
+            role
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            totalProfit
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
         newProspects {
             id
-        fullname
-        phone
-        role
-        createdAt
-        updatedAt
-        isDisabled
-        balance
-        totalProfit
-        activePackages
-        onlinePackages
-        lastConnectedAt
-        description
-        initialDiscountPercent
-        telegram {
-            id
+            fullname
+            paymentCount
             phone
-            firstname
-            lastname
-            username
-            smallAvatar
-            bigAvatar
-        }
+            role
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            totalProfit
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
         engagedSubscribers {
             id
-        fullname
-        phone
-        role
-        createdAt
-        updatedAt
-        isDisabled
-        balance
-        totalProfit
-        activePackages
-        onlinePackages
-        lastConnectedAt
-        description
-        initialDiscountPercent
-        telegram {
-            id
+            fullname
             phone
-            firstname
-            lastname
-            username
-            smallAvatar
-            bigAvatar
-        }
+            role
+            paymentCount
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            totalProfit
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
         dormantSubscribers {
             id
-        fullname
-        phone
-        role
-        createdAt
-        updatedAt
-        isDisabled
-        balance
-        totalProfit
-        activePackages
-        onlinePackages
-        lastConnectedAt
-        description
-        initialDiscountPercent
-        telegram {
-            id
+            fullname
             phone
-            firstname
-            lastname
-            username
-            smallAvatar
-            bigAvatar
-        }
+            role
+            createdAt
+            updatedAt
+            paymentCount
+            isDisabled
+            balance
+            totalProfit
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
         recentlyLapsedCustomers {
             id
-        fullname
-        phone
-        role
-        createdAt
-        updatedAt
-        isDisabled
-        balance
-        totalProfit
-        activePackages
-        onlinePackages
-        lastConnectedAt
-        description
-        initialDiscountPercent
-        telegram {
-            id
+            fullname
             phone
-            firstname
-            lastname
-            username
-            smallAvatar
-            bigAvatar
+            role
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            totalProfit
+            paymentCount
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
+        trialExplorers {
+            id
+            fullname
+            phone
+            role
+            createdAt
+            updatedAt
+            isDisabled
+            balance
+            paymentCount
+            totalProfit
+            activePackages
+            onlinePackages
+            lastConnectedAt
+            description
+            initialDiscountPercent
+            telegram {
+                id
+                phone
+                firstname
+                lastname
+                username
+                smallAvatar
+                bigAvatar
+            }
         }
     }
 }

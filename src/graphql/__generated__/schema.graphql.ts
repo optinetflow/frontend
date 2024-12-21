@@ -84,6 +84,7 @@ export type Child = {
   otpExpiration?: Maybe<Scalars["DateTime"]["output"]>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars["String"]["output"]>;
+  paymentCount: Scalars["Int"]["output"];
   phone: Scalars["String"]["output"];
   profitBalance: Scalars["Float"]["output"];
   profitPercent: Scalars["Float"]["output"];
@@ -140,6 +141,7 @@ export type GetChildrenBySegmentOutput = {
   longLostCustomers: Array<Child>;
   newProspects: Array<Child>;
   recentlyLapsedCustomers: Array<Child>;
+  trialExplorers: Array<Child>;
   uncategorized: Array<Child>;
 };
 

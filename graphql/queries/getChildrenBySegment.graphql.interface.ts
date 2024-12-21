@@ -13,6 +13,7 @@ export type GetChildrenBySegmentQuery = {
       __typename?: "Child";
       id: string;
       fullname: string;
+      paymentCount: number;
       phone: string;
       role: Types.Role;
       createdAt: any;
@@ -40,6 +41,7 @@ export type GetChildrenBySegmentQuery = {
       __typename?: "Child";
       id: string;
       fullname: string;
+      paymentCount: number;
       phone: string;
       role: Types.Role;
       createdAt: any;
@@ -67,6 +69,7 @@ export type GetChildrenBySegmentQuery = {
       __typename?: "Child";
       id: string;
       fullname: string;
+      paymentCount: number;
       phone: string;
       role: Types.Role;
       createdAt: any;
@@ -96,6 +99,7 @@ export type GetChildrenBySegmentQuery = {
       fullname: string;
       phone: string;
       role: Types.Role;
+      paymentCount: number;
       createdAt: any;
       updatedAt: any;
       isDisabled?: boolean | null;
@@ -125,6 +129,7 @@ export type GetChildrenBySegmentQuery = {
       role: Types.Role;
       createdAt: any;
       updatedAt: any;
+      paymentCount: number;
       isDisabled?: boolean | null;
       balance: number;
       totalProfit: number;
@@ -155,6 +160,35 @@ export type GetChildrenBySegmentQuery = {
       isDisabled?: boolean | null;
       balance: number;
       totalProfit: number;
+      paymentCount: number;
+      activePackages: number;
+      onlinePackages: number;
+      lastConnectedAt?: any | null;
+      description?: string | null;
+      initialDiscountPercent?: number | null;
+      telegram?: {
+        __typename?: "TelegramUser";
+        id: string;
+        phone?: string | null;
+        firstname?: string | null;
+        lastname?: string | null;
+        username?: string | null;
+        smallAvatar?: string | null;
+        bigAvatar?: string | null;
+      } | null;
+    }>;
+    trialExplorers: Array<{
+      __typename?: "Child";
+      id: string;
+      fullname: string;
+      phone: string;
+      role: Types.Role;
+      createdAt: any;
+      updatedAt: any;
+      isDisabled?: boolean | null;
+      balance: number;
+      paymentCount: number;
+      totalProfit: number;
       activePackages: number;
       onlinePackages: number;
       lastConnectedAt?: any | null;
@@ -180,6 +214,7 @@ export const GetChildrenBySegmentDocument = gql`
       longLostCustomers {
         id
         fullname
+        paymentCount
         phone
         role
         createdAt
@@ -205,6 +240,7 @@ export const GetChildrenBySegmentDocument = gql`
       uncategorized {
         id
         fullname
+        paymentCount
         phone
         role
         createdAt
@@ -230,6 +266,7 @@ export const GetChildrenBySegmentDocument = gql`
       newProspects {
         id
         fullname
+        paymentCount
         phone
         role
         createdAt
@@ -257,6 +294,7 @@ export const GetChildrenBySegmentDocument = gql`
         fullname
         phone
         role
+        paymentCount
         createdAt
         updatedAt
         isDisabled
@@ -284,6 +322,7 @@ export const GetChildrenBySegmentDocument = gql`
         role
         createdAt
         updatedAt
+        paymentCount
         isDisabled
         balance
         totalProfit
@@ -311,6 +350,33 @@ export const GetChildrenBySegmentDocument = gql`
         updatedAt
         isDisabled
         balance
+        totalProfit
+        paymentCount
+        activePackages
+        onlinePackages
+        lastConnectedAt
+        description
+        initialDiscountPercent
+        telegram {
+          id
+          phone
+          firstname
+          lastname
+          username
+          smallAvatar
+          bigAvatar
+        }
+      }
+      trialExplorers {
+        id
+        fullname
+        phone
+        role
+        createdAt
+        updatedAt
+        isDisabled
+        balance
+        paymentCount
         totalProfit
         activePackages
         onlinePackages

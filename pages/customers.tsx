@@ -38,8 +38,10 @@ interface CustomerProps {
   totalProfit: number;
   activePackages: number;
   onlinePackages: number;
+  paymentCount: number;
   lastConnectedAt?: Date;
   description?: string | null;
+  segment: UserSegment;
 }
 
 export enum UserSegment {
@@ -48,27 +50,53 @@ export enum UserSegment {
   LONG_LOST_CUSTOMERS = "longLostCustomers",
   RECENTLY_LAPSED_CUSTOMERS = "recentlyLapsedCustomers",
   NEW_PROSPECTS = "newProspects",
-  UNCATEGORIZED = "uncategorized",
+  // UNCATEGORIZED = "uncategorized",
+  TRIAL_EXPLORERS = "trialExplorers",
 }
 
-const UserSegmentDisplay: { [key in UserSegment]: string } = {
-  [UserSegment.ENGAGED_SUBSCRIBERS]: "مشتریان فعال",
-  [UserSegment.DORMANT_SUBSCRIBERS]: "مشتریان غیرفعال",
-  [UserSegment.LONG_LOST_CUSTOMERS]: "مشتریان از دست رفته",
-  [UserSegment.RECENTLY_LAPSED_CUSTOMERS]: "مشتریان اخیرا غیرفعال شده",
-  [UserSegment.NEW_PROSPECTS]: "مشتریان جدید",
-  [UserSegment.UNCATEGORIZED]: "دسته‌بندی نشده",
+interface UserSegmentInfo {
+  title: string;
+  subtitle: string;
+}
+
+const UserSegmentDisplay: { [key in UserSegment]: UserSegmentInfo } = {
+  [UserSegment.TRIAL_EXPLORERS]: {
+    title: "🔍 کاربرای کنجکاو",
+    subtitle: "اونایی که هنوز پرداخت نکردن ولی دارن بسته هدیه یا رایگان رو امتحان می‌کنن!",
+  },
+  [UserSegment.NEW_PROSPECTS]: {
+    title: "👶 کاربرای تازه وارد",
+    subtitle: "اونایی که نه پرداختی داشتن، نه بسته‌ای استفاده کردن.",
+  },
+  [UserSegment.RECENTLY_LAPSED_CUSTOMERS]: {
+    title: "🪂 مشتری‌های در حال پریدن",
+    subtitle: "کاربرایی که بسته فعال ندارن و آخرین پرداختشون کمتر از ۳ ماه پیش بوده.",
+  },
+  [UserSegment.DORMANT_SUBSCRIBERS]: {
+    title: "😴 مشتریان کم‌پیدا",    
+    subtitle: "کاربرایی که بسته فعال دارن ولی یه مدت آنلاین نشدن.",
+  },
+  [UserSegment.ENGAGED_SUBSCRIBERS]: {
+    title: "✨ مشتریان وفادار",
+    subtitle: "اونایی که بسته فعال دارن و همین دیروز آنلاین بودن!",
+  },
+  [UserSegment.LONG_LOST_CUSTOMERS]: {
+    title: "🚶‍♂️ مشتری‌هایی که خیلی وقته رفتن",
+    subtitle: "اونایی که از آخرین پرداختشون بیشتر از ۳ ماه گذشته.",
+  },
 };
+
 
 interface CustomerOptionsProps {
   id: string;
   isDisabled: boolean;
+  segment: UserSegment;
 }
-const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => {
+const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled, segment }) => {
   const [updateChild, updateChildData] = useUpdateChildMutation();
   const client = useApolloClient();
 
-  const handleBlockChild = async (isEnabled: boolean, childId: string) => {
+  const handleBlockChild = async (isEnabled: boolean, childId: string, segment: UserSegment) => {
     try {
       await updateChild({
         variables: {
@@ -77,16 +105,16 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
         update: () => {
           const existingData = client.readQuery<GetChildrenBySegmentQuery>({ query: GetChildrenBySegmentDocument });
 
-          // if (existingData) {
-          //   const updatedChildren = existingData.children.map((child) =>
-          //     child.id === childId ? { ...child, isDisabled: !isEnabled } : child
-          //   );
+          if (existingData) {
+            const updatedChildren = existingData.getChildrenBySegment[segment].map((child) =>
+              child.id === childId ? { ...child, isDisabled: !isEnabled } : child
+            );
 
-          //   client.writeQuery({
-          //     query: GetChildrenBySegmentDocument,
-          //     data: { children: updatedChildren },
-          //   });
-          // }
+            client.writeQuery({
+              query: GetChildrenBySegmentDocument,
+              data: { getChildrenBySegment: { ...existingData.getChildrenBySegment, [segment]: updatedChildren } },
+            });
+          }
         },
       });
     } catch (e) {
@@ -96,7 +124,6 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 
   return (
     <DropdownMenu>
-      {/* <DropdownMenuTrigger className="rounded-full w-12 h-12 text-slate-500 flex justify-center items-center hover:bg-slate-200"><EllipsisHorizontalIcon  /></DropdownMenuTrigger> */}
       <DropdownMenuTrigger asChild>
         <Button className="mr-4 size-12 rounded-full text-slate-500" size="sm" variant="ghost" type="button">
           <EllipsisHorizontalIcon />
@@ -128,7 +155,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
               onClick={(e) => e.stopPropagation()}
               id="isDisabled"
               defaultChecked={!isDisabled}
-              onCheckedChange={(value) => handleBlockChild(value, id)}
+              onCheckedChange={(value) => handleBlockChild(value, id, segment)}
               className="ltr"
             />
           </label>
@@ -151,6 +178,8 @@ const Customer: React.FC<CustomerProps> = ({
   lastConnectedAt,
   description,
   onlinePackages,
+  paymentCount,
+  segment,
 }) => {
   const { toast } = useToast();
 
@@ -163,7 +192,7 @@ const Customer: React.FC<CustomerProps> = ({
   };
   const isOnline = lastConnectedAt && onlinePackages > 0;
   return (
-    <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
+    <div className={`flex items-center justify-between rounded-lg py-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="relative flex flex-1 items-center overflow-hidden">
         <Avatar className="relative size-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
@@ -171,7 +200,7 @@ const Customer: React.FC<CustomerProps> = ({
         </Avatar>
         {activePackages > 0 && (
           <div
-            className={`absolute font-black ${role === "ADMIN" ? (description ? "right-8 top-6" : "right-8 top-4") : "right-8 top-0"}  size-6 rounded-full border text-xs ${isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"}  flex items-center justify-center pt-1`}
+            className={`absolute font-black ${role === "ADMIN" ? (description ? "right-8 top-10" : "right-8 top-8") : "right-8 top-2"}  size-6 rounded-full border text-xs ${isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"}  flex items-center justify-center pt-1`}
           >
             {activePackages}
           </div>
@@ -188,10 +217,11 @@ const Customer: React.FC<CustomerProps> = ({
               </div>
             )}
           </button>
+          {paymentCount > 0 && <div className="text-xs text-slate-500">{paymentCount} پرداختی</div>}
           {description && <div className="truncate text-xs font-thin text-slate-300">{description}</div>}
         </div>
       </div>
-      <CustomerOptions id={id} isDisabled={isDisabled} />
+      <CustomerOptions id={id} isDisabled={isDisabled} segment={segment} />
     </div>
   );
 };
@@ -201,31 +231,31 @@ const CustomersPage: NextPageWithLayout = () => {
   if (data) {
     const segments = [
       {
-        segment: UserSegment.ENGAGED_SUBSCRIBERS,
-        customers: data.getChildrenBySegment.engagedSubscribers,
-      },
-      {
-        segment: UserSegment.DORMANT_SUBSCRIBERS,
-        customers: data.getChildrenBySegment.dormantSubscribers,
-      },
-      {
-        segment: UserSegment.LONG_LOST_CUSTOMERS,
-        customers: data.getChildrenBySegment.longLostCustomers,
-      },
-      {
-        segment: UserSegment.RECENTLY_LAPSED_CUSTOMERS,
-        customers: data.getChildrenBySegment.recentlyLapsedCustomers,
+        segment: UserSegment.TRIAL_EXPLORERS,
+        customers: data.getChildrenBySegment.trialExplorers,
       },
       {
         segment: UserSegment.NEW_PROSPECTS,
         customers: data.getChildrenBySegment.newProspects,
       },
       {
-        segment: UserSegment.UNCATEGORIZED,
-        customers: data.getChildrenBySegment.uncategorized || [], // Handle undefined
+        segment: UserSegment.RECENTLY_LAPSED_CUSTOMERS,
+        customers: data.getChildrenBySegment.recentlyLapsedCustomers,
+      },
+      {
+        segment: UserSegment.DORMANT_SUBSCRIBERS,
+        customers: data.getChildrenBySegment.dormantSubscribers,
+      },
+      {
+        segment: UserSegment.ENGAGED_SUBSCRIBERS,
+        customers: data.getChildrenBySegment.engagedSubscribers,
+      },
+      {
+        segment: UserSegment.LONG_LOST_CUSTOMERS,
+        customers: data.getChildrenBySegment.longLostCustomers,
       },
     ];
-    const sortedSegments = segments.sort((a, b) => b.customers.length - a.customers.length);
+    
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center">
         <div className="w-full space-y-4">
@@ -248,9 +278,13 @@ const CustomersPage: NextPageWithLayout = () => {
                 data.getChildrenBySegment.engagedSubscribers.reduce((all, child) => all + child.onlinePackages, 0)}
             </span>
           </div>
-          <Accordion className="w-full space-y-2 p-4">
-            {sortedSegments.map(({ segment, customers }) => (
-              <AccordionItem key={segment} title={`${UserSegmentDisplay[segment]} ${customers.length}`}>
+          <Accordion className="w-full">
+            {segments.map(({ segment, customers }) => (
+              <AccordionItem
+                key={segment}
+                title={`${UserSegmentDisplay[segment].title} ${customers.length}`}
+                subTitle={UserSegmentDisplay[segment].subtitle}
+              >
                 {customers.length > 0 ? (
                   customers.map((child) => (
                     <Customer
@@ -267,6 +301,8 @@ const CustomersPage: NextPageWithLayout = () => {
                       onlinePackages={child.onlinePackages}
                       lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
                       description={child.description}
+                      paymentCount={child.paymentCount}
+                      segment={segment}
                     />
                   ))
                 ) : (
