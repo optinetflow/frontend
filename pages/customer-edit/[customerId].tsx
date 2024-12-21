@@ -8,10 +8,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from "@/components/ui/textarea";
 import Layout from "../../components/Layout/Layout";
 import { useUpdateChildMutation } from "../../graphql/mutations/updateChild.graphql.interface";
-import { useChildrenQuery } from "../../graphql/queries/children.graphql.interface";
+import { useGetChildrenBySegmentQuery } from "../../graphql/queries/getChildrenBySegment.graphql.interface";
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface";
 import { normalizeNumber, normalizePhone, roundTo } from "../../helpers";
-import { UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql";
+import { GetChildrenBySegmentOutput, UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql";
 import type { NextPageWithLayout } from "../_app";
 
 const CustomerEditPage: NextPageWithLayout = () => {
@@ -24,9 +24,12 @@ const CustomerEditPage: NextPageWithLayout = () => {
     control,
     formState: { errors },
   } = useForm<UpdateChildInput>();
-  const customers = useChildrenQuery({ fetchPolicy: "cache-only" });
+  const customersBySegments = useGetChildrenBySegmentQuery({ fetchPolicy: "cache-only" });
   const me = useMeQuery({ fetchPolicy: "cache-only" });
-  const customer = customers.data?.children.find((child) => child.id === id);
+  const customers = Object.values(customersBySegments.data?.getChildrenBySegment as GetChildrenBySegmentOutput)
+    .filter((value) => Array.isArray(value))
+    .flat();
+  const customer = customers.find((child) => child.id === id);
   const profitPercent = me?.data?.me?.profitPercent || 0;
   const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100;
 

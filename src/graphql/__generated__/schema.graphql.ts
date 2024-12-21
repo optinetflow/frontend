@@ -84,6 +84,7 @@ export type Child = {
   otpExpiration?: Maybe<Scalars["DateTime"]["output"]>;
   parent?: Maybe<Parent>;
   parentId?: Maybe<Scalars["String"]["output"]>;
+  paymentCount: Scalars["Int"]["output"];
   phone: Scalars["String"]["output"];
   profitBalance: Scalars["Float"]["output"];
   profitPercent: Scalars["Float"]["output"];
@@ -131,6 +132,17 @@ export type EnterCostInput = {
 
 export type GetBrandInfoInput = {
   domainName: Scalars["String"]["input"];
+};
+
+export type GetChildrenBySegmentOutput = {
+  __typename?: "GetChildrenBySegmentOutput";
+  dormantSubscribers: Array<Child>;
+  engagedSubscribers: Array<Child>;
+  longLostCustomers: Array<Child>;
+  newProspects: Array<Child>;
+  recentlyLapsedCustomers: Array<Child>;
+  trialExplorers: Array<Child>;
+  uncategorized: Array<Child>;
 };
 
 export type GetClientStatsFiltersInput = {
@@ -332,9 +344,9 @@ export type PromotionCode = {
 export type Query = {
   __typename?: "Query";
   checkAuth: CheckAuth;
-  children: Array<Child>;
   clientStats: Array<ClientStat>;
   getBrandInfo: Brand;
+  getChildrenBySegment: GetChildrenBySegmentOutput;
   getGiftPackages: Array<Package>;
   getPromotionCodes: Array<Promotion>;
   hello: Scalars["String"]["output"];
