@@ -26,6 +26,7 @@ export type GetChildrenBySegmentQuery = {
       lastConnectedAt?: any | null;
       description?: string | null;
       initialDiscountPercent?: number | null;
+      joinedPromotionCode?: string | null;
       telegram?: {
         __typename?: "TelegramUser";
         id: string;
@@ -52,6 +53,7 @@ export type GetChildrenBySegmentQuery = {
       activePackages: number;
       onlinePackages: number;
       lastConnectedAt?: any | null;
+      joinedPromotionCode?: string | null;
       description?: string | null;
       initialDiscountPercent?: number | null;
       telegram?: {
@@ -76,6 +78,7 @@ export type GetChildrenBySegmentQuery = {
       updatedAt: any;
       isDisabled?: boolean | null;
       balance: number;
+      joinedPromotionCode?: string | null;
       totalProfit: number;
       activePackages: number;
       onlinePackages: number;
@@ -102,6 +105,7 @@ export type GetChildrenBySegmentQuery = {
       paymentCount: number;
       createdAt: any;
       updatedAt: any;
+      joinedPromotionCode?: string | null;
       isDisabled?: boolean | null;
       balance: number;
       totalProfit: number;
@@ -131,6 +135,7 @@ export type GetChildrenBySegmentQuery = {
       updatedAt: any;
       paymentCount: number;
       isDisabled?: boolean | null;
+      joinedPromotionCode?: string | null;
       balance: number;
       totalProfit: number;
       activePackages: number;
@@ -156,6 +161,7 @@ export type GetChildrenBySegmentQuery = {
       phone: string;
       role: Types.Role;
       createdAt: any;
+      joinedPromotionCode?: string | null;
       updatedAt: any;
       isDisabled?: boolean | null;
       balance: number;
@@ -186,6 +192,7 @@ export type GetChildrenBySegmentQuery = {
       createdAt: any;
       updatedAt: any;
       isDisabled?: boolean | null;
+      joinedPromotionCode?: string | null;
       balance: number;
       paymentCount: number;
       totalProfit: number;
@@ -227,6 +234,7 @@ export const GetChildrenBySegmentDocument = gql`
         lastConnectedAt
         description
         initialDiscountPercent
+        joinedPromotionCode
         telegram {
           id
           phone
@@ -251,6 +259,7 @@ export const GetChildrenBySegmentDocument = gql`
         activePackages
         onlinePackages
         lastConnectedAt
+        joinedPromotionCode
         description
         initialDiscountPercent
         telegram {
@@ -273,6 +282,7 @@ export const GetChildrenBySegmentDocument = gql`
         updatedAt
         isDisabled
         balance
+        joinedPromotionCode
         totalProfit
         activePackages
         onlinePackages
@@ -297,6 +307,7 @@ export const GetChildrenBySegmentDocument = gql`
         paymentCount
         createdAt
         updatedAt
+        joinedPromotionCode
         isDisabled
         balance
         totalProfit
@@ -324,6 +335,7 @@ export const GetChildrenBySegmentDocument = gql`
         updatedAt
         paymentCount
         isDisabled
+        joinedPromotionCode
         balance
         totalProfit
         activePackages
@@ -347,6 +359,7 @@ export const GetChildrenBySegmentDocument = gql`
         phone
         role
         createdAt
+        joinedPromotionCode
         updatedAt
         isDisabled
         balance
@@ -375,6 +388,7 @@ export const GetChildrenBySegmentDocument = gql`
         createdAt
         updatedAt
         isDisabled
+        joinedPromotionCode
         balance
         paymentCount
         totalProfit

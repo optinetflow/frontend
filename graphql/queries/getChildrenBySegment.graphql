@@ -16,6 +16,7 @@ query getChildrenBySegment {
             lastConnectedAt
             description
             initialDiscountPercent
+            joinedPromotionCode
             telegram {
                 id
                 phone
@@ -40,6 +41,7 @@ query getChildrenBySegment {
             activePackages
             onlinePackages
             lastConnectedAt
+            joinedPromotionCode
             description
             initialDiscountPercent
             telegram {
@@ -62,6 +64,7 @@ query getChildrenBySegment {
             updatedAt
             isDisabled
             balance
+            joinedPromotionCode
             totalProfit
             activePackages
             onlinePackages
@@ -86,6 +89,7 @@ query getChildrenBySegment {
             paymentCount
             createdAt
             updatedAt
+            joinedPromotionCode
             isDisabled
             balance
             totalProfit
@@ -113,6 +117,7 @@ query getChildrenBySegment {
             updatedAt
             paymentCount
             isDisabled
+            joinedPromotionCode
             balance
             totalProfit
             activePackages
@@ -136,6 +141,7 @@ query getChildrenBySegment {
             phone
             role
             createdAt
+            joinedPromotionCode
             updatedAt
             isDisabled
             balance
@@ -164,6 +170,7 @@ query getChildrenBySegment {
             createdAt
             updatedAt
             isDisabled
+            joinedPromotionCode
             balance
             paymentCount
             totalProfit

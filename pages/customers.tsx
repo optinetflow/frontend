@@ -74,7 +74,7 @@ const UserSegmentDisplay: { [key in UserSegment]: UserSegmentInfo } = {
     subtitle: "کاربرایی که بسته فعال ندارن و آخرین پرداختشون کمتر از ۳ ماه پیش بوده.",
   },
   [UserSegment.DORMANT_SUBSCRIBERS]: {
-    title: "😴 مشتریان کم‌پیدا",    
+    title: "😴 مشتریان کم‌پیدا",
     subtitle: "کاربرایی که بسته فعال دارن ولی یه مدت آنلاین نشدن.",
   },
   [UserSegment.ENGAGED_SUBSCRIBERS]: {
@@ -86,7 +86,6 @@ const UserSegmentDisplay: { [key in UserSegment]: UserSegmentInfo } = {
     subtitle: "اونایی که از آخرین پرداختشون بیشتر از ۳ ماه گذشته.",
   },
 };
-
 
 interface CustomerOptionsProps {
   id: string;
@@ -202,7 +201,21 @@ const Customer: React.FC<CustomerProps> = ({
         </Avatar>
         {activePackages > 0 && (
           <div
-            className={`absolute font-black ${role === "ADMIN" ? (description ? "right-8 top-10" : "right-8 top-8") : "right-8 top-2"}  size-6 rounded-full border text-xs ${isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"}  flex items-center justify-center pt-1`}
+            className={`absolute font-black ${
+              role === "ADMIN"
+                ? joinedPromotionCode
+                  ? description
+                    ? "right-8 top-14"
+                    : "right-8 top-10"
+                  : description
+                    ? "right-8 top-10"
+                    : "right-8 top-8"
+                : joinedPromotionCode
+                  ? "right-8 top-4"
+                  : "right-8 top-2"
+            } size-6 rounded-full border text-xs ${
+              isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"
+            } flex items-center justify-center pt-1`}
           >
             {activePackages}
           </div>
@@ -260,7 +273,7 @@ const CustomersPage: NextPageWithLayout = () => {
         customers: data.getChildrenBySegment.longLostCustomers,
       },
     ];
-    
+
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center">
         <div className="w-full space-y-4">
@@ -307,6 +320,7 @@ const CustomersPage: NextPageWithLayout = () => {
                       lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
                       description={child.description}
                       paymentCount={child.paymentCount}
+                      joinedPromotionCode={child.joinedPromotionCode || undefined}
                       segment={segment}
                     />
                   ))
