@@ -78,7 +78,7 @@ const UserSegmentDisplay: { [key in UserSegment]: UserSegmentInfo } = {
     subtitle: "کاربرایی که بسته فعال دارن ولی یه مدت آنلاین نشدن.",
   },
   [UserSegment.ENGAGED_SUBSCRIBERS]: {
-    title: "✨ مشتریان وفادار",
+    title: "❤️ مشتریان وفادار",
     subtitle: "اونایی که بسته فعال دارن و همین دیروز آنلاین بودن!",
   },
   [UserSegment.LONG_LOST_CUSTOMERS]: {
