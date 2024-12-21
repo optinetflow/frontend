@@ -11,7 +11,7 @@ import { useUpdateChildMutation } from "../../graphql/mutations/updateChild.grap
 import { useGetChildrenBySegmentQuery } from "../../graphql/queries/getChildrenBySegment.graphql.interface";
 import { useMeQuery } from "../../graphql/queries/me.graphql.interface";
 import { normalizeNumber, normalizePhone, roundTo } from "../../helpers";
-import { GetChildrenBySegmentOutput, UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql";
+import { Child, GetChildrenBySegmentOutput, UpdateChildInput } from "../../src/graphql/__generated__/schema.graphql";
 import type { NextPageWithLayout } from "../_app";
 
 const CustomerEditPage: NextPageWithLayout = () => {
@@ -26,10 +26,12 @@ const CustomerEditPage: NextPageWithLayout = () => {
   } = useForm<UpdateChildInput>();
   const customersBySegments = useGetChildrenBySegmentQuery({ fetchPolicy: "cache-only" });
   const me = useMeQuery({ fetchPolicy: "cache-only" });
+  const isChildArray = (value: any): value is Child[] => Array.isArray(value);
+
   const customers = Object.values(customersBySegments.data?.getChildrenBySegment as GetChildrenBySegmentOutput)
-    .filter((value) => Array.isArray(value))
+    .filter(isChildArray) // TypeScript infers these are Child[]
     .flat();
-  const customer = customers.find((child) => child.id === id);
+    const customer = customers.find((child) => child.id === id);
   const profitPercent = me?.data?.me?.profitPercent || 0;
   const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100;
 
