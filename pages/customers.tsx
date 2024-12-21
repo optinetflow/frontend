@@ -18,13 +18,14 @@ import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql
 import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface";
 import { copyText } from "../helpers";
 import { avatarColor, roundTo, timeSince, toIRR } from "../helpers";
-import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons";
+import { ArrowUTurnLeftIcon, EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon } from "../icons";
 import * as Types from "../src/graphql/__generated__/schema.graphql";
 
 interface CustomerProps {
   id: string;
   avatar?: string;
   fullname: string;
+  joinedPromotionCode?: string;
   phone: string;
   isDisabled: boolean;
   role: Types.Role;
@@ -127,6 +128,7 @@ const Customer: React.FC<CustomerProps> = ({
   lastConnectedAt,
   description,
   onlinePackages,
+  joinedPromotionCode,
 }) => {
   const { toast } = useToast();
 
@@ -165,6 +167,9 @@ const Customer: React.FC<CustomerProps> = ({
             )}
           </button>
           {description && <div className="truncate text-xs font-thin text-slate-300">{description}</div>}
+          {joinedPromotionCode && (
+            <div className="truncate text-xs font-thin text-slate-300">کد معرف: {joinedPromotionCode}</div>
+          )}
         </div>
       </div>
       <CustomerOptions id={id} isDisabled={isDisabled} />
@@ -178,10 +183,10 @@ const CustomersPage: NextPageWithLayout = () => {
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
         <div className="w-full space-y-4">
-          <Link href="/signup">
+          <Link href="/">
             <Button className="flex w-full">
-              <UserPlusIcon className="ml-2 size-5" />
-              <span>ثبت نام</span>
+              <ArrowUTurnLeftIcon className="ml-2 size-5" />
+              <span>بازگشت</span>
             </Button>
           </Link>
           <div className="flex rounded-md bg-slate-50 text-sm text-slate-600">
@@ -207,6 +212,7 @@ const CustomersPage: NextPageWithLayout = () => {
               onlinePackages={child.onlinePackages}
               lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
               description={child.description}
+              joinedPromotionCode={child.joinedPromotionCode || undefined}
             />
           ))}
         </div>

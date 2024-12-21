@@ -77,6 +77,7 @@ export type Child = {
   isDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isParentDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isVerified: Scalars["Boolean"]["output"];
+  joinedPromotionCode?: Maybe<Scalars["String"]["output"]>;
   lastConnectedAt?: Maybe<Scalars["DateTime"]["output"]>;
   maxRechargeDiscountPercent?: Maybe<Scalars["Float"]["output"]>;
   onlinePackages: Scalars["Int"]["output"];
@@ -117,6 +118,7 @@ export type ClientStat = {
 export type CreatePromotionInput = {
   code: Scalars["String"]["input"];
   giftPackageId?: InputMaybe<Scalars["ID"]["input"]>;
+  initialDiscountPercent?: InputMaybe<Scalars["Float"]["input"]>;
 };
 
 export type DeletePromotionInput = {
@@ -320,6 +322,7 @@ export type Promotion = {
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
   giftPackage?: Maybe<Package>;
   id: Scalars["ID"]["output"];
+  initialDiscountPercent?: Maybe<Scalars["Float"]["output"]>;
   parentUser: User;
   updatedAt: Scalars["DateTime"]["output"];
 };
@@ -477,6 +480,7 @@ export type User = {
   isDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isParentDisabled?: Maybe<Scalars["Boolean"]["output"]>;
   isVerified: Scalars["Boolean"]["output"];
+  joinedPromotionCode?: Maybe<Scalars["String"]["output"]>;
   maxRechargeDiscountPercent?: Maybe<Scalars["Float"]["output"]>;
   otp?: Maybe<Scalars["String"]["output"]>;
   otpExpiration?: Maybe<Scalars["DateTime"]["output"]>;
