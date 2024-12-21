@@ -1,47 +1,51 @@
-import React, { ReactNode } from "react";
+import { X } from "lucide-react";
+import React, { ReactNode, useEffect, useState } from "react";
 
-interface AccordionItemProps {
-  title: string;
-  children: ReactNode;
+interface BottomSheetProps {
   isOpen: boolean;
-  onClick: () => void;
+  onClose: () => void;
+  children: ReactNode;
+  title?: string; // Optional: For adding a title to the bottom sheet
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, isOpen, onClick }) => {
+const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen, onClose, children, title }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      setTimeout(() => setIsVisible(true), 20);
+    } else {
+      setIsVisible(false);
+      setTimeout(() => setShouldRender(false), 300);
+    }
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
+
   return (
-    <div className="mb-2 rounded-xl border border-gray-200 dark:border-gray-700">
-      <h2>
-        <button
-          type="button"
-          className="flex w-full items-center justify-between gap-3 border-b border-gray-200 p-5 font-medium text-gray-500 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:focus:ring-gray-800"
-          onClick={onClick}
-          aria-expanded={isOpen}
-          aria-controls={`accordion-content-${title}`}
-        >
-          <span>{title}</span>
-          <svg
-            className={`size-3 transition-transform duration-300${isOpen ? "rotate-180" : "rotate-0"}`}
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-            aria-hidden="true"
-          >
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5 5 1 1 5" />
-          </svg>
-        </button>
-      </h2>
-      {isOpen && (
-        <div
-          id={`accordion-content-${title}`}
-          className="border-t border-gray-200 p-5 dark:border-gray-700 dark:bg-gray-900"
-          role="region"
-          aria-labelledby={`accordion-header-${title}`}
-        >
-          {children}
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-gray-900/50">
+      {/* Backdrop */}
+      <div className="absolute inset-0 z-30" onClick={onClose}></div>
+
+      <div
+        className={`relative z-40 w-full max-w-lg rounded-t-lg bg-white shadow-xl transition-transform duration-300 ease-in-out ${
+          isVisible ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="flex items-center justify-between p-4">
+          <h2 className="text-lg font-bold">{title || ""}</h2>
+          <button onClick={onClose} className="text-gray-500">
+            <X />
+          </button>
         </div>
-      )}
+
+        {/* Bottom Sheet Body */}
+        <div className="px-6 pb-6">{children}</div>
+      </div>
     </div>
   );
 };
 
-export default AccordionItem;
+export default BottomSheet;
