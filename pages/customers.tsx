@@ -24,13 +24,14 @@ import {
 } from "../graphql/queries/getChildrenBySegment.graphql.interface";
 import { copyText } from "../helpers";
 import { avatarColor, roundTo, timeSince, toIRR } from "../helpers";
-import { EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon, UserPlusIcon } from "../icons";
+import { ArrowUTurnLeftIcon, EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon } from "../icons";
 import * as Types from "../src/graphql/__generated__/schema.graphql";
 
 interface CustomerProps {
   id: string;
   avatar?: string;
   fullname: string;
+  joinedPromotionCode?: string;
   phone: string;
   isDisabled: boolean;
   role: Types.Role;
@@ -180,6 +181,7 @@ const Customer: React.FC<CustomerProps> = ({
   onlinePackages,
   paymentCount,
   segment,
+  joinedPromotionCode,
 }) => {
   const { toast } = useToast();
 
@@ -219,6 +221,9 @@ const Customer: React.FC<CustomerProps> = ({
           </button>
           {paymentCount > 0 && <div className="text-xs text-slate-500">{paymentCount} پرداختی</div>}
           {description && <div className="truncate text-xs font-thin text-slate-300">{description}</div>}
+          {joinedPromotionCode && (
+            <div className="truncate text-xs font-thin text-slate-300">کد معرف: {joinedPromotionCode}</div>
+          )}
         </div>
       </div>
       <CustomerOptions id={id} isDisabled={isDisabled} segment={segment} />
@@ -259,10 +264,10 @@ const CustomersPage: NextPageWithLayout = () => {
     return (
       <div className="mx-auto my-12 flex max-w-xs flex-col justify-center">
         <div className="w-full space-y-4">
-          <Link href="/signup">
+          <Link href="/">
             <Button className="flex w-full">
-              <UserPlusIcon className="ml-2 size-5" />
-              <span>ثبت نام</span>
+              <ArrowUTurnLeftIcon className="ml-2 size-5" />
+              <span>بازگشت</span>
             </Button>
           </Link>
           <div className="flex rounded-md bg-slate-50 text-sm text-slate-600">
