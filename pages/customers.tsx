@@ -12,10 +12,16 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
+import Accordion from "components/Accordion/Accordion";
 import type { NextPageWithLayout } from "./_app";
+import AccordionItem from "../components/Accordion/AccordionItem";
 import Layout from "../components/Layout/Layout";
 import { useUpdateChildMutation } from "../graphql/mutations/updateChild.graphql.interface";
-import { ChildrenDocument, ChildrenQuery, useChildrenQuery } from "../graphql/queries/children.graphql.interface";
+import {
+  GetChildrenBySegmentDocument,
+  GetChildrenBySegmentQuery,
+  useGetChildrenBySegmentQuery,
+} from "../graphql/queries/getChildrenBySegment.graphql.interface";
 import { copyText } from "../helpers";
 import { avatarColor, roundTo, timeSince, toIRR } from "../helpers";
 import { ArrowUTurnLeftIcon, EllipsisHorizontalIcon, NoSymbolIcon, PencilIcon } from "../icons";
@@ -33,35 +39,80 @@ interface CustomerProps {
   totalProfit: number;
   activePackages: number;
   onlinePackages: number;
+  paymentCount: number;
   lastConnectedAt?: Date;
   description?: string | null;
+  segment: UserSegment;
 }
+
+export enum UserSegment {
+  ENGAGED_SUBSCRIBERS = "engagedSubscribers",
+  DORMANT_SUBSCRIBERS = "dormantSubscribers",
+  LONG_LOST_CUSTOMERS = "longLostCustomers",
+  RECENTLY_LAPSED_CUSTOMERS = "recentlyLapsedCustomers",
+  NEW_PROSPECTS = "newProspects",
+  // UNCATEGORIZED = "uncategorized",
+  TRIAL_EXPLORERS = "trialExplorers",
+}
+
+interface UserSegmentInfo {
+  title: string;
+  subtitle: string;
+}
+
+const UserSegmentDisplay: { [key in UserSegment]: UserSegmentInfo } = {
+  [UserSegment.TRIAL_EXPLORERS]: {
+    title: "🔍 کاربرای کنجکاو",
+    subtitle: "اونایی که هنوز پرداخت نکردن ولی دارن بسته هدیه یا رایگان رو امتحان می‌کنن!",
+  },
+  [UserSegment.NEW_PROSPECTS]: {
+    title: "👶 کاربرای تازه وارد",
+    subtitle: "اونایی که نه پرداختی داشتن، نه بسته‌ای استفاده کردن.",
+  },
+  [UserSegment.RECENTLY_LAPSED_CUSTOMERS]: {
+    title: "🪂 مشتری‌های در حال پریدن",
+    subtitle: "کاربرایی که بسته فعال ندارن و آخرین پرداختشون کمتر از ۳ ماه پیش بوده.",
+  },
+  [UserSegment.DORMANT_SUBSCRIBERS]: {
+    title: "😴 مشتریان کم‌پیدا",
+    subtitle: "کاربرایی که بسته فعال دارن ولی یه مدت آنلاین نشدن.",
+  },
+  [UserSegment.ENGAGED_SUBSCRIBERS]: {
+    title: "✨ مشتریان وفادار",
+    subtitle: "اونایی که بسته فعال دارن و همین دیروز آنلاین بودن!",
+  },
+  [UserSegment.LONG_LOST_CUSTOMERS]: {
+    title: "🚶‍♂️ مشتری‌هایی که خیلی وقته رفتن",
+    subtitle: "اونایی که از آخرین پرداختشون بیشتر از ۳ ماه گذشته.",
+  },
+};
 
 interface CustomerOptionsProps {
   id: string;
   isDisabled: boolean;
+  segment: UserSegment;
 }
-const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => {
+const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled, segment }) => {
   const [updateChild, updateChildData] = useUpdateChildMutation();
   const client = useApolloClient();
 
-  const handleBlockChild = async (isEnabled: boolean, childId: string) => {
+  const handleBlockChild = async (isEnabled: boolean, childId: string, segment: UserSegment) => {
     try {
       await updateChild({
         variables: {
           input: { childId, isDisabled: !isEnabled },
         },
         update: () => {
-          const existingData = client.readQuery<ChildrenQuery>({ query: ChildrenDocument });
+          const existingData = client.readQuery<GetChildrenBySegmentQuery>({ query: GetChildrenBySegmentDocument });
 
           if (existingData) {
-            const updatedChildren = existingData.children.map((child) =>
+            const updatedChildren = existingData.getChildrenBySegment[segment].map((child) =>
               child.id === childId ? { ...child, isDisabled: !isEnabled } : child
             );
 
             client.writeQuery({
-              query: ChildrenDocument,
-              data: { children: updatedChildren },
+              query: GetChildrenBySegmentDocument,
+              data: { getChildrenBySegment: { ...existingData.getChildrenBySegment, [segment]: updatedChildren } },
             });
           }
         },
@@ -73,7 +124,6 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
 
   return (
     <DropdownMenu>
-      {/* <DropdownMenuTrigger className="rounded-full w-12 h-12 text-slate-500 flex justify-center items-center hover:bg-slate-200"><EllipsisHorizontalIcon  /></DropdownMenuTrigger> */}
       <DropdownMenuTrigger asChild>
         <Button className="mr-4 size-12 rounded-full text-slate-500" size="sm" variant="ghost" type="button">
           <EllipsisHorizontalIcon />
@@ -105,7 +155,7 @@ const CustomerOptions: React.FC<CustomerOptionsProps> = ({ id, isDisabled }) => 
               onClick={(e) => e.stopPropagation()}
               id="isDisabled"
               defaultChecked={!isDisabled}
-              onCheckedChange={(value) => handleBlockChild(value, id)}
+              onCheckedChange={(value) => handleBlockChild(value, id, segment)}
               className="ltr"
             />
           </label>
@@ -128,6 +178,8 @@ const Customer: React.FC<CustomerProps> = ({
   lastConnectedAt,
   description,
   onlinePackages,
+  paymentCount,
+  segment,
   joinedPromotionCode,
 }) => {
   const { toast } = useToast();
@@ -141,7 +193,7 @@ const Customer: React.FC<CustomerProps> = ({
   };
   const isOnline = lastConnectedAt && onlinePackages > 0;
   return (
-    <div className={`flex items-center justify-between rounded-lg p-2 ${isDisabled ? "bg-red-50" : ""}`}>
+    <div className={`flex items-center justify-between rounded-lg py-2 ${isDisabled ? "bg-red-50" : ""}`}>
       <div className="relative flex flex-1 items-center overflow-hidden">
         <Avatar className="relative size-12 text-xs">
           <AvatarImage alt="@shadcn" src={avatar || undefined} />
@@ -149,7 +201,21 @@ const Customer: React.FC<CustomerProps> = ({
         </Avatar>
         {activePackages > 0 && (
           <div
-            className={`absolute font-black ${role === "ADMIN" ? (description ? "right-8 top-6" : "right-8 top-4") : "right-8 top-0"}  size-6 rounded-full border text-xs ${isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"}  flex items-center justify-center pt-1`}
+            className={`absolute font-black ${
+              role === "ADMIN"
+                ? joinedPromotionCode
+                  ? description
+                    ? "right-8 top-14"
+                    : "right-8 top-10"
+                  : description
+                    ? "right-8 top-10"
+                    : "right-8 top-8"
+                : joinedPromotionCode
+                  ? "right-8 top-4"
+                  : "right-8 top-2"
+            } size-6 rounded-full border text-xs ${
+              isOnline ? "border-green-500 bg-green-50 text-green-500" : "border-slate-500 bg-slate-50 text-slate-500"
+            } flex items-center justify-center pt-1`}
           >
             {activePackages}
           </div>
@@ -166,22 +232,50 @@ const Customer: React.FC<CustomerProps> = ({
               </div>
             )}
           </button>
+          {paymentCount > 0 && <div className="text-xs text-slate-500">{paymentCount} پرداختی</div>}
           {description && <div className="truncate text-xs font-thin text-slate-300">{description}</div>}
           {joinedPromotionCode && (
             <div className="truncate text-xs font-thin text-slate-300">کد معرف: {joinedPromotionCode}</div>
           )}
         </div>
       </div>
-      <CustomerOptions id={id} isDisabled={isDisabled} />
+      <CustomerOptions id={id} isDisabled={isDisabled} segment={segment} />
     </div>
   );
 };
 
 const CustomersPage: NextPageWithLayout = () => {
-  const { data } = useChildrenQuery({ fetchPolicy: "cache-and-network" });
+  const { data } = useGetChildrenBySegmentQuery({ fetchPolicy: "cache-and-network" });
   if (data) {
+    const segments = [
+      {
+        segment: UserSegment.TRIAL_EXPLORERS,
+        customers: data.getChildrenBySegment.trialExplorers,
+      },
+      {
+        segment: UserSegment.NEW_PROSPECTS,
+        customers: data.getChildrenBySegment.newProspects,
+      },
+      {
+        segment: UserSegment.RECENTLY_LAPSED_CUSTOMERS,
+        customers: data.getChildrenBySegment.recentlyLapsedCustomers,
+      },
+      {
+        segment: UserSegment.DORMANT_SUBSCRIBERS,
+        customers: data.getChildrenBySegment.dormantSubscribers,
+      },
+      {
+        segment: UserSegment.ENGAGED_SUBSCRIBERS,
+        customers: data.getChildrenBySegment.engagedSubscribers,
+      },
+      {
+        segment: UserSegment.LONG_LOST_CUSTOMERS,
+        customers: data.getChildrenBySegment.longLostCustomers,
+      },
+    ];
+
     return (
-      <div className="mx-auto my-12 flex max-w-xs flex-col justify-center" style={{ minHeight: "calc(100vh - 6rem)" }}>
+      <div className="mx-auto my-12 flex max-w-xs flex-col justify-center">
         <div className="w-full space-y-4">
           <Link href="/">
             <Button className="flex w-full">
@@ -191,30 +285,51 @@ const CustomersPage: NextPageWithLayout = () => {
           </Link>
           <div className="flex rounded-md bg-slate-50 text-sm text-slate-600">
             <span className="w-full p-4">
-              بسته: {data.children.reduce((all, child) => all + child.activePackages, 0)}
+              بسته:
+              {data.getChildrenBySegment.engagedSubscribers.reduce((all, child) => all + child.activePackages, 0) +
+                data.getChildrenBySegment.dormantSubscribers.reduce((all, child) => all + child.activePackages, 0) +
+                data.getChildrenBySegment.newProspects.reduce((all, child) => all + child.activePackages, 0)}
             </span>
             <span className="w-full p-4">
-              آنلاین: {data.children.reduce((all, child) => all + child.onlinePackages, 0)}
+              آنلاین:{" "}
+              {data.getChildrenBySegment.newProspects.reduce((all, child) => all + child.onlinePackages, 0) +
+                data.getChildrenBySegment.engagedSubscribers.reduce((all, child) => all + child.onlinePackages, 0)}
             </span>
           </div>
-          {data.children.map((child) => (
-            <Customer
-              key={child.id}
-              id={child.id}
-              fullname={child.fullname}
-              phone={child.phone}
-              isDisabled={Boolean(child.isDisabled)}
-              avatar={child?.telegram?.smallAvatar || undefined}
-              role={child.role}
-              balance={child.balance}
-              totalProfit={child.totalProfit}
-              activePackages={child.activePackages}
-              onlinePackages={child.onlinePackages}
-              lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
-              description={child.description}
-              joinedPromotionCode={child.joinedPromotionCode || undefined}
-            />
-          ))}
+          <Accordion className="w-full">
+            {segments.map(({ segment, customers }) => (
+              <AccordionItem
+                key={segment}
+                title={`${UserSegmentDisplay[segment].title} ${customers.length}`}
+                subTitle={UserSegmentDisplay[segment].subtitle}
+              >
+                {customers.length > 0 ? (
+                  customers.map((child) => (
+                    <Customer
+                      key={child.id}
+                      id={child.id}
+                      fullname={child.fullname}
+                      phone={child.phone}
+                      isDisabled={Boolean(child.isDisabled)}
+                      avatar={child?.telegram?.smallAvatar || undefined}
+                      role={child.role}
+                      balance={child.balance}
+                      totalProfit={child.totalProfit}
+                      activePackages={child.activePackages}
+                      onlinePackages={child.onlinePackages}
+                      lastConnectedAt={child.lastConnectedAt ? new Date(child.lastConnectedAt) : undefined}
+                      description={child.description}
+                      paymentCount={child.paymentCount}
+                      joinedPromotionCode={child.joinedPromotionCode || undefined}
+                      segment={segment}
+                    />
+                  ))
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400">مشتری برای این بخش وجود ندارد.</p>
+                )}
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
     );
