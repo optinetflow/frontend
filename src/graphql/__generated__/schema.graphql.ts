@@ -290,10 +290,10 @@ export type Package = {
   categoryFa?: Maybe<Scalars["String"]["output"]>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars["DateTime"]["output"];
-  discountedPrice?: Maybe<Scalars["Int"]["output"]>;
+  discountedPrice?: Maybe<Scalars["Float"]["output"]>;
   expirationDays: Scalars["Int"]["output"];
   id: Scalars["ID"]["output"];
-  price: Scalars["Int"]["output"];
+  price: Scalars["Float"]["output"];
   traffic: Scalars["Float"]["output"];
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars["DateTime"]["output"];

@@ -31,7 +31,7 @@ const CustomerEditPage: NextPageWithLayout = () => {
   const customers = Object.values(customersBySegments.data?.getChildrenBySegment as GetChildrenBySegmentOutput)
     .filter(isChildArray) // TypeScript infers these are Child[]
     .flat();
-    const customer = customers.find((child) => child.id === id);
+  const customer = customers.find((child) => child.id === id);
   const profitPercent = me?.data?.me?.profitPercent || 0;
   const isSuperAdmin = me?.data?.me.maxRechargeDiscountPercent === 100;
 
