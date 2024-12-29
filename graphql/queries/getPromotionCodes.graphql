@@ -2,6 +2,7 @@ query getPromotionCodes {
   getPromotionCodes {
     id
     code
+    isForFreePackageSharing
     giftPackage {
       traffic
     }

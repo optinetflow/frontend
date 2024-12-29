@@ -39,14 +39,14 @@ query Me {
                 number
             }
             freePackageId
+            promotion {
+                code
+            }
         }
         userGift {
             giftPackage {
                 traffic
             }
-        }
-        promotion {
-            code
         }
     }
 }

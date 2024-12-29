@@ -259,8 +259,8 @@ const HomePageComponent: React.FC = () => {
             onClose={() => setFreePackageBottomSheetOpen(false)}
             freePackage={enableTodayFreePackageData.data?.enableTodayFreePackage}
             promotionCode={
-              me.data.me.promotion?.length
-                ? me.data.me.promotion[0].code
+              me.data.me.parent?.promotion?.length
+                ? me.data.me.parent?.promotion[0].code
                 : removeWWW(window.location.host) === "vaslshim.com"
                   ? "save"
                   : "vvip"

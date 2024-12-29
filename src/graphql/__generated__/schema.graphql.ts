@@ -89,7 +89,6 @@ export type Child = {
   phone: Scalars["String"]["output"];
   profitBalance: Scalars["Float"]["output"];
   profitPercent: Scalars["Float"]["output"];
-  promotion?: Maybe<Array<PromotionCode>>;
   referId?: Maybe<Scalars["String"]["output"]>;
   role: Role;
   telegram?: Maybe<TelegramUser>;
@@ -120,6 +119,7 @@ export type CreatePromotionInput = {
   code: Scalars["String"]["input"];
   giftPackageId?: InputMaybe<Scalars["ID"]["input"]>;
   initialDiscountPercent?: InputMaybe<Scalars["Float"]["input"]>;
+  isForFreePackageSharing?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type DeletePromotionInput = {
@@ -311,6 +311,7 @@ export type Parent = {
   bankCard?: Maybe<Array<BankCard>>;
   freePackageId?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
+  promotion?: Maybe<Array<PromotionCode>>;
   telegram?: Maybe<ParentTelegram>;
 };
 
@@ -335,6 +336,7 @@ export type Promotion = {
   giftPackage?: Maybe<Package>;
   id: Scalars["ID"]["output"];
   initialDiscountPercent?: Maybe<Scalars["Float"]["output"]>;
+  isForFreePackageSharing: Scalars["Boolean"]["output"];
   parentUser: User;
   updatedAt: Scalars["DateTime"]["output"];
 };
@@ -501,7 +503,6 @@ export type User = {
   phone: Scalars["String"]["output"];
   profitBalance: Scalars["Float"]["output"];
   profitPercent: Scalars["Float"]["output"];
-  promotion?: Maybe<Array<PromotionCode>>;
   referId?: Maybe<Scalars["String"]["output"]>;
   role: Role;
   telegram?: Maybe<TelegramUser>;

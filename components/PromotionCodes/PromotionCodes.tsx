@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Modal from "@/components/ui/modal";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetGiftPackagesQuery } from "graphql/queries/getGiftPackages.graphql.interface";
 import { GetPromotionCodesQuery, useGetPromotionCodesQuery } from "graphql/queries/getPromotionCodes.graphql.interface";
@@ -21,6 +22,7 @@ interface PromotionCodeForm {
   code: string;
   giftPackageId: string;
   initialDiscountPercent: number;
+  isForFreePackageSharing: boolean;
 }
 
 const PromotionCodes: React.FC = () => {
@@ -67,6 +69,7 @@ const PromotionCodes: React.FC = () => {
           code: formData.code,
           giftPackageId: formData.giftPackageId,
           initialDiscountPercent: formData.initialDiscountPercent || null,
+          isForFreePackageSharing: formData.isForFreePackageSharing || false,
         },
       },
     })
@@ -185,7 +188,15 @@ const PromotionCodes: React.FC = () => {
           promotionCodes.map((promo) => (
             <div key={promo.id} className="mb-4 flex w-full items-center justify-between rounded-lg bg-slate-50 p-4">
               <div>
-                <p className="font-semibold">کد: {promo.code}</p>
+                <div className="flex items-center">
+                  <p className="text-lg font-semibold text-gray-900">{promo.code}</p>
+                  {promo.isForFreePackageSharing && (
+                    <span className="mr-2 rounded bg-slate-400 px-2 py-0.5 text-[10px] text-white">
+                      برای بسته رایگان
+                    </span>
+                  )}
+                </div>
+
                 <p>هدیه: {promo.giftPackage?.traffic ? `${promo.giftPackage.traffic} گیگابایت` : "ندارد"}</p>
                 <p>تخفیف: {promo.initialDiscountPercent ? `${promo.initialDiscountPercent} درصد` : "ندارد"}</p>
               </div>
@@ -292,6 +303,32 @@ const PromotionCodes: React.FC = () => {
                 </Select>
               )}
             />
+
+            <div className="flex items-center justify-between space-y-2">
+              <Label htmlFor="isForFreePackageSharing">می‌خوای این کد برای بسته رایگان استفاده بشه؟</Label>
+              <Controller
+                name="isForFreePackageSharing"
+                control={controlAdd}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <>
+                    <Switch
+                      onClick={(e) => e.stopPropagation()}
+                      id="isForFreePackageSharing"
+                      checked={value}
+                      onCheckedChange={onChange}
+                      className="ltr"
+                      aria-labelledby="isForFreePackageSharing"
+                    />
+                    {error && (
+                      <span role="alert" className="ml-2 text-sm text-red-600">
+                        {error.message}
+                      </span>
+                    )}
+                  </>
+                )}
+              />
+            </div>
+
             <div className="text-sm text-red-600">
               {errors?.[firstError]?.message || createPromotionCodeData.error?.message}&nbsp;
             </div>
