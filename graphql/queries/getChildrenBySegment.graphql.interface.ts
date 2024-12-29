@@ -1,6 +1,7 @@
+import * as Types from "../../src/graphql/__generated__/schema.graphql";
+
 import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
-import * as Types from "../../src/graphql/__generated__/schema.graphql";
 const defaultOptions = {} as const;
 export type GetChildrenBySegmentQueryVariables = Types.Exact<{ [key: string]: never }>;
 

@@ -9,7 +9,6 @@ import FreePackageBottomSheet from "../components/FreePackageBottomSheet/FreePac
 import Layout from "../components/Layout/Layout";
 import Loading from "../components/Loading/Loading";
 import { Stat } from "../components/Stat";
-import UpdateMessagePopup from "../components/UpdateMessagePopup/UpdateMessagePopup";
 import { useEnableGiftMutation } from "../graphql/mutations/enableGift.graphql.interface";
 import { useEnableTodayFreePackageMutation } from "../graphql/mutations/enableTodayFreePackage.graphql.interface";
 import { useLogoutMutation } from "../graphql/mutations/logout.graphql.interface";
@@ -254,7 +253,7 @@ const HomePageComponent: React.FC = () => {
               </Link>
             )}
           </div>
-          <UpdateMessagePopup />
+          {/* <UpdateMessagePopup /> */}
           <FreePackageBottomSheet
             isOpen={isFreePackageBottomSheetOpen}
             onClose={() => setFreePackageBottomSheetOpen(false)}
