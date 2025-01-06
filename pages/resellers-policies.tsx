@@ -11,8 +11,8 @@ const ResellersPoliciesPage: NextPageWithLayout = () => {
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
       {/* Header Section */}
-      <header className="mb-8 text-center">
-        <h1 className="mb-4 text-3xl font-extrabold text-gray-900">سیاست‌های نمایندگان فروش</h1>
+      <header className="mb-8">
+        <h1 className="mb-4 text-2xl font-extrabold text-gray-900">سیاست‌های نمایندگان فروش</h1>
         <p className="text-gray-700">
           در این بخش، به توضیح دلایل محدودیت تعداد بسته‌های خریداری شده و ضرورت اضافه کردن کاربران به سیستم پرداخته شده
           است.
@@ -22,7 +22,6 @@ const ResellersPoliciesPage: NextPageWithLayout = () => {
       {/* Limitation Reason Section */}
       <section className="mb-8">
         <div className="flex items-start">
-          <AlertCircle className="mr-3 mt-1 size-6 text-yellow-400" aria-hidden="true" />
           <div>
             <h2 className="mb-4 text-2xl font-semibold text-yellow-800">دلیل محدودیت تعداد بسته‌های خریداری شده</h2>
             <p className="mb-4 text-gray-700">
@@ -42,7 +41,6 @@ const ResellersPoliciesPage: NextPageWithLayout = () => {
       {/* User Addition Requirement Section */}
       <section className="mb-8">
         <div className="flex items-start">
-          <AlertCircle className="mr-3 mt-1 size-6 text-yellow-400" aria-hidden="true" />
           <div>
             <h2 className="mb-4 text-2xl font-semibold text-yellow-800">ضرورت اضافه کردن کاربران به سیستم</h2>
             <p className="mb-4 text-gray-700">
@@ -56,15 +54,6 @@ const ResellersPoliciesPage: NextPageWithLayout = () => {
             </p>
           </div>
         </div>
-      </section>
-
-      {/* Conclusion Section */}
-      <section>
-        <h2 className="mb-4 text-center text-2xl font-semibold text-yellow-800">نتیجه‌گیری</h2>
-        <p className="text-center text-gray-700">
-          ما معتقدیم که با اعمال این سیاست‌ها، می‌توانیم یک شبکه فروش پایدار و موثر ایجاد کنیم که به نفع همه طرف‌های
-          درگیر باشد. اگر سوالی دارید یا نیاز به توضیحات بیشتری دارید، لطفاً با تیم پشتیبانی ما تماس بگیرید.
-        </p>
       </section>
     </div>
   );
