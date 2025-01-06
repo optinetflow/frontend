@@ -8,7 +8,7 @@ const ResellersPoliciesPage: NextPageWithLayout = () => {
       className="mx-auto my-12 flex min-h-screen max-w-xs flex-col items-center justify-center"
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
-      <header className="mb-10 text-center">
+      <header className="mb-10">
         <h1 className="mb-4 text-3xl font-extrabold text-gray-900">
           چطور با اضافه کردن مشتری‌ها، درآمدتون چند برابر میشه؟{" "}
         </h1>
@@ -98,15 +98,13 @@ const ResellersPoliciesPage: NextPageWithLayout = () => {
       </section>
 
       <section>
-        <h2 className="mb-4 text-center text-2xl font-semibold text-yellow-800">
-          چرا باید این سیاست‌ها رو رعایت کنیم؟
-        </h2>
-        <p className="mb-4 text-center text-gray-700">
+        <h2 className="mb-4 text-2xl font-semibold text-yellow-800">چرا باید این سیاست‌ها رو رعایت کنیم؟</h2>
+        <p className="mb-4 text-gray-700">
           با رعایت این سیاست‌ها، شما فروش بیشتر، مدیریت بهتر و مشتری‌های وفادارتر خواهید داشت. ما کنار شما هستیم تا این
           مسیر رو ساده‌تر و لذت‌بخش‌تر کنیم!
         </p>
-        <p className="text-center text-gray-700">
-          اگر سوالی دارید یا نیاز به راهنمایی بیشتر دارید، تیم پشتیبانی ما همیشه آماده کمک به شماست. 💬
+        <p className="text-gray-700">
+          اگر سوالی دارید یا نیاز به راهنمایی بیشتر دارید، تیم پشتیبانی ما همیشه آماده کمک به شماست.
         </p>
       </section>
     </div>

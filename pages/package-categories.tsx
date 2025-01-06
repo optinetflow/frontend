@@ -42,12 +42,11 @@ const PackageCategoriesPage: NextPageWithLayout = () => {
               <div className="flex-1">
                 <div className="flex items-center">
                   <AlertCircle className="size-5 text-yellow-400" aria-hidden="true" />
-
-                  <h3 className="mr-1 text-lg font-bold text-yellow-800">توجه برای نمایندگان فروش</h3>
+                  <h3 className="mr-1 text-lg font-bold text-yellow-800">نمایندگان فروش، توجه کنید! ⚠️</h3>
                 </div>
                 <p className="mt-2 text-sm text-yellow-700">
-                  نمایندگان فروش حداکثر ۲۰ بسته می‌توانند داشته باشند و باید کاربران را به سیستم اضافه کنند، نه خرید
-                  مستقیم بسته‌ها. این محصول برای تسهیل خرید VPN طراحی شده است.
+                  شما می‌توانید حداکثر ۲۰ بسته داشته باشید و بهتر است مشتری‌ها رو مستقیم به سیستم اضافه کنید. این کار
+                  درآمد و زمان شما رو بهینه می‌کنه!
                 </p>
                 <div className="mt-2 text-center">
                   <Link
@@ -56,7 +55,7 @@ const PackageCategoriesPage: NextPageWithLayout = () => {
                     aria-label="بیشتر درباره سیاست‌های نمایندگان فروش"
                   >
                     <ArrowRight className="ml-1 size-4" aria-hidden="true" />
-                    توضیحات بیشتر
+                    بیشتر بخوانید 🚀
                   </Link>
                 </div>
               </div>
