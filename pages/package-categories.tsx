@@ -1,9 +1,13 @@
+import { AlertCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { ArrowUTurnLeftIcon } from "icons";
+import { Role } from "src/graphql/__generated__/schema.graphql";
 import { NextPageWithLayout } from "./_app";
 import Layout from "../components/Layout/Layout";
+import { useMeQuery } from "../graphql/queries/me.graphql.interface";
+import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface";
 
 const packageCategories = [
   {
@@ -21,13 +25,47 @@ const packageCategories = [
 const PackageCategoriesPage: NextPageWithLayout = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { data: packages } = useUserPackagesQuery({ fetchPolicy: "cache-first" });
+  const { data: me } = useMeQuery({ fetchPolicy: "cache-only" });
+
   const userPackageId = searchParams.get("userPackageId");
   return (
     <div
       className="mx-auto my-12 flex min-h-screen max-w-xs flex-col items-center justify-center"
       style={{ minHeight: "calc(100vh - 6rem)" }}
     >
-      <div className="sticky top-0 z-10 mb-4 w-full bg-white p-2">
+      {/* Warning Message for resellers */}
+      {me && me.me.role === Role.Admin && packages && packages?.userPackages.length > 20 && (
+        <div className="mb-4 w-full">
+          <div className="rounded-md bg-yellow-100 p-4">
+            <div className="flex">
+              <div className="flex-1">
+                <div className="flex items-center">
+                  <AlertCircle className="size-5 text-yellow-400" aria-hidden="true" />
+
+                  <h3 className="mr-1 text-lg font-bold text-yellow-800">توجه برای نمایندگان فروش</h3>
+                </div>
+                <p className="mt-2 text-sm text-yellow-700">
+                  نمایندگان فروش حداکثر ۲۰ بسته می‌توانند داشته باشند و باید کاربران را به سیستم اضافه کنند، نه خرید
+                  مستقیم بسته‌ها. این محصول برای تسهیل خرید VPN طراحی شده است.
+                </p>
+                <div className="mt-2 text-center">
+                  <Link
+                    href="/resellers-policies"
+                    className="inline-flex items-center rounded-lg text-sm font-semibold text-yellow-800 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    aria-label="بیشتر درباره سیاست‌های نمایندگان فروش"
+                  >
+                    <ArrowRight className="ml-1 size-4" aria-hidden="true" />
+                    توضیحات بیشتر
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="sticky top-0 z-10 mb-4 w-full bg-white">
         <button
           onClick={() => router.push("/")}
           className="flex w-full items-center justify-center rounded-lg bg-gray-100 px-4 py-2 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
