@@ -3,11 +3,11 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { ArrowUTurnLeftIcon } from "icons";
-import { Role } from "src/graphql/__generated__/schema.graphql";
 import { NextPageWithLayout } from "./_app";
 import Layout from "../components/Layout/Layout";
 import { useMeQuery } from "../graphql/queries/me.graphql.interface";
 import { useUserPackagesQuery } from "../graphql/queries/userPackages.graphql.interface";
+import { Role } from "../src/graphql/__generated__/schema.graphql";
 
 const packageCategories = [
   {
