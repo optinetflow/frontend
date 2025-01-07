@@ -13,7 +13,7 @@ import Layout from "../components/Layout/Layout";
 import QuickFilter, { Filter } from "../components/quickFilter/QuickFilter";
 import SkeletonPackage from "../components/SkeletonPackage/SkeletonPackage";
 import { useMeQuery } from "../graphql/queries/me.graphql.interface";
-import { useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface";
+import { GetPackagesQuery, useGetPackagesQuery } from "../graphql/queries/packages.graphql.interface";
 import { formatDuration, toIRR } from "../helpers";
 import { ArrowUTurnLeftIcon } from "../icons";
 import { PackageCategory } from "../src/graphql/__generated__/schema.graphql";
@@ -68,10 +68,19 @@ const PackagesPage: NextPageWithLayout = () => {
     router.back();
   };
 
-  const handleBuyPackageClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleBuyPackageClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    pack: GetPackagesQuery["packages"][number]
+  ) => {
     if (balance <= 0 && isAdmin) {
       e.preventDefault();
       toast({ variant: "destructive", description: "ابتدا حساب خود را شارژ کنید." });
+    }
+    if (balance >= 0 && isAdmin) {
+      if ((pack.discountedPrice && pack.discountedPrice > balance) || (pack.price && pack.price > balance)) {
+        e.preventDefault();
+        toast({ variant: "destructive", description: "موجودی حساب شما کافی نیست." });
+      }
     }
   };
 
@@ -113,7 +122,7 @@ const PackagesPage: NextPageWithLayout = () => {
               href={
                 userPackageId ? `/renew-package/${pack.id}?userPackageId=${userPackageId}` : `/buy-package/${pack.id}`
               }
-              onClick={(e) => handleBuyPackageClick(e)}
+              onClick={(e) => handleBuyPackageClick(e, pack)}
               key={pack.id}
               className="mb-4 flex h-32 w-full items-center justify-between rounded-lg bg-slate-50 p-4 hover:bg-slate-100"
             >

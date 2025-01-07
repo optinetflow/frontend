@@ -5,6 +5,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { Copyable } from "../../components/Copyable/Copyable";
 
 import Layout from "../../components/Layout/Layout";
@@ -20,6 +21,7 @@ import type { NextPageWithLayout } from "../_app";
 const BuyPackagePage: NextPageWithLayout = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const packageId = router.query?.packageId as string;
   const userPackageId = searchParams.get("userPackageId");
 
@@ -42,9 +44,13 @@ const BuyPackagePage: NextPageWithLayout = () => {
           packageId: packageId,
         },
       },
-    }).then(() => {
-      router.replace("/");
-    });
+    })
+      .then(() => {
+        router.replace("/");
+      })
+      .catch((error) => {
+        toast({ variant: "destructive", description: error.message });
+      });
   });
 
   const firstError = Object.keys(errors)?.[0] as keyof RenewPackageInput;

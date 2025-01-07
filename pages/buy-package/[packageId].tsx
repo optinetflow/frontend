@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { Copyable } from "../../components/Copyable/Copyable";
 
 import Layout from "../../components/Layout/Layout";
@@ -20,6 +21,7 @@ import type { NextPageWithLayout } from "../_app";
 const BuyPackagePage: NextPageWithLayout = () => {
   const router = useRouter();
   const packageId = router.query?.packageId as string;
+  const { toast } = useToast();
   const [buyPackageMutate, buyPackage] = useBuyPackageMutation();
   const {
     register,
@@ -39,9 +41,13 @@ const BuyPackagePage: NextPageWithLayout = () => {
           packageId: packageId,
         },
       },
-    }).then(() => {
-      router.replace("/");
-    });
+    })
+      .then(() => {
+        router.replace("/");
+      })
+      .catch((error) => {
+        toast({ variant: "destructive", description: error.message });
+      });
   });
 
   const firstError = Object.keys(errors)?.[0] as keyof BuyPackageInput;
@@ -84,7 +90,7 @@ const BuyPackagePage: NextPageWithLayout = () => {
           <Button disabled={buyPackage?.loading} className="w-full" type="submit">
             {buyPackage?.loading ? "لطفا کمی صبر کنید..." : buttonLabel}
           </Button>
-          <Button variant="ghost" className="flex w-full" onClick={router.back}>
+          <Button variant="ghost" type="button" className="flex w-full" onClick={router.back}>
             <ArrowUTurnLeftIcon className="ml-2 size-5" />
             <span>بازگشت</span>
           </Button>
