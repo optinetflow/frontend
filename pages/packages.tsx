@@ -72,15 +72,19 @@ const PackagesPage: NextPageWithLayout = () => {
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     pack: GetPackagesQuery["packages"][number]
   ) => {
-    if (balance <= 0 && isAdmin) {
+    if (!isAdmin) return;
+
+    if (balance <= 0) {
       e.preventDefault();
       toast({ variant: "destructive", description: "ابتدا حساب خود را شارژ کنید." });
+      return;
     }
-    if (balance >= 0 && isAdmin) {
-      if ((pack.discountedPrice && pack.discountedPrice > balance) || (pack.price && pack.price > balance)) {
-        e.preventDefault();
-        toast({ variant: "destructive", description: "موجودی حساب شما کافی نیست." });
-      }
+
+    const price = pack.discountedPrice ?? pack.price;
+
+    if (price && price > balance) {
+      e.preventDefault();
+      toast({ variant: "destructive", description: "موجودی حساب شما کافی نیست." });
     }
   };
 
