@@ -63,6 +63,25 @@ const PackageCategoriesPage: NextPageWithLayout = () => {
           </div>
         </div>
       )}
+      {/* Warning Message for users */}
+      {me && me.me.role === Role.User && packages && packages?.userPackages.length > 5 && (
+        <div className="mb-4 w-full">
+          <div className="rounded-md bg-yellow-100 p-4">
+            <div className="flex">
+              <div className="flex-1">
+                <div className="flex items-center">
+                  <AlertCircle className="size-5 text-yellow-400" aria-hidden="true" />
+                  <h3 className="mr-1 text-lg font-bold text-yellow-800">توجه! ⚠️</h3>
+                </div>
+                <p className="mt-2 text-sm text-yellow-700">
+                  شما می‌توانید حداکثر ۵ بسته خریداری کنید. برای خرید بیشتر، لطفاً با پشتیبانی تماس بگیرید تا درخواست
+                  شما بررسی شود.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="sticky top-0 z-10 mb-4 w-full bg-white">
         <button
