@@ -167,7 +167,10 @@ const HomePageComponent: React.FC = () => {
               </>
             )}
           </div>
-
+          <div className="bg-red-500 text-white p-4 rounded mb-4">
+          دوستان عزیز،
+          متأسفانه دیتاسنتر فعلی‌مون دچار اختلال شدید شده و این ممکنه باعث مشکلاتی در سرویس بشه. اما نگران نباشید! تیم ما با تمام توان در حال انتقال به یک دیتاسنتر جدید و قدرتمندتره تا این مشکلات رو برای همیشه حل کنیم. ممنونیم که صبورید و مثل همیشه پشتیبان ما هستید. ❤️  
+          </div>
           <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
             <Button className="flex w-full">
               <PlusIcon className="ml-2 size-5" />
