@@ -173,6 +173,21 @@ const HomePageComponent: React.FC = () => {
               <span>خرید بسته جدید</span>
             </Button>
           </Link>
+          {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-01-29') && (
+            <div className="bg-green-50 text-green-800 p-4 rounded-md text-sm/7">
+              {(new Date(me.data.me.createdAt) < new Date('2025-01-25'))}
+              🔹 <strong className="font-black">خبر خوب + هدیه ویژه!</strong> 🔹  
+              <br />
+              <br />
+              مشکل سرویس برطرف شده و حالا <strong>همه چی سریع‌تر و پایدارتر از قبل</strong>ه! 💪  
+              برای جبران، <strong>۲۰٪ حجم بیشتر</strong> روی هر خریدتون (و تمدید)  هدیه می‌دیم! 🎁  
+              <br />
+              <br />
+              ✅ <strong>فقط خرید کنین و حجم بیشتر بگیرین!</strong>  
+              <br />
+              ⏳ <strong>فرصت محدوده، پس از دست ندین!</strong>  
+            </div>
+          )}
           {gif && (
             <Button
               variant="outline"
