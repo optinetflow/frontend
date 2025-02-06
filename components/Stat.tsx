@@ -33,7 +33,7 @@ interface StatProps {
 }
 
 export function Stat({ pack, onRenewClick, isFree = false }: StatProps) {
-  const remainingTime = pack.expiryTime - new Date().getTime();
+  const remainingTime = pack.expiryTime > 0 ? pack.expiryTime - Date.now() : -Number(pack.expiryTime);
   const totalTraffic = roundTo(bytesToGB(pack.totalTraffic), 2);
   const remainingTraffic = roundTo(bytesToGB(pack.remainingTraffic), 2);
   const remainingDays = getRemainingDays(pack.expiryTime);

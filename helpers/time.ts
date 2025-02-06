@@ -33,7 +33,7 @@ export function remainingTimeToWords(remainingTime: number): string {
 }
 
 export function getRemainingDays(expiryTime: number): number {
-  const remainingTime = expiryTime - new Date().getTime();
+  const remainingTime = expiryTime > 0 ? expiryTime - Date.now() : -Number(expiryTime);
   const millisecondsInDay = 24 * 60 * 60 * 1000;
 
   return roundTo(remainingTime / millisecondsInDay, 0);
