@@ -188,6 +188,15 @@ const HomePageComponent: React.FC = () => {
               ⏳ <strong>فرصت محدوده، پس از دست ندین!</strong>  
             </div>
           )} */}
+          {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-02-05') && (
+            <div className="bg-red-50 text-red-900 p-4 rounded-md text-sm/7">
+              متاسفانه زیر ساخت شاتل دچار مشکل شده و سرور های خریداری شده توسط شما دچار مشکل شدند.
+              <br />
+              ما در حال تلاش هستیم که مشکل را از سمت دیتاسنتر پیگیری و برطرف کنیم.
+              <br />
+               عذرخواهی می‌کنیم بابت مشکل پیش اومده.
+            </div>
+          )}
           {gif && (
             <Button
               variant="outline"
