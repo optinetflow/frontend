@@ -173,7 +173,7 @@ const HomePageComponent: React.FC = () => {
               <span>خرید بسته جدید</span>
             </Button>
           </Link>
-          {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-01-29') && (
+          {/* {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-01-29') && (
             <div className="bg-green-50 text-green-800 p-4 rounded-md text-sm/7">
               {(new Date(me.data.me.createdAt) < new Date('2025-01-25'))}
               <strong className="font-black">خبر خوب + هدیه ویژه!</strong>  
@@ -187,7 +187,7 @@ const HomePageComponent: React.FC = () => {
               <br />
               ⏳ <strong>فرصت محدوده، پس از دست ندین!</strong>  
             </div>
-          )}
+          )} */}
           {gif && (
             <Button
               variant="outline"
