@@ -175,12 +175,20 @@ const HomePageComponent: React.FC = () => {
               </>
             )}
           </div>
-          <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
-            <Button className="flex w-full">
-              <PlusIcon className="ml-2 size-5" />
-              <span>خرید بسته جدید</span>
-            </Button>
-          </Link>
+          <div className="bg-orange-50 text-orange-800 p-4 rounded-md text-sm/7">
+            <strong className="font-black">یه خبر مهم!</strong>
+            <br />
+            شرمنده رفیق! یه مشکل فنی پیش اومده و مجبور شدیم لینک اتصال رو عوض کنیم. ببخشید که به زحمت افتادی!
+            <br />
+            لطفاً لینک جدید رو از باکس بسته کپی کن و تو برنامه‌ت وارد کن تا دوباره وصل شی.
+            <br />
+            دمت گرم که صبوری می‌کنی! اگه سوالی داشتی، تیم پشتیبانی همیشه اینجاست که کمکت کنه.
+            <br />
+            <br />
+            مخلصیم،
+            <br />
+            <strong>تیم پشتیبانی وصل‌کن</strong>
+          </div>
           {isAliAkbarUsers && (
             <div className="bg-orange-50 text-orange-800 p-4 rounded-md text-sm/7">
               {(new Date(me.data.me.createdAt) < new Date('2025-01-25'))}
@@ -200,20 +208,6 @@ const HomePageComponent: React.FC = () => {
               <strong>تیم پشتیبانی وصل‌کن</strong>
             </div>
           )}
-          <div className="bg-orange-50 text-orange-800 p-4 rounded-md text-sm/7">
-            <strong className="font-black">یه خبر مهم!</strong>
-            <br />
-            شرمنده رفیق! یه مشکل فنی پیش اومده و مجبور شدیم لینک اتصال رو عوض کنیم. ببخشید که به زحمت افتادی!
-            <br />
-            لطفاً لینک جدید رو از باکس زیر کپی کن و تو برنامه‌ت وارد کن تا دوباره وصل شی.
-            <br />
-            دمت گرم که صبوری می‌کنی! اگه سوالی داشتی، تیم پشتیبانی همیشه اینجاست که کمکت کنه.
-            <br />
-            <br />
-            مخلصیم،
-            <br />
-            <strong>تیم پشتیبانی وصل‌کن</strong>
-          </div>
           {/* {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-01-29') && (
             <div className="bg-green-50 text-green-800 p-4 rounded-md text-sm/7">
               {(new Date(me.data.me.createdAt) < new Date('2025-01-25'))}
@@ -238,6 +232,12 @@ const HomePageComponent: React.FC = () => {
                عذرخواهی می‌کنیم بابت مشکل پیش اومده.
             </div>
           )} */}
+          <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
+            <Button className="flex w-full">
+              <PlusIcon className="ml-2 size-5" />
+              <span>خرید بسته جدید</span>
+            </Button>
+          </Link>
           {gif && (
             <Button
               variant="outline"
