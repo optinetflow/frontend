@@ -43,7 +43,7 @@ export function Stat({ pack, onRenewClick, isFree = false }: StatProps) {
   const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords;
   const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است";
 
-  const showRenewBtn = true || remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85;
+  const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85;
 
   const lastConnectedAt = pack?.lastConnectedAt ? new Date(pack?.lastConnectedAt) : undefined;
   const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt);
@@ -70,7 +70,9 @@ export function Stat({ pack, onRenewClick, isFree = false }: StatProps) {
         <ProgressBar progress={((remainingTraffic > 0 ? remainingTraffic : 0) / totalTraffic) * 100} />
       </div>
 
-      {showRenewBtn && !isFree ? (
+      <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
+
+      {showRenewBtn && !isFree && (
         <Link
           className="flex"
           href={`/packages?category=${pack.category}&userPackageId=${pack.id}`}
@@ -81,8 +83,6 @@ export function Stat({ pack, onRenewClick, isFree = false }: StatProps) {
             <span>تمدید بسته</span>
           </Button>
         </Link>
-      ) : (
-        <Copyable className="text-xs font-thin text-slate-400" content={pack.link} />
       )}
     </div>
   );
