@@ -43,7 +43,7 @@ export function Stat({ pack, onRenewClick, isFree = false }: StatProps) {
   const expiryTimeNote = pack.expiryTime === 0 ? "بدون محدودیت زمان" : remainingTimeWords;
   const packageNote = remainingTraffic > 0 ? expiryTimeNote : "حجم بسته تمام شده است";
 
-  const showRenewBtn = remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85;
+  const showRenewBtn = true || remainingDays <= 2 || pack.totalTraffic - pack.remainingTraffic >= pack.totalTraffic * 0.85;
 
   const lastConnectedAt = pack?.lastConnectedAt ? new Date(pack?.lastConnectedAt) : undefined;
   const isOnline = lastConnectedAt && isRecentlyConnected(lastConnectedAt);

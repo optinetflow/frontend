@@ -200,6 +200,20 @@ const HomePageComponent: React.FC = () => {
               <strong>تیم پشتیبانی وصل‌کن</strong>
             </div>
           )}
+          <div className="bg-orange-50 text-orange-800 p-4 rounded-md text-sm/7">
+            <strong className="font-black">اطلاعیه مهم</strong>
+            <br />
+            با کمال احترام و پوزش، به اطلاع شما عزیزان می‌رسانیم که به دلیل بروز یک مشکل فنی، لینک اتصال شما تغییر کرده است.
+            <br />
+            لطفاً جهت ادامه استفاده از سرویس، لینک جدید را از باکس مربوطه کپی کرده و در برنامه خود وارد نمایید.
+            <br />
+            از همراهی و شکیبایی شما صمیمانه سپاسگزاریم و در صورت نیاز به راهنمایی، تیم پشتیبانی ما همواره در کنار شما خواهد بود.
+            <br />
+            <br />
+            با احترام،
+            <br />
+            <strong>تیم پشتیبانی وصل‌کن</strong>
+          </div>
           {/* {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-01-29') && (
             <div className="bg-green-50 text-green-800 p-4 rounded-md text-sm/7">
               {(new Date(me.data.me.createdAt) < new Date('2025-01-25'))}
