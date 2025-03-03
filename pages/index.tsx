@@ -175,20 +175,6 @@ const HomePageComponent: React.FC = () => {
               </>
             )}
           </div>
-          <div className="bg-orange-50 text-orange-800 p-4 rounded-md text-sm/7">
-            <strong className="font-black">یه خبر مهم!</strong>
-            <br />
-            شرمنده رفیق! یه مشکل فنی پیش اومده و مجبور شدیم لینک اتصال رو عوض کنیم. ببخشید که به زحمت افتادی!
-            <br />
-            لطفاً لینک جدید رو از باکس بسته کپی کن و تو برنامه‌ت وارد کن تا دوباره وصل شی.
-            <br />
-            دمت گرم که صبوری می‌کنی! اگه سوالی داشتی، تیم پشتیبانی همیشه اینجاست که کمکت کنه.
-            <br />
-            <br />
-            مخلصیم،
-            <br />
-            <strong>تیم پشتیبانی وصل‌کن</strong>
-          </div>
           {isAliAkbarUsers && (
             <div className="bg-orange-50 text-orange-800 p-4 rounded-md text-sm/7">
               {(new Date(me.data.me.createdAt) < new Date('2025-01-25'))}
