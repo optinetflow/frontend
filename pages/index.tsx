@@ -209,7 +209,7 @@ const HomePageComponent: React.FC = () => {
               ⏳ <strong>فرصت محدوده، پس از دست ندین!</strong>  
             </div>
           )} */}
-          {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-02-05') && (
+          {/* {me.data?.me.createdAt && new Date(me.data.me.createdAt) < new Date('2025-02-05') && (
             <div className="bg-red-50 text-red-900 p-4 rounded-md text-sm/7">
               متاسفانه زیر ساخت شاتل دچار مشکل شده و سرور های خریداری شده توسط شما دچار مشکل شدند.
               <br />
@@ -219,7 +219,7 @@ const HomePageComponent: React.FC = () => {
               <br />
                عذرخواهی می‌کنیم بابت مشکل پیش اومده.
             </div>
-          )}
+          )} */}
           <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
             <Button className="flex w-full">
               <PlusIcon className="ml-2 size-5" />
