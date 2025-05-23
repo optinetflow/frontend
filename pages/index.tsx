@@ -220,7 +220,7 @@ const HomePageComponent: React.FC = () => {
                عذرخواهی می‌کنیم بابت مشکل پیش اومده.
             </div>
           )} */}
-          <div className="bg-orange-50 text-orange-900 p-4 rounded-md text-sm/7">
+          {/* <div className="bg-orange-50 text-orange-900 p-4 rounded-md text-sm/7">
             با سلام،
             <br />
             به اطلاع می‌رسانیم که در روز پنج‌شنبه، ۰۱ خرداد ۱۴۰۴، به دلیل قطعی سراسری برق و بروز مشکل در عملکرد ژنراتور پشتیبان دیتاسنتر شاتل، زیرساخت‌های این دیتاسنتر برای مدت حدود دو ساعت دچار اختلال شدند.
@@ -230,7 +230,7 @@ const HomePageComponent: React.FC = () => {
             با بازیابی برق، تمام سرویس‌ها به حالت عادی بازگشتند و در حال حاضر تمامی سامانه‌ها به‌درستی در حال ارائه خدمات هستند.
             <br />
             از شکیبایی و همراهی شما سپاسگزاریم.
-          </div>
+          </div> */}
           <Link className="flex" href="/package-categories" onClick={handleBuyPackageClick}>
             <Button className="flex w-full">
               <PlusIcon className="ml-2 size-5" />
